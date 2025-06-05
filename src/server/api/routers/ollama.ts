@@ -11,6 +11,7 @@ export const ollamaRouter = createTRPCRouter({
       })
     )
     .mutation(async ({ input }) => {
+        console.log("input",input);
       const ollama = new ChatOllama({
         baseUrl: "http://localhost:11434",
         model: "qwen:vl",
