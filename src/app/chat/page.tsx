@@ -1,11 +1,11 @@
 "use client";
 
 import { api } from "@/trpc/react";
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 export default function ChatPage() {
+  const inputRef = useRef<HTMLInputElement>(null);
   const [question, setQuestion] = useState("what is this image?");
-  const [imageUrl, setImageUrl] = useState("");
   const [answer, setAnswer] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -17,8 +17,23 @@ export default function ChatPage() {
   });
 
   const handleSubmit = async () => {
-    setLoading(true);
-    ask.mutate({ text: question, imageUrl });
+    if(!question) {
+      alert("请输入问题");
+      return;
+    }
+
+    if(!inputRef.current!.value) {
+      alert("请上传图片");
+      return;
+    }
+
+    const file = inputRef.current!.files?.[0];
+    if (file && validateSize(file, 1024 * 1024)) { 
+      convertImageToBase64(file).then((base64) => {
+        setLoading(true);
+        ask.mutate({ text: question, imageUrl: base64 as string });
+      });
+    }
   };
 
   return (
@@ -29,20 +44,10 @@ export default function ChatPage() {
         <div className="mb-6">
           <label className="mb-2 block text-sm font-medium text-gray-700">上传图片</label>
           <div className="flex items-center gap-4">
-            <input 
+            <input
+              ref={inputRef}
               type="file" 
               accept="image/png, image/jpeg" 
-              onChange={(e) => {
-                const file = e.target.files?.[0];
-                if (file && validateSize(file, 1024 * 1024)) { 
-                  convertImageToBase64(file).then((base64) => {
-                    setImageUrl(base64 as string);
-                  });
-                } else {
-                  e.target.value = "";
-                }
-                
-              }}
               className="block w-full text-sm text-gray-500
                 file:mr-4 file:rounded-full file:border-0
                 file:bg-blue-50 file:px-4 file:py-2
