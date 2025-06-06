@@ -12,10 +12,7 @@ export const ollamaRouter = createTRPCRouter({
     )
     .subscription(async function* ({ input }) {
       try {
-        const chunks = await ollamaService.ask(input)
-        for await (const chunk of chunks) {
-          yield chunk
-        }
+        yield* await ollamaService.ask(input)
       } catch (error) {
         console.error('error', error)
       }
