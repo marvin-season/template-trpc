@@ -1,3 +1,4 @@
+import { createDeepSeek } from '@ai-sdk/deepseek'
 import { createOllama } from 'ollama-ai-provider'
 
 export function initOllamaProvider(props: {
@@ -18,4 +19,28 @@ export function initOllamaProvider(props: {
   return createOllama({
     baseURL,
   })(model)
+}
+
+export function initDeepSeek(props: {
+  model?: string
+  apiKey?: string
+  baseURL?: string
+}) {
+  const {
+    model = process.env.NEXT_DEEPSEEK_MODEL_ID,
+    baseURL = process.env.NEXT_DEEPSEEK_BASE_URL,
+  } = props
+  if (!model) {
+    throw new Error('Model is not defined')
+  }
+
+  if (!baseURL) {
+    throw new Error('Base URL is not defined')
+  }
+  const deepseek = createDeepSeek({
+    baseURL,
+    apiKey: '',
+  })
+
+  return deepseek(model)
 }

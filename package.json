@@ -21,6 +21,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@ai-sdk/deepseek": "^0.2.14",
     "@auth/prisma-adapter": "^2.7.2",
     "@prisma/client": "^6.5.0",
     "@t3-oss/env-nextjs": "^0.12.0",

@@ -1,10 +1,23 @@
-import { initOllamaProvider } from '@/server/provider'
-import { streamText } from 'ai'
+import { initDeepSeek, initOllamaProvider } from '@/server/provider'
+import { streamText, type LanguageModelV1 } from 'ai'
 
-export const ollamaService = {
+export const chatService = {
   ask: async ({ text, imageUrl }: { text: string; imageUrl: string }) => {
+    let model: LanguageModelV1 | null = null
+    const provider = process.env.NEXT_MODEL_PROVIDER
+    switch (provider) {
+      case 'deepseek':
+        model = initDeepSeek({})
+        break
+      default:
+        model = initOllamaProvider({})
+        break
+    }
+    if (!model) {
+      throw new Error('模型不存在')
+    }
     const result = streamText({
-      model: initOllamaProvider({}),
+      model,
       messages: [
         { role: 'user', content: text },
         {

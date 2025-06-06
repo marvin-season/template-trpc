@@ -1,5 +1,5 @@
 import { createTRPCRouter, publicProcedure } from '@/server/api/trpc'
-import { ollamaService } from '@/server/service/ollamaService'
+import { chatService } from '@/server/service/chatService'
 import { z } from 'zod'
 
 export const ollamaRouter = createTRPCRouter({
@@ -12,7 +12,7 @@ export const ollamaRouter = createTRPCRouter({
     )
     .subscription(async function* ({ input }) {
       try {
-        yield* await ollamaService.ask(input)
+        yield* await chatService.ask(input)
       } catch (error) {
         console.error('error', error)
       }
