@@ -25,4 +25,12 @@ export const ollamaRouter = createTRPCRouter({
 
       return { reply: content };
     }),
+    streaming: publicProcedure
+    .subscription(async function* (){
+      for (const char of "Hello") {
+        yield char;
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        yield char;
+      }
+    })
 });

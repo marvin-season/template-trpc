@@ -8,6 +8,7 @@ export default function ChatPage() {
   const [question, setQuestion] = useState("what is this image?");
   const [answer, setAnswer] = useState("");
   const [loading, setLoading] = useState(false);
+  const streaming = api.ollama.streaming.useSubscription();
 
   const ask = api.ollama.ask.useMutation({
     onSuccess(data) {
@@ -40,7 +41,7 @@ export default function ChatPage() {
     <div className="flex min-h-screen items-center justify-center bg-gray-50 p-6">
       <div className="w-full max-w-lg rounded-xl bg-white p-8 shadow-lg">
         <h1 className="mb-6 text-2xl font-bold text-gray-800">AI 图像问答</h1>
-        
+        {streaming.data}
         <div className="mb-6">
           <label className="mb-2 block text-sm font-medium text-gray-700">上传图片</label>
           <div className="flex items-center gap-4">
