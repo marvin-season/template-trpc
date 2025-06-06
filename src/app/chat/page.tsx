@@ -54,8 +54,9 @@ export default function ChatPage() {
             示例图片
           </label>
           <div className='flex items-center gap-4'>
-            {examples.map((example) => (
+            {examples.map((example, index) => (
               <img
+                key={index}
                 src={example}
                 alt=''
                 width={40}

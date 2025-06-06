@@ -1,33 +1,30 @@
-import { HumanMessage } from '@langchain/core/messages'
-import { ChatOllama } from '@langchain/ollama'
+import { initOllamaProvider } from '@/server/provider'
+import { streamText } from 'ai'
+
 export const ollamaService = {
   ask: async ({ text, imageUrl }: { text: string; imageUrl: string }) => {
-    const ollama = new ChatOllama({
-      baseUrl: 'http://localhost:11434',
-      model: 'qwen2.5vl:3b',
-    })
-    const humanMessage = new HumanMessage({
-      content: [
+    const result = streamText({
+      model: initOllamaProvider({
+        model: 'qwen2.5vl:3b',
+        base_url: 'http://127.0.0.1:11434',
+      }),
+      messages: [
+        { role: 'user', content: text },
         {
-          type: 'text',
-          text,
-        },
-        imageUrl
-          ? {
-              type: 'image_url',
-              image_url: {
-                url: imageUrl,
-              },
-            }
-          : {
-              type: 'text',
-              text: '我没有上传图片,请提醒我上传图片',
+          content: [
+            {
+              type: 'image',
+              image: imageUrl,
             },
+          ],
+          role: 'user',
+        },
       ],
+      onError(error) {
+        throw error
+      },
     })
 
-    return await ollama.stream([humanMessage]).catch((error) => {
-      console.error('error', error)
-    })
+    return result.textStream
   },
 }
