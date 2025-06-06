@@ -7,24 +7,22 @@ import { useRef, useState } from 'react'
 export default function ChatPage() {
   const inputRef = useRef<HTMLInputElement>(null)
   const [start, setStart] = useState(false)
-  const [question, setQuestion] = useState('what is this image?')
+  const [question, setQuestion] = useState('hi')
   const [answer, setAnswer] = useState('')
-  const [loading, setLoading] = useState(false)
-  const streaming = api.ollama.streaming.useSubscription(
-    start ? undefined : skipToken,
+
+  const askStreaming = api.ollama.askStreaming.useSubscription(
+    start
+      ? {
+          text: question,
+          imageUrl: '',
+        }
+      : skipToken,
     {
       onData(data) {
-        console.log('data', data)
+        setAnswer((prev) => prev + data)
       },
     },
   )
-
-  const ask = api.ollama.ask.useMutation({
-    onSuccess(data) {
-      setAnswer(JSON.stringify(data.reply, null, 2))
-      setLoading(false)
-    },
-  })
 
   const handleSubmit = async () => {
     if (!question) {
@@ -32,29 +30,17 @@ export default function ChatPage() {
       return
     }
 
-    if (!inputRef.current!.value) {
-      alert('请上传图片')
-      return
-    }
-
-    const file = inputRef.current!.files?.[0]
-    if (file && validateSize(file, 1024 * 1024)) {
-      convertImageToBase64(file).then((base64) => {
-        setLoading(true)
-        ask.mutate({ text: question, imageUrl: base64 as string })
-      })
-    }
+    // if (!inputRef.current!.value) {
+    //   alert('请上传图片')
+    //   return
+    // }
+    askStreaming.reset()
+    setStart(true)
   }
 
   return (
     <div className='flex min-h-screen items-center justify-center bg-gray-50 p-6'>
       <div className='w-full max-w-lg rounded-xl bg-white p-8 shadow-lg'>
-        <div>
-          streaming: {streaming.data}
-          <button onClick={() => setStart((prev) => !prev)}>
-            {start ? 'kill' : 'start'}
-          </button>
-        </div>
         <h1 className='mb-6 text-2xl font-bold text-gray-800'>AI 图像问答</h1>
         <div className='mb-6'>
           <label className='mb-2 block text-sm font-medium text-gray-700'>
@@ -94,7 +80,7 @@ export default function ChatPage() {
           提交问题
         </button>
 
-        {loading && (
+        {askStreaming.status === 'pending' && (
           <div className='mt-6 text-center text-gray-600'>
             <div className='mb-2 animate-spin text-2xl'>⚡</div>
             思考中...

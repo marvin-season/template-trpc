@@ -25,11 +25,15 @@ export const ollamaRouter = createTRPCRouter({
 
       return { reply: content }
     }),
-  streaming: publicProcedure.subscription(async function* () {
-    for (const char of 'Hello') {
-      yield char
-      await new Promise((resolve) => setTimeout(resolve, 1000))
-      yield char
-    }
-  }),
+  askStreaming: publicProcedure
+    .input(
+      z.object({
+        text: z.string(),
+        imageUrl: z.string(), // 本地静态图片地址，如 /uploads/x.jpg
+      }),
+    )
+    .subscription(async function* ({ input }) {
+      console.log('input', input)
+      yield input.text
+    }),
 })
