@@ -3,15 +3,6 @@ import { ollamaService } from '@/server/service/ollamaService'
 import { z } from 'zod'
 
 export const ollamaRouter = createTRPCRouter({
-  /**
-    curl http://localhost:11434/api/chat -d '{
-      "model": "qwen2.5vl:3b",
-      "messages": [
-        { "role": "user", "content": "What is this image?" },
-        { "role": "user", "content": "https://create.t3.gg/images/t3-dark.svg" }
-      ]
-    }'
-   */
   ask: publicProcedure
     .input(
       z.object({

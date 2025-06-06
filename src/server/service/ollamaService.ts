@@ -6,22 +6,26 @@ export const ollamaService = {
       baseUrl: 'http://localhost:11434',
       model: 'qwen2.5vl:3b',
     })
-
-    try {
-      const res = await ollama.stream([
-        new HumanMessage({
-          content: [
-            {
+    const humanMessage = new HumanMessage({
+      content: [
+        {
+          type: 'text',
+          text,
+        },
+        imageUrl
+          ? {
+              type: 'image_url',
+              image_url: {
+                url: imageUrl,
+              },
+            }
+          : {
               type: 'text',
-              text,
+              text: '我没有上传图片,请提醒我上传图片',
             },
-          ],
-        }),
-      ])
+      ],
+    })
 
-      return res
-    } catch (error) {
-      console.error('error', error)
-    }
+    return await ollama.stream([humanMessage])
   },
 }
