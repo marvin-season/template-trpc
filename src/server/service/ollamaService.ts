@@ -26,6 +26,8 @@ export const ollamaService = {
       ],
     })
 
-    return await ollama.stream([humanMessage])
+    return await ollama.stream([humanMessage]).catch((error) => {
+      console.error('error', error)
+    })
   },
 }
