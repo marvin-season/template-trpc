@@ -21,6 +21,9 @@ export default function ChatPage() {
       onData(data) {
         data && setAnswer((prev) => prev + data)
       },
+      onComplete() {
+        setStart(false)
+      },
     },
   )
 
@@ -65,6 +68,15 @@ export default function ChatPage() {
                 }
               }}
             />
+            {imageUrl && (
+              <img
+                src={imageUrl}
+                alt='上传的图片'
+                width={40}
+                height={40}
+                className='rounded-lg'
+              />
+            )}
           </div>
         </div>
 
