@@ -1,22 +1,21 @@
 import { createOllama } from 'ollama-ai-provider'
 
-export function initOllamaProvider({
-  model,
-  base_url,
-}: {
+export function initOllamaProvider(props: {
   model?: string
-  base_url?: string
+  baseURL?: string
 }) {
+  console.log('props', process.env)
+  const {
+    model = process.env.NEXT_OLLAMA_MODEL,
+    baseURL = process.env.NEXT_OLLAMA_ENDPOINT + '/api',
+  } = props
   if (!model) {
     throw new Error('Model is not defined')
   }
-
-  if (!base_url) {
+  if (!baseURL) {
     throw new Error('Endpoint is not defined')
   }
-  const ollama = createOllama({
-    baseURL: `${base_url}/api`,
-  })
-
-  return ollama(model)
+  return createOllama({
+    baseURL,
+  })(model)
 }
