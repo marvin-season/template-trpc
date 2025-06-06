@@ -9,10 +9,15 @@ export const ollamaService = {
         { role: 'user', content: text },
         {
           content: [
-            {
-              type: 'image',
-              image: imageUrl,
-            },
+            imageUrl
+              ? {
+                  type: 'image',
+                  image: imageUrl,
+                }
+              : {
+                  type: 'text',
+                  text: '如果我问了图片相关问题，请提示我上传图片',
+                },
           ],
           role: 'user',
         },

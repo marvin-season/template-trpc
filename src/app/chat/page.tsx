@@ -36,10 +36,6 @@ export default function ChatPage() {
       return
     }
 
-    if (!imageUrl) {
-      alert('请上传图片')
-      return
-    }
     askStreaming.reset()
     setAnswer('')
     setStart(true)
