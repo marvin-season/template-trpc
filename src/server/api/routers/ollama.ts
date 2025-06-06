@@ -34,6 +34,9 @@ export const ollamaRouter = createTRPCRouter({
     )
     .subscription(async function* ({ input }) {
       console.log('input', input)
-      yield input.text
+      const chunks = await ollamaService.ask(input)
+      for await (const chunk of chunks!) {
+        yield chunk.content
+      }
     }),
 })

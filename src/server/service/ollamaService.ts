@@ -8,26 +8,20 @@ export const ollamaService = {
     })
 
     try {
-      const res = await ollama.invoke([
+      const res = await ollama.stream([
         new HumanMessage({
           content: [
             {
               type: 'text',
               text,
             },
-            {
-              type: 'image_url',
-              image_url: {
-                url: imageUrl,
-              },
-            },
           ],
         }),
       ])
+
       return res
     } catch (error) {
       console.error('error', error)
-      return 'error'
     }
   },
 }

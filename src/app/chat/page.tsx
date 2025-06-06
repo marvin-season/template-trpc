@@ -19,7 +19,7 @@ export default function ChatPage() {
       : skipToken,
     {
       onData(data) {
-        setAnswer((prev) => prev + data)
+        data && setAnswer((prev) => prev + data)
       },
     },
   )
@@ -35,6 +35,7 @@ export default function ChatPage() {
     //   return
     // }
     askStreaming.reset()
+    setAnswer('')
     setStart(true)
   }
 
