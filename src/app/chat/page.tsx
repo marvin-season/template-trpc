@@ -5,13 +5,13 @@ import { useState } from "react";
 
 export default function ChatPage() {
   const [question, setQuestion] = useState("what is this image?");
-  const [imageUrl, setImageUrl] = useState("https://create.t3.gg/images/t3-dark.svg");
+  const [imageUrl, setImageUrl] = useState("");
   const [answer, setAnswer] = useState("");
   const [loading, setLoading] = useState(false);
 
   const ask = api.ollama.ask.useMutation({
     onSuccess(data) {
-      setAnswer(data.reply.toString());
+      setAnswer(JSON.stringify(data.reply, null, 2));
       setLoading(false);
     },
   });
@@ -31,15 +31,17 @@ export default function ChatPage() {
           <div className="flex items-center gap-4">
             <input 
               type="file" 
-              accept="image/*" 
+              accept="image/png, image/jpeg" 
               onChange={(e) => {
                 const file = e.target.files?.[0];
-                debugger
-                if (file) {
+                if (file && validateSize(file, 1024 * 1024)) { 
                   convertImageToBase64(file).then((base64) => {
                     setImageUrl(base64 as string);
                   });
+                } else {
+                  e.target.value = "";
                 }
+                
               }}
               className="block w-full text-sm text-gray-500
                 file:mr-4 file:rounded-full file:border-0
@@ -95,4 +97,12 @@ function convertImageToBase64(file: File) {
     reader.onerror = reject;
     reader.readAsDataURL(file);
   });
+}
+
+function validateSize(file: File, maxSize: number) {
+  if (file.size > maxSize) {
+    alert(`File size exceeds the maximum limit of ${maxSize} bytes`);
+    return false;
+  }
+  return true;
 }
