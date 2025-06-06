@@ -22,7 +22,7 @@
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.7.2",
-    "@langchain/community": "^0.3.45",
+    "@langchain/core": "^0.3.57",
     "@langchain/ollama": "^0.2.1",
     "@prisma/client": "^6.5.0",
     "@t3-oss/env-nextjs": "^0.12.0",

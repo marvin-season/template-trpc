@@ -1,8 +1,17 @@
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
-import { ChatOllama } from "@langchain/ollama";
+import { ollamaService } from "@/server/service/ollamaService";
 import { z } from "zod";
 
 export const ollamaRouter = createTRPCRouter({
+  /**
+    curl http://localhost:11434/api/chat -d '{
+      "model": "qwen2.5vl:3b",
+      "messages": [
+        { "role": "user", "content": "What is this image?" },
+        { "role": "user", "content": "https://create.t3.gg/images/t3-dark.svg" }
+      ]
+    }'
+   */
   ask: publicProcedure
     .input(
       z.object({
@@ -12,21 +21,8 @@ export const ollamaRouter = createTRPCRouter({
     )
     .mutation(async ({ input }) => {
         console.log("input",input);
-      const ollama = new ChatOllama({
-        baseUrl: "http://localhost:11434",
-        model: "qwen:vl",
-      });
+        const content = await ollamaService.ask(input);
 
-      const res = await ollama.invoke([
-        {
-          role: "user",
-          content: [
-            { type: "text", text: input.text },
-            { type: "image_url", image_url: { url: input.imageUrl } },
-          ],
-        },
-      ]);
-
-      return { reply: res.content };
+      return { reply: content };
     }),
 });

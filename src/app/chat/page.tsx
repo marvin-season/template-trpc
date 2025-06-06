@@ -5,8 +5,8 @@ import { useState } from "react";
 
 export default function ChatPage() {
   const [file, setFile] = useState<File | null>(null);
-  const [question, setQuestion] = useState("");
-  const [imageUrl, setImageUrl] = useState("");
+  const [question, setQuestion] = useState("what is this image?");
+  const [imageUrl, setImageUrl] = useState("https://create.t3.gg/images/t3-dark.svg");
   const [answer, setAnswer] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -28,7 +28,6 @@ export default function ChatPage() {
   };
 
   const handleSubmit = async () => {
-    debugger
     setLoading(true);
     ask.mutate({ text: question, imageUrl });
   };
