@@ -15,7 +15,12 @@ export const ollamaService  ={
                         type: "text",
                         text,
                       },
-            
+                      {
+                        type: "image_url",  
+                        image_url: {
+                            url: imageUrl,
+                        },
+                      },
                     ],
                   }),
             ]);
