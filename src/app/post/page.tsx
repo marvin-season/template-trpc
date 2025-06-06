@@ -1,10 +1,10 @@
-import { PostList } from "./_components/post-list";
+import { PostList } from './_components/post-list'
 
 export default function PostPage() {
   return (
     <>
-      <div className="text-2xl font-bold">Posts</div>
+      <div className='text-2xl font-bold'>Posts</div>
       <PostList />
     </>
-  );
+  )
 }

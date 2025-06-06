@@ -1,12 +1,19 @@
-"use client";
+'use client'
 
-import { api } from "@/trpc/react";
+import { api } from '@/trpc/react'
 export function DeletePost({ id }: { id: number }) {
-  const apiUtils = api.useUtils();
+  const apiUtils = api.useUtils()
   const deletePost = api.post.delete.useMutation({
     onSuccess() {
-      apiUtils.post.list.invalidate();
+      apiUtils.post.list.invalidate()
     },
-  });
-  return <button disabled={deletePost.isPending} onClick={() => deletePost.mutate({ id })}>Delete</button>;
+  })
+  return (
+    <button
+      disabled={deletePost.isPending}
+      onClick={() => deletePost.mutate({ id })}
+    >
+      Delete
+    </button>
+  )
 }

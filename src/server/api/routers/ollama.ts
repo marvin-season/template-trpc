@@ -1,6 +1,6 @@
-import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
-import { ollamaService } from "@/server/service/ollamaService";
-import { z } from "zod";
+import { createTRPCRouter, publicProcedure } from '@/server/api/trpc'
+import { ollamaService } from '@/server/service/ollamaService'
+import { z } from 'zod'
 
 export const ollamaRouter = createTRPCRouter({
   /**
@@ -17,20 +17,19 @@ export const ollamaRouter = createTRPCRouter({
       z.object({
         text: z.string(),
         imageUrl: z.string(), // 本地静态图片地址，如 /uploads/x.jpg
-      })
+      }),
     )
     .mutation(async ({ input }) => {
-        console.log("input",input);
-        const content = await ollamaService.ask(input);
+      console.log('input', input)
+      const content = await ollamaService.ask(input)
 
-      return { reply: content };
+      return { reply: content }
     }),
-    streaming: publicProcedure
-    .subscription(async function* (){
-      for (const char of "Hello") {
-        yield char;
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        yield char;
-      }
-    })
-});
+  streaming: publicProcedure.subscription(async function* () {
+    for (const char of 'Hello') {
+      yield char
+      await new Promise((resolve) => setTimeout(resolve, 1000))
+      yield char
+    }
+  }),
+})
