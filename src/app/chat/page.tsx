@@ -2,19 +2,19 @@
 
 import { api } from '@/trpc/react'
 import { skipToken } from '@tanstack/react-query'
-import { useRef, useState } from 'react'
+import { useState } from 'react'
 
 export default function ChatPage() {
-  const inputRef = useRef<HTMLInputElement>(null)
   const [start, setStart] = useState(false)
-  const [question, setQuestion] = useState('hi')
+  const [question, setQuestion] = useState('what is this image?')
   const [answer, setAnswer] = useState('')
+  const [imageUrl, setImageUrl] = useState('')
 
   const askStreaming = api.ollama.askStreaming.useSubscription(
     start
       ? {
           text: question,
-          imageUrl: '',
+          imageUrl,
         }
       : skipToken,
     {
@@ -30,10 +30,10 @@ export default function ChatPage() {
       return
     }
 
-    // if (!inputRef.current!.value) {
-    //   alert('请上传图片')
-    //   return
-    // }
+    if (!imageUrl) {
+      alert('请上传图片')
+      return
+    }
     askStreaming.reset()
     setAnswer('')
     setStart(true)
@@ -49,7 +49,6 @@ export default function ChatPage() {
           </label>
           <div className='flex items-center gap-4'>
             <input
-              ref={inputRef}
               type='file'
               accept='image/png, image/jpeg'
               className='block w-full text-sm text-gray-500
@@ -57,6 +56,14 @@ export default function ChatPage() {
                 file:bg-blue-50 file:px-4 file:py-2
                 file:text-sm file:font-semibold file:text-blue-700
                 hover:file:bg-blue-100'
+              onChange={(e) => {
+                const file = e.target.files?.[0]
+                if (file) {
+                  convertImageToBase64(file).then((base64) =>
+                    setImageUrl(base64 as string),
+                  )
+                }
+              }}
             />
           </div>
         </div>
