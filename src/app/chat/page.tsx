@@ -4,7 +4,6 @@ import { api } from "@/trpc/react";
 import { useState } from "react";
 
 export default function ChatPage() {
-  const [file, setFile] = useState<File | null>(null);
   const [question, setQuestion] = useState("what is this image?");
   const [imageUrl, setImageUrl] = useState("https://create.t3.gg/images/t3-dark.svg");
   const [answer, setAnswer] = useState("");
@@ -16,16 +15,6 @@ export default function ChatPage() {
       setLoading(false);
     },
   });
-
-  const handleUpload = async () => {
-    if (!file) return;
-    const form = new FormData();
-    form.append("file", file);
-
-    const res = await fetch("/api/upload", { method: "POST", body: form });
-    const data = await res.json();
-    setImageUrl(data.url);
-  };
 
   const handleSubmit = async () => {
     setLoading(true);
@@ -43,19 +32,21 @@ export default function ChatPage() {
             <input 
               type="file" 
               accept="image/*" 
-              onChange={(e) => setFile(e.target.files?.[0] || null)}
+              onChange={(e) => {
+                const file = e.target.files?.[0];
+                debugger
+                if (file) {
+                  convertImageToBase64(file).then((base64) => {
+                    setImageUrl(base64 as string);
+                  });
+                }
+              }}
               className="block w-full text-sm text-gray-500
                 file:mr-4 file:rounded-full file:border-0
                 file:bg-blue-50 file:px-4 file:py-2
                 file:text-sm file:font-semibold file:text-blue-700
                 hover:file:bg-blue-100"
             />
-            <button 
-              onClick={handleUpload}
-              className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-            >
-              上传图片
-            </button>
           </div>
         </div>
 
@@ -95,4 +86,13 @@ export default function ChatPage() {
       </div>
     </div>
   );
+}
+
+function convertImageToBase64(file: File) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
 }
