@@ -50,12 +50,11 @@ export default function InputPanel({
                 file:bg-blue-50 file:px-4 file:py-2
                 file:text-sm file:font-semibold file:text-blue-700
                 hover:file:bg-blue-100'
-            onChange={(e) => {
+            onChange={async (e) => {
               const file = e.target.files?.[0]
               if (file && validateSize(file, 1024 * 100)) {
-                convertImageToBase64(file).then((base64) =>
-                  setImageUrl(base64 as string),
-                )
+                const base64 = await convertImageToBase64(file)
+                setImageUrl(base64 as string)
               }
             }}
           />

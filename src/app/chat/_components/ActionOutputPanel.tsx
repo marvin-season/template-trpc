@@ -1,3 +1,5 @@
+'use client'
+
 import { api } from '@/trpc/react'
 import type { ChatInputType } from '@/types/chat'
 import { useState } from 'react'
@@ -21,9 +23,7 @@ export default function ActionOutputPanel(input: ChatInputType) {
   return (
     <>
       <button
-        onClick={async () => {
-          handleSubmit()
-        }}
+        onClick={handleSubmit}
         className='w-full rounded-lg bg-blue-600 py-3 text-center font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2'
       >
         提交问题

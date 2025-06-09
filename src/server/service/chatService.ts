@@ -36,9 +36,6 @@ export const chatService = {
           role: 'user',
         },
       ],
-      onError(error) {
-        throw error
-      },
     })
 
     return result.textStream
