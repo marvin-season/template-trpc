@@ -1,11 +1,13 @@
 'use client'
 
-import { api } from '@/trpc/react'
+import { useTRPC } from '@/trpc/react'
 import type { ChatInputType } from '@/types/chat'
+import { useMutation } from '@tanstack/react-query'
 import { useState } from 'react'
 
 export default function ActionOutputPanel(input: ChatInputType) {
-  const mutate = api.chat.generate.useMutation({})
+  const trpc = useTRPC()
+  const mutate = useMutation(trpc.chat.generate.mutationOptions())
   const [answer, setAnswer] = useState('')
   const handleSubmit = async () => {
     if (!input.text) {
