@@ -1,5 +1,6 @@
 'use client'
 
+import ResultPanel from '@/app/chat/ResultPanel'
 import { api } from '@/trpc/react'
 import { skipToken } from '@tanstack/react-query'
 import { useState } from 'react'
@@ -43,6 +44,7 @@ export default function ChatPage() {
 
   return (
     <div className='flex min-h-screen items-center justify-center bg-gray-50 p-6'>
+      <ResultPanel />
       <div className='w-full max-w-lg rounded-xl bg-white p-8 shadow-lg'>
         <h1 className='mb-6 text-2xl font-bold text-gray-800'>AI 图像问答</h1>
         <div className='mb-6'>
