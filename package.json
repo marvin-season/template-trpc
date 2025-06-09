@@ -17,7 +17,7 @@
     "lint": "next lint",
     "lint:fix": "next lint --fix",
     "preview": "next build && next start",
-    "start": "next start",
+    "start": "next start --port 12346",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
