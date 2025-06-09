@@ -3,6 +3,9 @@ import { chatService } from '@/server/service/chatService'
 import { chatInputSchema } from '@/types/chat'
 
 export const chatRouter = createTRPCRouter({
+  list: publicProcedure.query(() => {
+    return ['1', '2', '3']
+  }),
   generate: publicProcedure.input(chatInputSchema).mutation(async function* ({
     input,
   }) {
