@@ -3,6 +3,16 @@ import { chatService } from '@/server/service/chatService'
 import { chatInputSchema } from '@/types/chat'
 
 export const chatRouter = createTRPCRouter({
+  generate: publicProcedure.input(chatInputSchema).mutation(async function* ({
+    input,
+  }) {
+    try {
+      yield* await chatService.ask(input)
+    } catch (error) {
+      console.error('error', error)
+    }
+  }),
+  // same as generate, but use subscription
   askStreaming: publicProcedure
     .input(chatInputSchema)
     .subscription(async function* ({ input }) {
@@ -12,11 +22,4 @@ export const chatRouter = createTRPCRouter({
         console.error('error', error)
       }
     }),
-  generate: publicProcedure.mutation(async function* ({}) {
-    const text = '你好，欢迎使用 tRPC 流式接口！'
-    for (const char of text) {
-      await new Promise((r) => setTimeout(r, 100)) // 模拟延迟
-      yield char
-    }
-  }),
 })
