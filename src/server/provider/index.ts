@@ -5,7 +5,6 @@ export function initOllamaProvider(props: {
   model?: string
   baseURL?: string
 }) {
-  console.log('props', process.env)
   const {
     model = process.env.NEXT_OLLAMA_MODEL,
     baseURL = process.env.NEXT_OLLAMA_ENDPOINT + '/api',

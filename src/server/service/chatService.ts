@@ -1,8 +1,9 @@
 import { initDeepSeek, initOllamaProvider } from '@/server/provider'
+import type { ChatInputType } from '@/types/chat'
 import { streamText, type LanguageModelV1 } from 'ai'
 
 export const chatService = {
-  ask: async ({ text, imageUrl }: { text: string; imageUrl: string }) => {
+  ask: async ({ text, imageUrl }: ChatInputType) => {
     let model: LanguageModelV1 | null = null
     const provider = process.env.NEXT_MODEL_PROVIDER
     switch (provider) {
