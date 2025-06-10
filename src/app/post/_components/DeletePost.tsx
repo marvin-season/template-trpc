@@ -9,7 +9,7 @@ export default function DeletePost({ postId }: { postId: number }) {
   const { mutate: deletePost, isPending } = useMutation(
     trpc.post.delete.mutationOptions({
       onSuccess: () => {
-        queryClient.invalidateQueries({
+        void queryClient.invalidateQueries({
           queryKey: [['post', 'list']],
         })
       },
