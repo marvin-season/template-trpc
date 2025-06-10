@@ -19,7 +19,7 @@ export default function ChatPage() {
     await queryClient.invalidateQueries(queryOptions)
   }
   useEffect(() => {
-    invalidateGreeting()
+    void invalidateGreeting()
   }, [])
   return (
     <div className='flex flex-col min-h-screen items-center justify-center bg-gray-50 p-6'>
