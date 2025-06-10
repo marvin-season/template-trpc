@@ -1,4 +1,5 @@
 import AddPost from '@/app/post/_components/AddPost'
+import DeletePost from '@/app/post/_components/DeletePost'
 import PostListBeta from '@/app/post/_components/PostListBeta'
 import Skeleton from '@/app/post/_components/Skeleton'
 import { getPostsMock } from '@/app/post/actions'
@@ -9,6 +10,7 @@ export default async function PostPage() {
   return (
     <div className='p-4 max-w-2xl mx-auto'>
       <AddPost />
+      <DeletePost />
       <Suspense fallback={<Skeleton />}>
         <PostListBeta posts={posts} />
       </Suspense>
