@@ -1,13 +1,12 @@
-'use client'
-import { useTRPC } from '@/trpc/react'
-import { useQuery } from '@tanstack/react-query'
+import AddPost from '@/app/post/_components/AddPost'
+import PostList from '@/app/post/_components/PostList'
 
-export default function PostPage() {
-  const trpc = useTRPC()
-  const { data } = useQuery(trpc.post.list.queryOptions())
+export default async function PostPage() {
   return (
-    <div>
-      <div>{data?.map((item) => item)}</div>
+    <div className='p-4 max-w-2xl mx-auto'>
+      <h1 className='text-2xl font-bold mb-4'>帖子列表</h1>
+      <AddPost />
+      <PostList />
     </div>
   )
 }
