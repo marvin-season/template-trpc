@@ -1,8 +1,9 @@
 'use client'
 
+import type { Post } from '@/app/post/actions'
 import { use } from 'react'
 
-export default function PostListBeta({ posts }: { posts: Promise<any[]> }) {
+export default function PostListBeta({ posts }: { posts: Promise<Post[]> }) {
   const allPosts = use(posts)
   return (
     <div className='space-y-2'>
