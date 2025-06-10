@@ -29,6 +29,15 @@ export default async function Home() {
             <div className='text-lg'>Ask AI about image, support png, jpeg</div>
           </Link>
         </div>
+        <div className='container flex flex-col items-center justify-center gap-12 px-4 py-16'>
+          <Link
+            className='flex max-w-xs flex-col gap-4 rounded-xl bg-white/10 p-4 hover:bg-white/20'
+            href='/post'
+          >
+            <h3 className='text-2xl font-bold'>Post →</h3>
+            <div className='text-lg'>Post list</div>
+          </Link>
+        </div>
       </main>
     </HydrateClient>
   )
