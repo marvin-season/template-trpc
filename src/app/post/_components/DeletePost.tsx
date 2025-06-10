@@ -1,17 +1,29 @@
 'use client'
 
-import { deletePost } from '@/app/post/actions'
-import { useActionState } from 'react'
+import { useTRPC } from '@/trpc/react'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 
-export default function DeletePost() {
-  const [state, formAction, pending] = useActionState(async () => {
-    return await deletePost(Date.now())
-  }, '')
+export default function DeletePost({ postId }: { postId: number }) {
+  const trpc = useTRPC()
+  const queryClient = useQueryClient()
+  const { mutate: deletePost, isPending } = useMutation(
+    trpc.post.delete.mutationOptions({
+      onSuccess: () => {
+        queryClient.invalidateQueries({
+          queryKey: [['post', 'list']],
+        })
+      },
+    }),
+  )
 
   return (
-    <form action={formAction}>
-      <span className='text-red-500 text-xs'>{state}</span>
-      <button type='submit'>{pending ? 'Deleting...' : 'Delete Post'}</button>
-    </form>
+    <button
+      type='submit'
+      onClick={() => {
+        deletePost(postId)
+      }}
+    >
+      {isPending ? 'Deleting...' : 'Delete Post'}
+    </button>
   )
 }

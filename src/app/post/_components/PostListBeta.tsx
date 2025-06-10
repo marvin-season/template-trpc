@@ -1,6 +1,6 @@
 'use client'
 
-import type { Post } from '@/app/post/actions'
+import type { Post } from '@prisma/client'
 import { use } from 'react'
 
 export default function PostListBeta({ posts }: { posts: Promise<Post[]> }) {
@@ -11,7 +11,7 @@ export default function PostListBeta({ posts }: { posts: Promise<Post[]> }) {
         <div key={index} className='p-3 border rounded shadow-sm'>
           <div className='font-medium'>{post.name}</div>
           <div className='text-sm text-gray-500'>
-            {post.createdBy.name} ·{' '}
+            {post.createdById} ·{' '}
             {new Date(post.createdAt).toLocaleString('zh-CN', {
               hour12: false,
             })}

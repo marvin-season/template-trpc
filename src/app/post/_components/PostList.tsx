@@ -3,6 +3,7 @@
 import { useTRPC } from '@/trpc/react'
 import { useQuery } from '@tanstack/react-query'
 import { type RouterOutputs } from '@/trpc/react'
+import DeletePost from '@/app/post/_components/DeletePost'
 
 type Post = RouterOutputs['post']['list'][number]
 
@@ -28,6 +29,7 @@ export default function PostList() {
             作者: {post.createdBy.name} ·{' '}
             {new Date(post.createdAt).toLocaleString()}
           </div>
+          <DeletePost postId={post.id} />
         </div>
       ))}
       {posts.length === 0 && (

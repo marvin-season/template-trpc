@@ -1,5 +1,7 @@
 'use server'
 
+import { db } from '@/server/db'
+
 const post = {
   id: 1,
   name: 'Post 1',
@@ -10,11 +12,8 @@ const post = {
 export type Post = typeof post
 
 export async function getPostsMock() {
-  'use server'
-  // mock data
   await new Promise((resolve) => setTimeout(resolve, 1000))
-  console.log('getPostsMock')
-  return Promise.resolve([post, post, post])
+  return db.post.findMany()
 }
 
 export async function deletePost(id: number) {
