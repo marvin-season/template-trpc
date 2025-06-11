@@ -30,19 +30,19 @@ export default function AddPost() {
   return (
     <form onSubmit={handleSubmit} className='flex gap-2 mb-4'>
       <input
-        className='border rounded px-2 py-1'
+        className='border border-gray-300 rounded px-2 text-sm py-0.5 w-1/2'
         type='text'
         value={name}
         onChange={(e) => setName(e.target.value)}
-        placeholder='输入帖子名称'
+        placeholder='Please enter the post name...'
         disabled={isPending}
       />
       <button
-        className='border rounded px-4 py-1 bg-blue-500 text-white hover:bg-blue-600 disabled:bg-gray-400'
+        className='border rounded px-2 text-sm py-0.5 bg-blue-500 text-white hover:bg-blue-600 disabled:bg-gray-400'
         type='submit'
         disabled={isPending}
       >
-        {isPending ? '添加中...' : '添加'}
+        {isPending ? 'Adding...' : 'Add'}
       </button>
     </form>
   )

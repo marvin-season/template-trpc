@@ -23,7 +23,7 @@ export default function PostList() {
       {posts.map((post: Post) => (
         <div
           key={post.id}
-          className='p-3 border rounded shadow-sm hover:shadow-md transition-shadow flex justify-between items-center'
+          className='px-2 py-1 border border-slate-100 rounded shadow-sm hover:shadow-md transition-shadow flex justify-between items-center'
         >
           <div>
             <div className='font-medium'>{post.name}</div>
