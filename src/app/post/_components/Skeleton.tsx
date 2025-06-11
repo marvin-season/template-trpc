@@ -6,3 +6,13 @@ export default function Skeleton() {
     </div>
   )
 }
+
+export function SkeletonList({ count }: { count: number }) {
+  return (
+    <div className='space-y-2'>
+      {Array.from({ length: count }).map((_, index) => (
+        <Skeleton key={index} />
+      ))}
+    </div>
+  )
+}

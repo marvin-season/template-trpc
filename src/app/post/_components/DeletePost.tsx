@@ -18,12 +18,13 @@ export default function DeletePost({ postId }: { postId: number }) {
 
   return (
     <button
+      className='bg-red-500 text-white text-sm px-1 py-0.5 rounded hover:bg-red-600 transition-colors'
       type='submit'
       onClick={() => {
         deletePost(postId)
       }}
     >
-      {isPending ? 'Deleting...' : 'Delete Post'}
+      {isPending ? 'Deleting...' : 'Delete'}
     </button>
   )
 }

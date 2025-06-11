@@ -4,6 +4,7 @@ import { useTRPC } from '@/trpc/react'
 import { useQuery } from '@tanstack/react-query'
 import { type RouterOutputs } from '@/trpc/react'
 import DeletePost from '@/app/post/_components/DeletePost'
+import { SkeletonList } from '@/app/post/_components/Skeleton'
 
 type Post = RouterOutputs['post']['list'][number]
 
@@ -14,7 +15,7 @@ export default function PostList() {
   })
 
   if (isLoading) {
-    return <div>加载中...</div>
+    return <SkeletonList count={6} />
   }
 
   return (
@@ -22,12 +23,14 @@ export default function PostList() {
       {posts.map((post: Post) => (
         <div
           key={post.id}
-          className='p-3 border rounded shadow-sm hover:shadow-md transition-shadow'
+          className='p-3 border rounded shadow-sm hover:shadow-md transition-shadow flex justify-between items-center'
         >
-          <div className='font-medium'>{post.name}</div>
-          <div className='text-sm text-gray-500'>
-            作者: {post.createdBy.name} ·{' '}
-            {new Date(post.createdAt).toLocaleString()}
+          <div>
+            <div className='font-medium'>{post.name}</div>
+            <div className='text-sm text-gray-500'>
+              作者: {post.createdBy.name} ·{' '}
+              {new Date(post.createdAt).toLocaleString()}
+            </div>
           </div>
           <DeletePost postId={post.id} />
         </div>
