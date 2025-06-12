@@ -28,6 +28,7 @@ export function initDeepSeek(props: {
   const {
     model = process.env.NEXT_DEEPSEEK_MODEL_ID,
     baseURL = process.env.NEXT_DEEPSEEK_BASE_URL,
+    apiKey = process.env.NEXT_DEEPSEEK_API_KEY,
   } = props
   if (!model) {
     throw new Error('Model is not defined')
@@ -38,7 +39,7 @@ export function initDeepSeek(props: {
   }
   const deepseek = createDeepSeek({
     baseURL,
-    apiKey: '',
+    apiKey,
   })
 
   return deepseek(model)

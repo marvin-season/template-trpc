@@ -8,34 +8,38 @@ import { useState } from 'react'
 export default function ActionOutputPanel(input: ChatInputType) {
   const trpc = useTRPC()
   const mutate = useMutation(trpc.chat.generate.mutationOptions())
+  const [isPending, setIsPending] = useState(false)
   const [answer, setAnswer] = useState('')
   const handleSubmit = async () => {
     if (!input.text) {
       alert('请输入问题')
       return
     }
-
+    setIsPending(true)
     setAnswer('')
     const asyncGenerator = await mutate.mutateAsync(input)
-    for await (const chunk of asyncGenerator) {
-      console.log('chunk', chunk)
-      setAnswer((prev) => prev + chunk)
+    try {
+      for await (const chunk of asyncGenerator) {
+        console.log('chunk', chunk)
+        setAnswer((prev) => prev + chunk)
+      }
+    } catch (error) {
+      console.error('error', error)
+    } finally {
+      setIsPending(false)
     }
   }
   return (
     <>
       <button
+        disabled={isPending}
         onClick={handleSubmit}
-        className='w-full rounded-lg bg-blue-600 py-3 text-center font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2'
+        className={`w-full rounded-lg bg-blue-600 py-3 text-center font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
+          isPending ? 'opacity-50 cursor-not-allowed' : ''
+        }`}
       >
-        提交问题
+        {isPending ? '思考中...' : '提交问题'}
       </button>
-      {mutate.status === 'pending' && (
-        <div className='mt-6 text-center text-gray-600'>
-          <div className='mb-2 animate-spin text-2xl'>⚡</div>
-          思考中...
-        </div>
-      )}
 
       <div className='mt-6'>
         <label className='mb-2 block text-sm font-medium text-gray-700'>

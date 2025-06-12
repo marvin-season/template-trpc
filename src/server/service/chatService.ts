@@ -18,6 +18,9 @@ export const chatService = {
       throw new Error('模型不存在')
     }
     const result = streamText({
+      onError: (error) => {
+        console.error('error', error)
+      },
       model,
       messages: [
         { role: 'user', content: text },
