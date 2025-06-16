@@ -1,8 +1,10 @@
 'use client'
 
+import ModelSelector from '@/app/chat/_components/ModelSelector'
 import { useTRPC } from '@/trpc/react'
 import type { ChatInputType } from '@/types/chat'
 import { useMutation } from '@tanstack/react-query'
+import { Button } from 'antd'
 import { useState } from 'react'
 
 export default function ActionPanel(props: {
@@ -11,23 +13,12 @@ export default function ActionPanel(props: {
 }) {
   const { isPending, handleSubmit } = props
   return (
-    <>
-      <button
-        disabled={isPending}
-        onClick={handleSubmit}
-        className={`w-full rounded-lg bg-blue-600 py-3 text-center font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
-          isPending ? 'opacity-50 cursor-not-allowed' : ''
-        }`}
-      >
+    <div className='flex gap-2'>
+      <Button disabled={isPending} onClick={handleSubmit}>
         {isPending ? '思考中...' : '提交问题'}
-      </button>
-
-      <div className='mt-6'>
-        <label className='mb-2 block text-sm font-medium text-gray-700'>
-          AI 回答
-        </label>
-      </div>
-    </>
+      </Button>
+      <ModelSelector />
+    </div>
   )
 }
 

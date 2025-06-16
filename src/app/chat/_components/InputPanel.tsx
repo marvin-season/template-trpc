@@ -16,7 +16,7 @@ export default function InputPanel(props: {
   const { imageUrl, setImageUrl, question, setQuestion } = props
 
   return (
-    <>
+    <div>
       <div className='mb-6'>
         <label className='mb-2 block text-sm font-medium text-gray-700'>
           示例图片
@@ -80,7 +80,7 @@ export default function InputPanel(props: {
           className='w-full rounded-lg border border-gray-300 p-3 text-gray-700 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500'
         />
       </div>
-    </>
+    </div>
   )
 }
 
