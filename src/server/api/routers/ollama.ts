@@ -1,4 +1,9 @@
-import { createTRPCRouter, publicProcedure } from '@/server/api/trpc'
+import { EMPTY_MODEL_ID, TEMP_MODEL_MAPPING } from '@/constant'
+import {
+  createTRPCRouter,
+  publicProcedure,
+  protectedProcedure,
+} from '@/server/api/trpc'
 import { OllamaModelSchema } from '@/types/chat'
 import { fetchData } from '@/utils/common'
 import z from 'zod'
@@ -14,5 +19,17 @@ export const ollamaRouter = createTRPCRouter({
       'http://localhost:11434/api/tags',
     )
     return data.models
+  }),
+  setModelId: protectedProcedure
+    .input(
+      z.object({
+        modelId: z.string(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      TEMP_MODEL_MAPPING.set(ctx.session.user.id, input.modelId)
+    }),
+  getModelId: protectedProcedure.query(async ({ ctx }) => {
+    return TEMP_MODEL_MAPPING.get(ctx.session.user.id) || EMPTY_MODEL_ID
   }),
 })
