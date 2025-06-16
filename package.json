@@ -22,6 +22,7 @@
   },
   "dependencies": {
     "@ai-sdk/deepseek": "^0.2.14",
+    "@ant-design/nextjs-registry": "^1.0.2",
     "@auth/prisma-adapter": "^2.7.2",
     "@prisma/client": "^6.5.0",
     "@t3-oss/env-nextjs": "^0.12.0",
@@ -31,6 +32,7 @@
     "@trpc/server": "^11.0.0",
     "@trpc/tanstack-react-query": "^11.3.1",
     "ai": "^4.3.16",
+    "antd": "^5.26.0",
     "langchain": "^0.3.27",
     "next": "^15.2.3",
     "next-auth": "5.0.0-beta.25",
