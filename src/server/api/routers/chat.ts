@@ -7,10 +7,11 @@ export const chatRouter = createTRPCRouter({
     return ['1', '2', '3']
   }),
   generate: publicProcedure.input(chatInputSchema).mutation(async function* ({
+    ctx,
     input,
   }) {
     try {
-      yield* await chatService.ask(input)
+      yield* await chatService.ask({ ctx, input })
     } catch (error) {
       console.error('error', error)
     }
@@ -18,9 +19,9 @@ export const chatRouter = createTRPCRouter({
   // same as generate, but use subscription
   askStreaming: publicProcedure
     .input(chatInputSchema)
-    .subscription(async function* ({ input }) {
+    .subscription(async function* ({ ctx, input }) {
       try {
-        yield* await chatService.ask(input)
+        yield* await chatService.ask({ ctx, input })
       } catch (error) {
         console.error('error', error)
       }
