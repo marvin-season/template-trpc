@@ -17,3 +17,7 @@ export function validateSize(file: File, maxSize: number) {
   }
   return true
 }
+
+export async function fetchData(url: string) {
+  return fetch(url).then((res) => res.json())
+}

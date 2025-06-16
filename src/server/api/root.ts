@@ -1,4 +1,5 @@
 import { chatRouter } from '@/server/api/routers/chat'
+import { ollamaRouter } from '@/server/api/routers/ollama'
 import { postRouter } from '@/server/api/routers/post'
 import { createCallerFactory, createTRPCRouter } from '@/server/api/trpc'
 
@@ -10,6 +11,7 @@ import { createCallerFactory, createTRPCRouter } from '@/server/api/trpc'
 export const appRouter = createTRPCRouter({
   chat: chatRouter,
   post: postRouter,
+  ollama: ollamaRouter,
 })
 
 // export type definition of API
