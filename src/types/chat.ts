@@ -6,3 +6,11 @@ export const chatInputSchema = z.object({
 })
 
 export type ChatInputType = z.infer<typeof chatInputSchema>
+
+// Ollama /api/tags 返回的数据模型
+export const OllamaModelSchema = z.object({
+  name: z.string(),
+  modified_at: z.string(),
+  size: z.number(),
+  details: z.array(z.string()),
+})

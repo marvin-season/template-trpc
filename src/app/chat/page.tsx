@@ -2,6 +2,7 @@
 
 import ActionOutputPanel from '@/app/chat/_components/ActionOutputPanel'
 import InputPanel from '@/app/chat/_components/InputPanel'
+import ModelSelector from '@/app/chat/_components/ModelSelector'
 import { useState } from 'react'
 
 export default function ChatPage() {
@@ -10,6 +11,7 @@ export default function ChatPage() {
 
   return (
     <div className='flex flex-col min-h-screen items-center justify-center bg-gray-50 p-6'>
+      <ModelSelector />
       <div className='w-full max-w-lg rounded-xl bg-white p-8 shadow-lg'>
         <h1 className='mb-6 text-2xl font-bold text-gray-800'>AI 图像问答</h1>
         <InputPanel
