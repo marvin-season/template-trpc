@@ -91,7 +91,7 @@ export function useInputPanel(options: { isSupportVision?: boolean }) {
   const [imageUrl, setImageUrl] = useState('')
   const [mcpServers, setMcpServers] =
     useState<ChatInputType['mcpServers']>(undefined)
-  const [question, setQuestion] = useState<string>()
+  const [question, setQuestion] = useState<string>('')
 
   useEffect(() => {
     if (isSupportVision) {
