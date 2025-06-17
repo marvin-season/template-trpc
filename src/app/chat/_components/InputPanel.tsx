@@ -88,7 +88,11 @@ function VisionInputPanel(props: {
 export function useInputPanel(options: { isSupportVision?: boolean }) {
   const { isSupportVision } = options
   const [imageUrl, setImageUrl] = useState('')
-  const [question, setQuestion] = useState('what is this image?')
+  const [question, setQuestion] = useState(
+    isSupportVision
+      ? 'what is this image?'
+      : 'What is the weather in 34.0522° N, -118.2437° W',
+  )
   return {
     render: () => {
       return (
@@ -103,6 +107,7 @@ export function useInputPanel(options: { isSupportVision?: boolean }) {
     getter: {
       imageUrl,
       text: question,
+      mcpServers: [],
     } satisfies ChatInputType,
   }
 }

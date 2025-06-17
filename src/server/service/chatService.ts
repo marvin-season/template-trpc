@@ -17,6 +17,7 @@ export const chatService = {
       imageUrl,
       modelId = TEMP_MODEL_MAPPING.get(ctx.session.user.id),
       provider = process.env.NEXT_MODEL_PROVIDER,
+      mcpServers,
     } = input
     let model: LanguageModelV1 | null = null
     switch (provider) {
@@ -42,12 +43,20 @@ export const chatService = {
         message: '模型不存在',
       })
     }
-    const mcpClient = await createMCPClient({
-      transport: new StdioMCPTransport({
-        command: 'node',
-        args: ['/Users/marvin/personal/mcp/server/build/index.js'],
-      }),
-    })
+
+    let tools
+    if (mcpServers) {
+      const mcpClient = await createMCPClient({
+        transport: new StdioMCPTransport({
+          command: 'node',
+          args: ['/Users/marvin/personal/mcp/server/build/index.js'],
+        }),
+      }).catch((error) => {
+        console.error('error', error)
+      })
+      tools = await mcpClient?.tools()
+    }
+
     const mcpResults = await generateText({
       model,
       messages: [
@@ -60,7 +69,7 @@ export const chatService = {
           content: `用户的问题是: ${text}`,
         },
       ],
-      tools: await mcpClient.tools(),
+      tools,
     })
 
     const finalMessages: CoreMessage[] = []
