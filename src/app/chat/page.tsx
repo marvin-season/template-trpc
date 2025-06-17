@@ -27,7 +27,7 @@ export default function ChatPage() {
   } = useActionPanel(Object.assign(input, { provider, modelId }))
 
   return (
-    <div className='flex bg-gray-50 p-6 gap-6'>
+    <div className='flex bg-gray-50 p-6 gap-6 h-dvh w-2/3 mx-auto'>
       <div className='flex flex-col gap-2'>
         {renderModelSelector()}
         {renderInputPanel()}

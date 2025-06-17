@@ -14,18 +14,13 @@ export default function QuestionInput(props: {
   const { question, setQuestion } = props
 
   return (
-    <div className='mb-6'>
-      <label className='mb-2 block text-sm font-medium text-gray-700'>
-        你的问题
-      </label>
-      <input
-        type='text'
-        placeholder='请输入你的问题'
-        value={question}
-        onChange={(e) => setQuestion(e.target.value)}
-        className='w-full rounded-lg border border-gray-300 p-3 text-gray-700 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500'
-      />
-    </div>
+    <input
+      type='text'
+      placeholder='请输入你的问题'
+      value={question}
+      onChange={(e) => setQuestion(e.target.value)}
+      className='w-full rounded-lg border border-gray-300 p-3 text-gray-700 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500'
+    />
   )
 }
 
