@@ -7,7 +7,7 @@ import { useMemo, useState } from 'react'
 export function useModelSelector(provider = PROVIDER_NAME.OLLAMA) {
   const trpc = useTRPC()
   const { data: models } = useQuery(trpc[provider].list.queryOptions())
-  const [current, setCurrent] = useState()
+  const [current, setCurrent] = useState<string>()
 
   const options = useMemo(() => {
     return models?.map((model) => ({

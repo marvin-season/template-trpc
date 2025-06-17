@@ -4,15 +4,27 @@ import { useActionPanel } from '@/app/chat/_components/ActionOutputPanel'
 import { useInputPanel } from '@/app/chat/_components/InputPanel'
 import Answer from '@/app/chat/_components/Answer'
 import { useModelSelector } from '@/app/chat/_components/ModelSelector'
+import { useMemo } from 'react'
 
 export default function ChatPage() {
-  const { render: renderInputPanel, getter } = useInputPanel()
+  // 设置模型
+  const {
+    render: renderModelSelector,
+    getters: { provider, current: modelId },
+  } = useModelSelector()
+  // Is support vision
+  const isSupportVision = useMemo(() => {
+    return modelId?.includes('v')
+  }, [modelId])
+  // 输入面板
+  const { render: renderInputPanel, getter: input } = useInputPanel({
+    isSupportVision,
+  })
+  // 动作面板
   const {
     render: renderActionPanel,
     getter: { answer },
-  } = useActionPanel(getter)
-
-  const { render: renderModelSelector } = useModelSelector()
+  } = useActionPanel(Object.assign(input, { provider, modelId }))
 
   return (
     <div className='flex bg-gray-50 p-6 gap-6'>
