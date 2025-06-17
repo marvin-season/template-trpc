@@ -2,8 +2,14 @@ import { PROVIDER_NAME, TEMP_MODEL_MAPPING } from '@/constant'
 import { initDeepSeek, initOllamaProvider } from '@/server/provider'
 import type { ChatInputType } from '@/types/chat'
 import { TRPCError } from '@trpc/server'
-import { streamText, type LanguageModelV1 } from 'ai'
-
+import {
+  streamText,
+  type LanguageModelV1,
+  experimental_createMCPClient as createMCPClient,
+  generateText,
+  type CoreMessage,
+} from 'ai'
+import { Experimental_StdioMCPTransport as StdioMCPTransport } from 'ai/mcp-stdio'
 export const chatService = {
   ask: async ({ ctx, input }: { ctx: any; input: ChatInputType }) => {
     const {
@@ -36,28 +42,55 @@ export const chatService = {
         message: '模型不存在',
       })
     }
+    const mcpClient = await createMCPClient({
+      transport: new StdioMCPTransport({
+        command: 'node',
+        args: ['/Users/marvin/personal/mcp/server/build/index.js'],
+      }),
+    })
+    const mcpResults = await generateText({
+      model,
+      messages: [
+        {
+          role: 'system',
+          content: '你善于反思, 善于使用工具, 请使用合适的工具来回答用户的问题',
+        },
+        {
+          role: 'system',
+          content: `用户的问题是: ${text}`,
+        },
+      ],
+      tools: await mcpClient.tools(),
+    })
+
+    const finalMessages: CoreMessage[] = []
+    finalMessages.push({
+      role: 'system',
+      content: `你是一个模型输出和工具输出的总结专家, 请结合用户的问题和工具的输出结果, 回答用户的问题`,
+    })
+    finalMessages.push({
+      role: 'system',
+      content: `用户的问题是: ${text}`,
+    })
+
+    if (imageUrl) {
+      finalMessages.push({
+        role: 'user',
+        content: [{ type: 'image', image: imageUrl }],
+      })
+    }
+
+    finalMessages.push({
+      role: 'tool',
+      content: mcpResults.toolResults,
+    })
+
     const result = streamText({
       onError: (error) => {
         console.error('error', error)
       },
       model,
-      messages: [
-        { role: 'user', content: text },
-        {
-          content: [
-            imageUrl
-              ? {
-                  type: 'image',
-                  image: imageUrl,
-                }
-              : {
-                  type: 'text',
-                  text: '如果我问了图片相关问题，请提示我上传图片',
-                },
-          ],
-          role: 'user',
-        },
-      ],
+      messages: finalMessages,
     })
 
     return result.textStream
