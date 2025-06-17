@@ -1,6 +1,5 @@
 'use client'
 
-import ModelSelector from '@/app/chat/_components/ModelSelector'
 import { useTRPC } from '@/trpc/react'
 import type { ChatInputType } from '@/types/chat'
 import { useMutation } from '@tanstack/react-query'
@@ -12,13 +11,11 @@ export default function ActionPanel(props: {
   handleSubmit: () => void
 }) {
   const { isPending, handleSubmit } = props
+
   return (
-    <div className='flex gap-2'>
-      <Button disabled={isPending} onClick={handleSubmit}>
-        {isPending ? '思考中...' : '提交问题'}
-      </Button>
-      <ModelSelector />
-    </div>
+    <Button disabled={isPending} onClick={handleSubmit}>
+      {isPending ? '思考中...' : '提交问题'}
+    </Button>
   )
 }
 

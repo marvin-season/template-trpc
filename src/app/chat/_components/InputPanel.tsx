@@ -16,7 +16,7 @@ export default function InputPanel(props: {
   const { imageUrl, setImageUrl, question, setQuestion } = props
 
   return (
-    <div>
+    <div className='flex flex-col gap-2 bg-blue-50 p-4 rounded-lg'>
       <div className='mb-6'>
         <label className='mb-2 block text-sm font-medium text-gray-700'>
           示例图片

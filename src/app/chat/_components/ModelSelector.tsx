@@ -1,36 +1,40 @@
+import { PROVIDER_NAME } from '@/constant'
 import { useTRPC } from '@/trpc/react'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { Select } from 'antd'
-import { useMemo } from 'react'
+import { useQuery } from '@tanstack/react-query'
+import { Button, Select } from 'antd'
+import { useMemo, useState } from 'react'
 
-export default function ModelSelector() {
+export function useModelSelector(provider = PROVIDER_NAME.OLLAMA) {
   const trpc = useTRPC()
-  const { data: models } = useQuery(trpc.ollama.list.queryOptions())
-  const { data: modelId } = useQuery(trpc.ollama.getModelId.queryOptions())
-  const queryClient = useQueryClient()
+  const { data: models } = useQuery(trpc[provider].list.queryOptions())
+  const [current, setCurrent] = useState()
 
-  const { mutate: setModelId } = useMutation(
-    trpc.ollama.setModelId.mutationOptions(),
-  )
-
-  const handleChange = async (value: string) => {
-    setModelId({ modelId: value })
-    await queryClient.invalidateQueries({
-      queryKey: [['ollama', 'getModelId']],
-    })
-  }
   const options = useMemo(() => {
     return models?.map((model) => ({
       value: model.name,
       label: <span>{model.name}</span>,
     }))
   }, [models])
-  return (
-    <Select
-      value={modelId as string}
-      placeholder={'暂无模型'}
-      options={options}
-      onChange={handleChange}
-    />
-  )
+
+  return {
+    render: () => {
+      return (
+        <div className='flex gap-2'>
+          <Button disabled>{provider}</Button>
+          <Select
+            value={current}
+            placeholder={'暂无模型'}
+            options={options}
+            onChange={(value) => {
+              setCurrent(value)
+            }}
+          />
+        </div>
+      )
+    },
+    getters: {
+      provider,
+      current,
+    },
+  }
 }
