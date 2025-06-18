@@ -2,13 +2,12 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { stream } from './perf'
 import { Button } from 'antd'
 
-export default function BufferRender() {
-  const [status, setStatus] = useState('running')
+function useBufferRender() {
+  const [status, setStatus] = useState('idle')
   const statusRef = useRef(status)
   statusRef.current = status
   const [answer, setAnswer] = useState('')
   const bufferRef = useRef<string[]>([])
-
   function appendAnswer(value: string) {
     setAnswer((prev) => prev + value)
   }
@@ -17,20 +16,45 @@ export default function BufferRender() {
     appendAnswer(bufferRef.current.join(''))
     bufferRef.current = []
   }
+  function flushEnd() {
+    setStatus('idle')
+    flushBuffer()
+  }
+  return {
+    status,
+    statusRef,
+    setStatus,
+    answer,
+    setAnswer,
+    bufferRef,
+    appendAnswer,
+    flushBuffer,
+    flushEnd,
+  }
+}
 
+export default function BufferRender() {
+  const {
+    status,
+    setStatus,
+    answer,
+    statusRef,
+    bufferRef,
+    appendAnswer,
+    flushBuffer,
+    flushEnd,
+  } = useBufferRender()
   const handleAnswer = useCallback(async () => {
+    setStatus('running')
     // @ts-ignore
     for await (const chunk of stream) {
-      console.log('chunk', chunk, statusRef.current)
       bufferRef.current.push(chunk.text)
-
       if (statusRef.current !== 'suspense') {
         flushBuffer()
       }
     }
-    flushBuffer()
-    setStatus('suspense')
-  }, [statusRef, flushBuffer, appendAnswer])
+    flushEnd()
+  }, [flushBuffer, appendAnswer])
   useEffect(() => {
     handleAnswer()
   }, [])
