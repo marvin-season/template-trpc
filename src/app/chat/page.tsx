@@ -35,15 +35,15 @@ export default function ChatPage() {
     <div className='flex bg-gray-50 p-6 gap-6 h-dvh w-2/3 mx-auto'>
       <Button
         onClick={() => {
-          if (status === 'pending') {
+          if (status === 'suspense') {
             promiseRef.current.resolve()
-          } else if (status === 'fulfilled') {
+          } else if (status === 'running') {
             promiseRef.current = withResolvers()
-            setStatus('pending')
+            setStatus('suspense')
           }
         }}
       >
-        {status}
+        {status === 'suspense' ? '开始' : '暂停'}
       </Button>
       <div className='flex flex-col gap-2'>
         {renderModelSelector()}

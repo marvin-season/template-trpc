@@ -6,7 +6,7 @@ import { useMutation } from '@tanstack/react-query'
 import { Button } from 'antd'
 import { memo, useCallback, useEffect, useRef, useState } from 'react'
 
-const ActionPanel = memo(
+export const ActionPanel = memo(
   function ActionPanel(props: {
     isPending: boolean
     handleSubmit: () => void
@@ -23,19 +23,19 @@ const ActionPanel = memo(
 
 const content = `
 Fast sites provide better user experiences. Users want and expect web experiences with content that is fast to load and smooth to interact with.
-
-Two major issues in web performance are issues having to do with latency and issues having to do with the fact that for the most part, browsers are single-threaded.
-
-Latency is the biggest threat to our ability to ensure a fast-loading page. It is the developers' goal to make the site load as fast as possible — or at least appear to load super fast — so the user gets the requested information as quickly as possible. Network latency is the time it takes to transmit bytes over the air to computers. Web performance is what we have to do to make the page load as quickly as possible.
-
 `
 const stream = new ReadableStream({
   start(controller) {
     let i = 0
-    setInterval(() => {
+    const interval = setInterval(() => {
+      if (!content[i]) {
+        controller.close()
+        clearInterval(interval)
+      }
       controller.enqueue({
         text: content[i],
       })
+
       i++
     }, 50)
   },
@@ -57,7 +57,7 @@ export function withResolvers() {
 }
 
 function useResolvers() {
-  const [status, setStatus] = useState('pending')
+  const [status, setStatus] = useState('suspense')
   const promiseRef = useRef<any>(withResolvers)
   return {
     status,
@@ -66,41 +66,50 @@ function useResolvers() {
   }
 }
 export function useActionPanel(input: ChatInputType) {
+  const inputRef = useRef(input)
+  inputRef.current = input
   const trpc = useTRPC()
   const mutate = useMutation(trpc.chat.generate.mutationOptions())
   const [isPending, setIsPending] = useState(false)
   const [answer, setAnswer] = useState('')
   const { promiseRef, status, setStatus } = useResolvers()
-
+  const statusRef = useRef(status)
+  statusRef.current = status
   const handleAnswer = useCallback(
     async (content: string) => {
-      // const stream = createMockStream(content, /(\s+)/g)
       // @ts-ignore
       for await (const chunk of stream) {
-        if (status === 'pending') {
+        console.log('chunk', chunk, statusRef.current)
+        if (statusRef.current === 'suspense') {
           await promiseRef.current.promise
-          setStatus('fulfilled')
+          setStatus('running')
         }
         setAnswer((prev) => prev + chunk.text)
       }
+      setStatus('suspense')
     },
-    [promiseRef],
+    [promiseRef, statusRef],
   )
   useEffect(() => {
-    handleAnswer(content + content)
+    // handleAnswer(content + content)
   }, [])
 
   const handleSubmit = async () => {
-    if (!input.text) {
+    if (!inputRef.current.text) {
       alert('请输入问题')
       return
     }
     setIsPending(true)
     setAnswer('')
-    const asyncGenerator = await mutate.mutateAsync(input)
+    const asyncGenerator = await mutate.mutateAsync(inputRef.current)
     try {
       for await (const chunk of asyncGenerator) {
-        console.log('chunk', chunk)
+        console.log('chunk', chunk, statusRef.current)
+
+        if (statusRef.current === 'suspense') {
+          await promiseRef.current.promise
+          setStatus('running')
+        }
         setAnswer((prev) => prev + chunk)
       }
     } catch (error) {
