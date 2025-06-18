@@ -4,7 +4,7 @@ import { useTRPC } from '@/trpc/react'
 import type { ChatInputType } from '@/types/chat'
 import { useMutation } from '@tanstack/react-query'
 import { Button } from 'antd'
-import { memo, useEffect, useState } from 'react'
+import { memo, useCallback, useEffect, useRef, useState } from 'react'
 
 const ActionPanel = memo(
   function ActionPanel(props: {
@@ -21,22 +21,73 @@ const ActionPanel = memo(
   (prev, next) => prev.isPending === next.isPending,
 )
 
-const content = `好的，用户问的是“What is the weather in 34.0522° N, -118.2437° W?”，我需要先确认用户的需求。他们可能想知道这个位置的天气情况，可能是在进行户外活动或者需要了解当地天气状况。首先，我需要检查输入的经纬度是否正确。34.0522° N和-118.2437° W，这两个坐标看起来都是正确的，没有输入错误。接下来，我需要考虑用户可能的用途。可能是想了解这个位置的天气，比如是否适合户外活动，或者需要帮助安排交通路线等。然后，我需要考虑用户可能的深层需求。他们可能想知道天气的具体情况，比如是否有雨、风速、温度等信息。但根据问题本身，用户并没有明确询问这些细节，而是直接询问天气状况。因此，我需要确认工具是否能够提供这些信息，或者是否有其他工具可以辅助回答。另外，我需要确保回答的准确性。可能需要查阅天气预报工具或API来验证数据。例如，使用开放数据平台或天气服务，如OpenWeatherMap，来获取该位置的实时天气信息。如果工具返回的数据是准确的，就可以直接回答用户的问题，否则可能需要进一步确认数据来源。同时，还要注意用户可能的隐私或数据安全问题，确保回答符合相关法规，比如GDPR或其他数据保护规定。不过，用户的问题看起来并不涉及敏感信息，因此无需额外考虑。最后，总结回答时，需要明确说明工具的使用情况，并提供进一步帮助的建议，确保用户满意。例如，可以建议他们使用天气服务来获取最新数据，或者询问是否有其他需求。`
+const content = `
+Fast sites provide better user experiences. Users want and expect web experiences with content that is fast to load and smooth to interact with.
 
+Two major issues in web performance are issues having to do with latency and issues having to do with the fact that for the most part, browsers are single-threaded.
+
+Latency is the biggest threat to our ability to ensure a fast-loading page. It is the developers' goal to make the site load as fast as possible — or at least appear to load super fast — so the user gets the requested information as quickly as possible. Network latency is the time it takes to transmit bytes over the air to computers. Web performance is what we have to do to make the page load as quickly as possible.
+
+`
+const stream = new ReadableStream({
+  start(controller) {
+    let i = 0
+    setInterval(() => {
+      controller.enqueue({
+        text: content[i],
+      })
+      i++
+    }, 50)
+  },
+})
+
+// polyfill for Promise.withResolvers
+export function withResolvers() {
+  let resolve, reject
+  const promise = new Promise((res, rej) => {
+    resolve = res
+    reject = rej
+  })
+
+  return {
+    promise,
+    resolve,
+    reject,
+  }
+}
+
+function useResolvers() {
+  const [status, setStatus] = useState('pending')
+  const promiseRef = useRef<any>(withResolvers)
+  return {
+    status,
+    promiseRef,
+    setStatus,
+  }
+}
 export function useActionPanel(input: ChatInputType) {
   const trpc = useTRPC()
   const mutate = useMutation(trpc.chat.generate.mutationOptions())
   const [isPending, setIsPending] = useState(false)
   const [answer, setAnswer] = useState('')
+  const { promiseRef, status, setStatus } = useResolvers()
 
-  const handleAnswer = async (content: string) => {
-    for (const chunk of content.split('')) {
-      setAnswer((prev) => prev + chunk)
-      await new Promise((resolve) => setTimeout(resolve, 0))
-    }
-  }
+  const handleAnswer = useCallback(
+    async (content: string) => {
+      // const stream = createMockStream(content, /(\s+)/g)
+      // @ts-ignore
+      for await (const chunk of stream) {
+        if (status === 'pending') {
+          await promiseRef.current.promise
+          setStatus('fulfilled')
+        }
+        setAnswer((prev) => prev + chunk.text)
+      }
+    },
+    [promiseRef],
+  )
   useEffect(() => {
-    handleAnswer(content)
+    handleAnswer(content + content)
   }, [])
 
   const handleSubmit = async () => {
@@ -64,6 +115,11 @@ export function useActionPanel(input: ChatInputType) {
     },
     getter: {
       answer,
+      promiseRef,
+      status,
+    },
+    setter: {
+      setStatus,
     },
   }
 }

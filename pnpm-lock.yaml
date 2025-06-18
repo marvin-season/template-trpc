@@ -41,6 +41,9 @@ importers:
       ai:
         specifier: ^4.3.16
         version: 4.3.16(react@19.1.0)(zod@3.25.30)
+      aio-tool:
+        specifier: ^0.0.2
+        version: 0.0.2
       antd:
         specifier: ^5.26.0
         version: 5.26.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
@@ -1046,6 +1049,9 @@ packages:
     peerDependenciesMeta:
       react:
         optional: true
+
+  aio-tool@0.0.2:
+    resolution: {integrity: sha512-+iqTI3atkUnr/2owEftKrHPm73BrU5oFct8IY+b/7jb8tExmpIUw+FUIQqCl0suGFQP1clL+F7zbwoTVJ58F6w==}
 
   ajv@6.12.6:
     resolution: {integrity: sha512-j3fVLgvTo527anyYyJOGTYJbG+vnnQYvE0m5mmkc1TK+nxAppkCLMIL0aZ4dblVCNoGShhm+kzE4ZUykBoMg4g==}
@@ -4068,6 +4074,8 @@ snapshots:
       zod: 3.25.30
     optionalDependencies:
       react: 19.1.0
+
+  aio-tool@0.0.2: {}
 
   ajv@6.12.6:
     dependencies:
