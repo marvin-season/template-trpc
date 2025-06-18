@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { stream } from './perf'
 import { Button } from 'antd'
 
-function useBufferRender() {
+export function useBufferRender() {
   const [status, setStatus] = useState('idle')
   const statusRef = useRef(status)
   statusRef.current = status
@@ -27,7 +27,6 @@ function useBufferRender() {
     answer,
     setAnswer,
     bufferRef,
-    appendAnswer,
     flushBuffer,
     flushEnd,
   }
@@ -40,7 +39,6 @@ export default function BufferRender() {
     answer,
     statusRef,
     bufferRef,
-    appendAnswer,
     flushBuffer,
     flushEnd,
   } = useBufferRender()
@@ -54,7 +52,7 @@ export default function BufferRender() {
       }
     }
     flushEnd()
-  }, [flushBuffer, appendAnswer])
+  }, [flushBuffer, flushEnd])
   useEffect(() => {
     handleAnswer()
   }, [])

@@ -1,5 +1,6 @@
 'use client'
 
+import { useBufferRender } from '@/app/chat/_components/perf/BufferRender'
 import { useTRPC } from '@/trpc/react'
 import type { ChatInputType } from '@/types/chat'
 import { useMutation } from '@tanstack/react-query'
@@ -28,8 +29,17 @@ export function useActionPanel(input: ChatInputType) {
   const trpc = useTRPC()
   const mutate = useMutation(trpc.chat.generate.mutationOptions())
   const [isPending, setIsPending] = useState(false)
-  const [answer, setAnswer] = useState('')
-
+  // const [answer, setAnswer] = useState('')
+  const {
+    status,
+    setStatus,
+    answer,
+    setAnswer,
+    statusRef,
+    bufferRef,
+    flushBuffer,
+    flushEnd,
+  } = useBufferRender()
   const handleSubmit = async () => {
     if (!inputRef.current.text) {
       alert('请输入问题')
@@ -39,9 +49,15 @@ export function useActionPanel(input: ChatInputType) {
     setAnswer('')
     const asyncGenerator = await mutate.mutateAsync(inputRef.current)
     try {
+      setStatus('running')
       for await (const chunk of asyncGenerator) {
-        setAnswer((prev) => prev + chunk)
+        bufferRef.current.push(chunk)
+        console.log('chunk', chunk, statusRef.current)
+        if (statusRef.current !== 'suspense') {
+          flushBuffer()
+        }
       }
+      flushEnd()
     } catch (error) {
       console.error('error', error)
     } finally {
@@ -54,6 +70,8 @@ export function useActionPanel(input: ChatInputType) {
     },
     getter: {
       answer,
+      status,
+      setStatus,
     },
   }
 }
