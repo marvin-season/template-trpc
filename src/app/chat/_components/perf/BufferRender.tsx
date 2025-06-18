@@ -3,9 +3,8 @@ import { stream } from './perf'
 import { Button } from 'antd'
 
 export function useBufferRender() {
-  const [status, setStatus] = useState('idle')
-  const statusRef = useRef(status)
-  statusRef.current = status
+  // const [status, setStatus] = useState('idle')
+  const statusRef = useRef('idle')
   const [answer, setAnswer] = useState('')
   const bufferRef = useRef<string[]>([])
   function appendAnswer(value: string) {
@@ -17,13 +16,11 @@ export function useBufferRender() {
     bufferRef.current = []
   }
   function flushEnd() {
-    setStatus('idle')
+    statusRef.current = 'idle'
     flushBuffer()
   }
   return {
-    status,
     statusRef,
-    setStatus,
     answer,
     setAnswer,
     bufferRef,
@@ -33,17 +30,10 @@ export function useBufferRender() {
 }
 
 export default function BufferRender() {
-  const {
-    status,
-    setStatus,
-    answer,
-    statusRef,
-    bufferRef,
-    flushBuffer,
-    flushEnd,
-  } = useBufferRender()
+  const { statusRef, answer, bufferRef, flushBuffer, flushEnd } =
+    useBufferRender()
   const handleAnswer = useCallback(async () => {
-    setStatus('running')
+    statusRef.current = 'running'
     // @ts-ignore
     for await (const chunk of stream) {
       bufferRef.current.push(chunk.text)
@@ -59,9 +49,13 @@ export default function BufferRender() {
   return (
     <div>
       <Button
-        onClick={() => setStatus(status === 'running' ? 'suspense' : 'running')}
+        onClick={() =>
+          statusRef.current === 'running'
+            ? (statusRef.current = 'suspense')
+            : (statusRef.current = 'running')
+        }
       >
-        {status}
+        {statusRef.current}
       </Button>
       <div>{answer}</div>
     </div>

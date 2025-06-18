@@ -30,16 +30,8 @@ export function useActionPanel(input: ChatInputType) {
   const mutate = useMutation(trpc.chat.generate.mutationOptions())
   const [isPending, setIsPending] = useState(false)
   // const [answer, setAnswer] = useState('')
-  const {
-    status,
-    setStatus,
-    answer,
-    setAnswer,
-    statusRef,
-    bufferRef,
-    flushBuffer,
-    flushEnd,
-  } = useBufferRender()
+  const { statusRef, answer, setAnswer, bufferRef, flushBuffer, flushEnd } =
+    useBufferRender()
   const handleSubmit = async () => {
     if (!inputRef.current.text) {
       alert('请输入问题')
@@ -49,7 +41,7 @@ export function useActionPanel(input: ChatInputType) {
     setAnswer('')
     const asyncGenerator = await mutate.mutateAsync(inputRef.current)
     try {
-      setStatus('running')
+      statusRef.current = 'running'
       for await (const chunk of asyncGenerator) {
         bufferRef.current.push(chunk)
         console.log('chunk', chunk, statusRef.current)
@@ -70,8 +62,7 @@ export function useActionPanel(input: ChatInputType) {
     },
     getter: {
       answer,
-      status,
-      setStatus,
+      statusRef,
     },
   }
 }
