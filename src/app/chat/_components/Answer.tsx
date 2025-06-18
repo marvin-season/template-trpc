@@ -1,3 +1,4 @@
+import useIntersectionObserver from '@/app/_hooks/useIntersectionObserver'
 import { useMemo } from 'react'
 import type { Components } from 'react-markdown'
 import Markdown from 'react-markdown'
@@ -25,8 +26,12 @@ const Think = ({
     </div>
   )
 }
-export default function Answer(props: { answer: string }) {
-  const { answer } = props
+export default function Answer(props: {
+  answer: string
+  onPause: () => void
+  onResume: () => void
+}) {
+  const { answer, onPause, onResume } = props
   const answerWithThink = useMemo(() => {
     // 替换answer中的思考内容: 如下规则
     /* <think> xxx   => <think data-status="loading" data-value="xxx">
@@ -40,12 +45,31 @@ export default function Answer(props: { answer: string }) {
         return `<think data-status="loading" data-value="${value.trim()}"></think>`
       })
   }, [answer])
+
+  /**
+   * 使用IntersectionObserver监听answer的滚动，当answer滚动到视口时，调用onResume，当answer滚动出视口时，调用onPause
+   */
+  const { targetRef, rootRef } = useIntersectionObserver<
+    HTMLDivElement,
+    HTMLDivElement
+  >({
+    rootOptions: {
+      rootMargin: '50%',
+    },
+    onIntersecting: onResume,
+    onDisIntersecting: onPause,
+  })
+
   return (
-    <div className='overflow-y-auto mt-4 whitespace-pre-wrap rounded-lg border border-gray-200 bg-gray-50 p-4 text-gray-700 flex-1'>
+    <div
+      ref={rootRef}
+      className='h-[200px] w-[500px] overflow-y-auto mt-4 whitespace-pre-wrap rounded-lg border border-gray-200 bg-gray-50 p-4 text-gray-700'
+    >
       <Markdown rehypePlugins={[rehypeRaw]} components={components}>
         {/* TODO: 换行符导致markdown解析自定义标签失败 */}
         {answerWithThink.replaceAll('\n', '')}
       </Markdown>
+      <p ref={targetRef}></p>
     </div>
   )
 }

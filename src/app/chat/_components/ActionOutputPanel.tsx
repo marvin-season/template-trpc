@@ -49,7 +49,7 @@ export function useActionPanel(input: ChatInputType) {
           flushBuffer()
         }
       }
-      flushEnd()
+      // flushEnd()
     } catch (error) {
       console.error('error', error)
     } finally {
@@ -63,6 +63,15 @@ export function useActionPanel(input: ChatInputType) {
     getter: {
       answer,
       statusRef,
+    },
+    action: {
+      onPause: () => {
+        statusRef.current = 'suspense'
+      },
+      onResume: () => {
+        flushBuffer()
+        statusRef.current = 'running'
+      },
     },
   }
 }
