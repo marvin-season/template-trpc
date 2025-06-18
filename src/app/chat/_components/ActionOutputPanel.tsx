@@ -5,6 +5,7 @@ import type { ChatInputType } from '@/types/chat'
 import { useMutation } from '@tanstack/react-query'
 import { Button } from 'antd'
 import { memo, useCallback, useEffect, useRef, useState } from 'react'
+import { useResolvers } from './deprecated/perf'
 
 export const ActionPanel = memo(
   function ActionPanel(props: {
@@ -21,50 +22,6 @@ export const ActionPanel = memo(
   (prev, next) => prev.isPending === next.isPending,
 )
 
-const content = `
-Fast sites provide better user experiences. Users want and expect web experiences with content that is fast to load and smooth to interact with.
-`
-const stream = new ReadableStream({
-  start(controller) {
-    let i = 0
-    const interval = setInterval(() => {
-      if (!content[i]) {
-        controller.close()
-        clearInterval(interval)
-      }
-      controller.enqueue({
-        text: content[i],
-      })
-
-      i++
-    }, 50)
-  },
-})
-
-// polyfill for Promise.withResolvers
-export function withResolvers() {
-  let resolve, reject
-  const promise = new Promise((res, rej) => {
-    resolve = res
-    reject = rej
-  })
-
-  return {
-    promise,
-    resolve,
-    reject,
-  }
-}
-
-function useResolvers() {
-  const [status, setStatus] = useState('suspense')
-  const promiseRef = useRef<any>(withResolvers)
-  return {
-    status,
-    promiseRef,
-    setStatus,
-  }
-}
 export function useActionPanel(input: ChatInputType) {
   const inputRef = useRef(input)
   inputRef.current = input
