@@ -41,5 +41,5 @@ export function getRandomInt(min: number, max: number) {
 }
 
 export function renderMarkdown(text: string) {
-  return marked.parse(text)
+  return marked.parse(text) as string
 }

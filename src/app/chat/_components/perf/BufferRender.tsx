@@ -63,7 +63,7 @@ export default function BufferRender() {
       <TypingBubble
         messageRender={renderMarkdown}
         options={{
-          interval: 10,
+          interval: 20,
         }}
         isRichText
         content={answer}
