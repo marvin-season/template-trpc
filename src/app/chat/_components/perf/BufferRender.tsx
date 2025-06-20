@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { stream } from './perf'
 import { Button } from 'antd'
-import { TypingBubble } from '@/app/_components/TypingBubble'
-import '@/styles/typing.css'
-
+import '@chatui/core/dist/index.css'
+import { TypingBubble } from '@chatui/core'
+import { renderMarkdown } from '@/utils/common'
 export function useBufferRender() {
   // const [status, setStatus] = useState('idle')
   const statusRef = useRef('idle')
@@ -59,10 +59,13 @@ export default function BufferRender() {
       >
         {statusRef.current}
       </Button>
+
       <TypingBubble
+        messageRender={renderMarkdown}
         options={{
           interval: 10,
         }}
+        isRichText
         content={answer}
       />
     </div>

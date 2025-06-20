@@ -1,3 +1,5 @@
+import { marked } from 'marked'
+
 export const sleep = (ms: number) =>
   new Promise((resolve) => setTimeout(resolve, ms))
 
@@ -36,4 +38,8 @@ export function formatBytes(bytes: number, decimals = 2): string {
 
 export function getRandomInt(min: number, max: number) {
   return Math.floor(Math.random() * (max - min + 1)) + min
+}
+
+export function renderMarkdown(text: string) {
+  return marked.parse(text)
 }

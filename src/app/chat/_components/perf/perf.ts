@@ -1,6 +1,14 @@
 import { useRef, useState } from 'react'
 
 const content = `
+
+## API
+
+- getUserInfo
+- getUserList
+- getUserDetail
+- getUserDetail
+
 Fast sites provide better user experiences. Users want and expect web experiences with content that is fast to load and smooth to interact with.
 `
 export const stream = new ReadableStream({
