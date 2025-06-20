@@ -1,9 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { stream } from './perf'
 import { Button } from 'antd'
-import '@chatui/core/dist/index.css'
-import { TypingBubble } from '@chatui/core'
-import { renderMarkdown } from '@/utils/common'
+import styles from './styles.module.css'
 export function useBufferRender() {
   // const [status, setStatus] = useState('idle')
   const statusRef = useRef('idle')
@@ -34,6 +32,7 @@ export function useBufferRender() {
 export default function BufferRender() {
   const { statusRef, answer, bufferRef, flushBuffer, flushEnd } =
     useBufferRender()
+  const tailRef = useRef<HTMLSpanElement>(null)
   const handleAnswer = useCallback(async () => {
     statusRef.current = 'running'
     // @ts-ignore
@@ -44,6 +43,7 @@ export default function BufferRender() {
       }
     }
     flushEnd()
+    tailRef.current?.style.setProperty('display', 'none')
   }, [flushBuffer, flushEnd])
   useEffect(() => {
     handleAnswer()
@@ -60,14 +60,15 @@ export default function BufferRender() {
         {statusRef.current}
       </Button>
 
-      <TypingBubble
-        messageRender={renderMarkdown}
-        options={{
-          interval: 20,
-        }}
-        isRichText
-        content={answer}
-      />
+      <div className={styles.answer}>
+        {answer}
+        <span
+          ref={tailRef}
+          key={'tail'}
+          className={styles.tail}
+          data-display={'none'}
+        ></span>
+      </div>
     </div>
   )
 }

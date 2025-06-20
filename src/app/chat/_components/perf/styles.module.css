@@ -1,0 +1,20 @@
+.answer {
+    .tail {
+        display: inline-block;
+        position: relative;
+        height: 1em;
+        width: 1em;
+        &::after {
+          --width: 10em;
+          content: '';
+          position: absolute;
+          background: linear-gradient(to right, transparent 0%, #fff 100%);
+          width: var(--width);
+          height: 100%;
+          left: calc(var(--width) * -1);
+          top: 0;
+          z-index: 1;
+        }
+      }
+}
+

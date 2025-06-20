@@ -1,6 +1,6 @@
 import useIntersectionObserver from '@/app/_hooks/useIntersectionObserver'
-import { TypingBubble } from '@chatui/core'
-import { renderMarkdown } from '@/utils/common'
+import styles from './perf/styles.module.css'
+import { useRef } from 'react'
 
 export default function Answer(props: {
   answer: string
@@ -8,7 +8,7 @@ export default function Answer(props: {
   onResume: () => void
 }) {
   const { answer, onPause, onResume } = props
-
+  const tailRef = useRef<HTMLSpanElement>(null)
   /**
    * 使用IntersectionObserver监听answer的滚动，当answer滚动到视口时，调用onResume，当answer滚动出视口时，调用onPause
    */
@@ -26,16 +26,13 @@ export default function Answer(props: {
   return (
     <div
       ref={rootRef}
-      className='h-[200px] w-[500px] overflow-y-auto mt-4 whitespace-pre-wrap rounded-lg border border-gray-200 bg-gray-50 p-4 text-gray-700'
+      className='h-[400px] w-[500px] overflow-y-auto mt-4 whitespace-pre-wrap rounded-lg border border-gray-200 bg-gray-50 p-4 text-gray-700'
     >
-      <TypingBubble
-        messageRender={renderMarkdown}
-        options={{
-          initialIndex: 0,
-        }}
-        isRichText
-        content={answer}
-      />
+      <div className={styles.answer}>
+        {answer}
+        <span ref={tailRef} key={'tail'} className={styles.tail}></span>
+      </div>
+
       <p ref={targetRef}></p>
     </div>
   )

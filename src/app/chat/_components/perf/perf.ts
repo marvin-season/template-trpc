@@ -24,7 +24,7 @@ export const stream = new ReadableStream({
       })
 
       i++
-    }, 10)
+    }, 20)
   },
 })
 
