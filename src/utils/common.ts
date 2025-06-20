@@ -33,3 +33,7 @@ export function formatBytes(bytes: number, decimals = 2): string {
 
   return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i]
 }
+
+export function getRandomInt(min: number, max: number) {
+  return Math.floor(Math.random() * (max - min + 1)) + min
+}

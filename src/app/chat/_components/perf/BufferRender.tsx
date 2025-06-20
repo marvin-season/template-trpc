@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { stream } from './perf'
 import { Button } from 'antd'
+import { TypingBubble } from '@/app/_components/TypingBubble'
+import '@/styles/typing.css'
 
 export function useBufferRender() {
   // const [status, setStatus] = useState('idle')
@@ -57,7 +59,12 @@ export default function BufferRender() {
       >
         {statusRef.current}
       </Button>
-      <div>{answer}</div>
+      <TypingBubble
+        options={{
+          interval: 10,
+        }}
+        content={answer}
+      />
     </div>
   )
 }
