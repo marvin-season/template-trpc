@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { stream } from './perf'
 import { Button } from 'antd'
 import styles from './styles.module.css'
+import { PortalId, PortalPlaceholder } from '@/app/_components/Portal'
 export function useBufferRender() {
   // const [status, setStatus] = useState('idle')
   const statusRef = useRef('idle')
@@ -50,7 +51,7 @@ export default function BufferRender() {
   }, [])
   return (
     <div>
-      <div id='portal-target'></div>
+      <PortalPlaceholder id={PortalId.TOGGLE_MENU_BUTTON} />
       <Button
         onClick={() =>
           statusRef.current === 'running'

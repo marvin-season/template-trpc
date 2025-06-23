@@ -1,7 +1,7 @@
 import useIntersectionObserver from '@/app/_hooks/useIntersectionObserver'
 import styles from './perf/styles.module.css'
 import { useRef } from 'react'
-import Portal from '@/app/_components/Portal'
+import { Portal, PortalId } from '@/app/_components/Portal'
 
 export default function Answer(props: {
   answer: string
@@ -35,7 +35,7 @@ export default function Answer(props: {
       </div>
 
       <p ref={targetRef}></p>
-      <Portal targetId='portal-target'>
+      <Portal targetId={PortalId.TOGGLE_MENU_BUTTON}>
         <div>
           <p>Hello</p>
         </div>
