@@ -50,6 +50,7 @@ export default function BufferRender() {
   }, [])
   return (
     <div>
+      <div id='portal-target'></div>
       <Button
         onClick={() =>
           statusRef.current === 'running'
