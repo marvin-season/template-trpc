@@ -7,44 +7,19 @@ import {
   TodoHeader,
   TodoCardContent,
 } from '../_components'
-
-const mockTodos = [
-  {
-    id: 1,
-    title: 'Read a book',
-    description: 'Finish reading the new novel.',
-    dueDate: '2025-06-01',
-    priority: 'Low',
-  },
-  {
-    id: 2,
-    title: 'Workout',
-    description: 'Go for a 5km run.',
-    dueDate: '2025-06-02',
-    priority: 'Medium',
-  },
-  {
-    id: 3,
-    title: 'Meeting',
-    description: 'Project sync with team.',
-    dueDate: '2025-06-03',
-    priority: 'High',
-  },
-  {
-    id: 4,
-    title: 'Grocery',
-    description: 'Buy vegetables and fruits.',
-    dueDate: '2025-06-04',
-    priority: 'Low',
-  },
-]
+import { mockTodos } from '@/app/todos/mock'
+import { useRouter } from 'next/navigation'
 
 export default function Green() {
+  const router = useRouter()
   const [todos, setTodos] = useState(mockTodos)
   return (
     <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 p-8 bg-white min-h-[60vh]'>
       {todos.map((todo) => (
         <TodoCardContainer
+          onClick={() => {
+            router.push(`/todos/${todo.id}`)
+          }}
           key={todo.id}
           as='section'
           className='border border-gray-200 rounded-xl p-6 shadow-sm flex flex-col gap-4 bg-white hover:shadow-md transition-shadow'

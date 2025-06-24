@@ -19,12 +19,14 @@ export function TodoCardContainer({
   children,
   className,
   as = 'div',
+  onClick,
 }: {
   children: React.ReactNode
   className?: string
   as?: React.ElementType
+  onClick?: () => void
 }) {
-  return createElement(as, { className }, children)
+  return createElement(as, { className, onClick }, children)
 }
 
 export function TodoCardContent({
