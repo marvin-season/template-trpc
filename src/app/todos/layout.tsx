@@ -1,3 +1,9 @@
+import {
+  NavigationMenu,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+} from '@/components/ui'
 import Link from 'next/link'
 
 export default function TodosLayout({
@@ -7,10 +13,20 @@ export default function TodosLayout({
 }) {
   return (
     <div>
-      <nav>
-        <Link href='/todos/blue'>Blue</Link>
-        <Link href='/todos/green'>Green</Link>
-      </nav>
+      <NavigationMenu>
+        <NavigationMenuList>
+          <NavigationMenuItem>
+            <NavigationMenuLink asChild>
+              <Link href='/todos/blue'>Blue</Link>
+            </NavigationMenuLink>
+          </NavigationMenuItem>
+          <NavigationMenuItem>
+            <NavigationMenuLink asChild>
+              <Link href='/todos/green'>Green</Link>
+            </NavigationMenuLink>
+          </NavigationMenuItem>
+        </NavigationMenuList>
+      </NavigationMenu>
       {children}
     </div>
   )
