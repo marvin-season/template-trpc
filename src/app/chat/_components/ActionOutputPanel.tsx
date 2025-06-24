@@ -4,7 +4,7 @@ import { useBufferRender } from '@/app/chat/_components/perf/BufferRender'
 import { useTRPC } from '@/trpc/react'
 import type { ChatInputType } from '@/types/chat'
 import { useMutation } from '@tanstack/react-query'
-import { Button } from 'antd'
+import { Button } from '@/components/ui/button'
 import { memo, useRef, useState } from 'react'
 
 export const ActionPanel = memo(

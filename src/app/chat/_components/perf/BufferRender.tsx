@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { stream } from './perf'
-import { Button } from 'antd'
+import { Button } from '@/components/ui/button'
 import styles from './styles.module.css'
 import { PortalId, PortalPlaceholder } from '@/app/_components/Portal'
 export function useBufferRender() {

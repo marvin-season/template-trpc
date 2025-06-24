@@ -1,7 +1,8 @@
 import { PROVIDER_NAME } from '@/constant'
 import { useTRPC } from '@/trpc/react'
 import { useQuery } from '@tanstack/react-query'
-import { Button, Select } from 'antd'
+import { Select } from '@/components/ui/select'
+import { Button } from '@/components/ui/button'
 import { memo, useMemo, useState } from 'react'
 
 const ModelSelector = memo(
@@ -15,14 +16,7 @@ const ModelSelector = memo(
     return (
       <div className='flex gap-2'>
         <Button disabled>{provider}</Button>
-        <Select
-          value={current}
-          placeholder={'暂无模型'}
-          options={options}
-          onChange={(value) => {
-            setCurrent(value)
-          }}
-        />
+        <Select value={current}></Select>
       </div>
     )
   },

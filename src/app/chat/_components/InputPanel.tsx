@@ -1,7 +1,7 @@
 'use client'
 import type { ChatInputType } from '@/types/chat'
 import { convertImageToBase64, validateSize } from '@/utils/common'
-import { Switch } from 'antd'
+import { Switch } from '@/components/ui/switch'
 import Image from 'next/image'
 import { memo, useEffect, useState } from 'react'
 const examples = [

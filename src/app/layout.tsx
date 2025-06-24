@@ -1,6 +1,5 @@
 import '@/styles/globals.css'
 import React from 'react'
-import { AntdRegistry } from '@ant-design/nextjs-registry'
 import { type Metadata } from 'next'
 import { Geist } from 'next/font/google'
 
@@ -23,9 +22,7 @@ export default function RootLayout({
   return (
     <html lang='en' className={`${geist.variable}`}>
       <body>
-        <TRPCReactProvider>
-          <AntdRegistry>{children}</AntdRegistry>
-        </TRPCReactProvider>
+        <TRPCReactProvider>{children}</TRPCReactProvider>
       </body>
     </html>
   )
