@@ -1,3 +1,3 @@
-export default function TenantHome() {
-  return <h1>Hello from banana.ai</h1>
-}
+import { redirect } from 'next/navigation'
+
+export default () => redirect('/chat')

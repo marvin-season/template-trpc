@@ -14,8 +14,7 @@ export function middleware(req: NextRequest) {
 
   const site = sites.find((site) => site.path === subdomain)
   if (!site) {
-    // redirect to 404
-    return NextResponse.redirect(new URL('/', req.url))
+    throw new Error('Not Found')
   }
 
   const { path } = site

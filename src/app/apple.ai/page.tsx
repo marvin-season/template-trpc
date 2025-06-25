@@ -1,4 +1,3 @@
-// app/[tenant]/page.tsx
-export default function TenantHome() {
-  return <h1>Hello from apple.ai</h1>
-}
+import { redirect } from 'next/navigation'
+
+export default () => redirect('/chat')
