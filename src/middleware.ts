@@ -1,3 +1,4 @@
+import { sites } from '@/config/site'
 import { NextRequest, NextResponse } from 'next/server'
 
 export function middleware(req: NextRequest) {
@@ -11,8 +12,16 @@ export function middleware(req: NextRequest) {
     return NextResponse.next()
   }
 
+  const site = sites.find((site) => site.path === subdomain)
+  if (!site) {
+    // redirect to 404
+    return NextResponse.redirect(new URL('/', req.url))
+  }
+
+  const { path } = site
+
   // 重写 URL 为路径形式，如：/apple.ai
   const url = req.nextUrl.clone()
-  url.pathname = `/${subdomain}${url.pathname}`
+  url.pathname = `/${path}${url.pathname}`
   return NextResponse.rewrite(url)
 }
