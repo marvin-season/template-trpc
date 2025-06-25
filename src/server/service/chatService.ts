@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { PROVIDER_NAME, TEMP_MODEL_MAPPING } from '@/constant'
 import { initDeepSeek, initOllamaProvider } from '@/server/provider'
 import type { ChatInputType } from '@/types/chat'

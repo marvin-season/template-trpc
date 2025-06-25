@@ -15,7 +15,7 @@ export default function useIntersectionObserver<
   const observerRef = useRef<IntersectionObserver>(null)
   useEffect(() => {
     observerRef.current = createIntersectionObserver({
-      targets: [targetRef.current],
+      targets: [targetRef.current!],
       rootInit: {
         root: rootRef.current,
         ...configs.rootOptions,
@@ -23,7 +23,7 @@ export default function useIntersectionObserver<
       ...configs,
     })
     return () => {
-      observerRef.current.disconnect()
+      observerRef.current?.disconnect()
     }
   }, [])
 
