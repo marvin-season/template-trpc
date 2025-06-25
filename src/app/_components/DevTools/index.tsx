@@ -1,7 +1,5 @@
 import { sites } from '@/config/site'
 
-import Link from 'next/link'
-
 export function SiteSwitcher() {
   console.log(process.env.NODE_ENV)
   if (process.env.NODE_ENV !== 'development') {
@@ -9,11 +7,16 @@ export function SiteSwitcher() {
   }
 
   return (
-    <div className='fixed top-0 right-0 bg-transparent'>
+    <div className='fixed top-0 right-0 opacity-50 bg-green-400 flex gap-2 cursor-pointer z-50'>
       {sites.map((site) => (
-        <Link key={site.path} href={`/${site.path}`}>
+        // 打开新的站点
+        <a
+          key={site.path}
+          target='_blank'
+          href={`http://${site.path}.localhost:${process.env.PORT}`}
+        >
           {site.name}
-        </Link>
+        </a>
       ))}
     </div>
   )

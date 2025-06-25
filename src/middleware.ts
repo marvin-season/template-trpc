@@ -24,3 +24,6 @@ export function middleware(req: NextRequest) {
   url.pathname = `/${path}${url.pathname}`
   return NextResponse.rewrite(url)
 }
+export const config = {
+  matcher: ['/((?!api|_next|static|favicon.ico|.*\\..*).*)'],
+}
