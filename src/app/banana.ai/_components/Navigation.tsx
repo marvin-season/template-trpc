@@ -6,13 +6,13 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
 } from '@/components/ui/navigation-menu'
-import { bananaAiNavigation } from '@/config/navigation'
+import { navigation } from '@/config/navigation'
 
 export function Navigation() {
   return (
     <NavigationMenu>
       <NavigationMenuList>
-        {bananaAiNavigation.items.map((item) => (
+        {navigation.items.map((item) => (
           <NavigationMenuItem key={item.id}>
             {item.items ? (
               <>

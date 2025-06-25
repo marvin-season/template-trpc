@@ -1,11 +1,11 @@
 import type { NavigationConfig } from '@/types/navigation'
 
-export const bananaAiNavigation: NavigationConfig = {
+export const navigation: NavigationConfig = {
   items: [
     {
       id: 'dashboard',
       title: '控制台',
-      href: '/',
+      href: '',
     },
     {
       id: 'ai-tools',
