@@ -25,6 +25,7 @@
     "@auth/prisma-adapter": "^2.7.2",
     "@chatui/core": "^3.0.0",
     "@prisma/client": "^6.5.0",
+    "@radix-ui/react-menubar": "^1.1.15",
     "@radix-ui/react-navigation-menu": "^1.2.13",
     "@radix-ui/react-select": "^2.2.5",
     "@radix-ui/react-slot": "^1.2.3",

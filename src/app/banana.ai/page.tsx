@@ -1,3 +1,1 @@
-import { redirect } from 'next/navigation'
-
-export default () => redirect('/chat')
+export default () => 'Welcome Banana AI'
