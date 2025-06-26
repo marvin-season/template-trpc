@@ -2,9 +2,11 @@ import '@/styles/globals.css'
 import React from 'react'
 import { type Metadata } from 'next'
 import { Geist } from 'next/font/google'
-
+import { SessionProvider } from 'next-auth/react'
 import { TRPCReactProvider } from '@/trpc/react'
 import { SiteSwitcher } from '@/app/_components/DevTools'
+import Profile from '@/app/_components/Profile'
+import { auth } from '@/server/auth'
 
 export const metadata: Metadata = {
   title: 'Create T3 App',
@@ -17,14 +19,18 @@ const geist = Geist({
   variable: '--font-geist-sans',
 })
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
+  const session = await auth()
   return (
     <html lang='en' className={`${geist.variable}`}>
       <body>
         <SiteSwitcher />
-        <TRPCReactProvider>{children}</TRPCReactProvider>
+        <SessionProvider session={session}>
+          <Profile />
+          <TRPCReactProvider>{children}</TRPCReactProvider>
+        </SessionProvider>
       </body>
     </html>
   )
