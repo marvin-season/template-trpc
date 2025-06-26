@@ -20,6 +20,11 @@ import {
 } from '@/components/ui/sidebar'
 import { navigation } from '@/config/navigation'
 import { cn } from '@/lib/utils'
+import {
+  Collapsible,
+  CollapsibleTrigger,
+  CollapsibleContent,
+} from '@/components/ui'
 
 export function SidebarNavigation({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
@@ -38,34 +43,33 @@ export function SidebarNavigation({ children }: { children: React.ReactNode }) {
                   {navigation.items.map((item) => (
                     <SidebarMenuItem key={item.id}>
                       {item.items ? (
-                        <>
-                          <SidebarMenuButton
-                            asChild
-                            className='w-full justify-start'
-                          >
-                            <div className='flex items-center gap-2'>
+                        <Collapsible defaultOpen className='group/collapsible'>
+                          <CollapsibleTrigger asChild>
+                            <SidebarMenuButton className='w-full justify-between'>
                               <span>{item.title}</span>
-                              <ChevronRight className='h-4 w-4 transition-transform group-data-[state=open]:rotate-90' />
-                            </div>
-                          </SidebarMenuButton>
-                          <SidebarMenuSub>
-                            {item.items.map((subItem) => (
-                              <SidebarMenuSubItem key={subItem.id}>
-                                <SidebarMenuSubButton
-                                  asChild
-                                  className={cn(
-                                    pathname === subItem.href &&
-                                      'bg-accent text-accent-foreground',
-                                  )}
-                                >
-                                  <Link href={subItem.href}>
-                                    <span>{subItem.title}</span>
-                                  </Link>
-                                </SidebarMenuSubButton>
-                              </SidebarMenuSubItem>
-                            ))}
-                          </SidebarMenuSub>
-                        </>
+                              <ChevronRight className='h-4 w-4 transition-transform group-data-[state=open]/collapsible:rotate-90' />
+                            </SidebarMenuButton>
+                          </CollapsibleTrigger>
+                          <CollapsibleContent>
+                            <SidebarMenuSub>
+                              {item.items.map((subItem) => (
+                                <SidebarMenuSubItem key={subItem.id}>
+                                  <SidebarMenuSubButton
+                                    asChild
+                                    className={cn(
+                                      pathname === subItem.href &&
+                                        'bg-accent text-accent-foreground',
+                                    )}
+                                  >
+                                    <Link href={subItem.href}>
+                                      <span>{subItem.title}</span>
+                                    </Link>
+                                  </SidebarMenuSubButton>
+                                </SidebarMenuSubItem>
+                              ))}
+                            </SidebarMenuSub>
+                          </CollapsibleContent>
+                        </Collapsible>
                       ) : (
                         <SidebarMenuButton
                           asChild
