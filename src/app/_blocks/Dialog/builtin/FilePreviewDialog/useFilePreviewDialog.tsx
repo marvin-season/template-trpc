@@ -1,4 +1,5 @@
 import { useDialogStore } from '@/app/_store/store-dialog'
+import { FilePreview } from '.'
 
 export function useFilePreviewDialog() {
   const show = useDialogStore((state) => state.show)
@@ -11,8 +12,4 @@ export function useFilePreviewDialog() {
       })
     },
   }
-}
-
-function FilePreview() {
-  return <div>FilePreview</div>
 }

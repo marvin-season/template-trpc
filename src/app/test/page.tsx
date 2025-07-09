@@ -1,11 +1,10 @@
 'use client'
 
 import { Button, Input } from '@/components/ui'
-import { useDialogStore } from '@/app/_store/store-dialog'
-import { useFilePreviewDialog } from '@/app/_components/BaseDialog'
+import { useDialog, useFilePreviewDialog } from '@/app/_blocks/Dialog'
 
 const Form = () => {
-  const toggle = useDialogStore((state) => state.toggle)
+  const toggle = useDialog((state) => state.toggle)
   return (
     <form className='flex flex-col gap-4'>
       <Input type='text' placeholder='Name' />
@@ -21,7 +20,7 @@ const Form = () => {
 }
 
 export default function TestPage() {
-  const showBaseDialog = useDialogStore((state) => state.show)
+  const showBaseDialog = useDialog((state) => state.show)
   const filePreviewDialog = useFilePreviewDialog()
 
   return (

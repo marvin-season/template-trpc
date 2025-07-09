@@ -7,9 +7,8 @@ import {
   DialogTitle,
 } from '@/components/ui'
 import { useDialogStore } from '@/app/_store/store-dialog'
-export { useFilePreviewDialog } from './_components/FilePreviewDialog'
 
-export default function BaseDialog() {
+export function BaseDialog() {
   const open = useDialogStore((state) => state.open)
   const toggle = useDialogStore((state) => state.toggle)
   const title = useDialogStore((state) => state.title)

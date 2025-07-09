@@ -1,4 +1,4 @@
-import BaseDialog from '../_components/BaseDialog'
+import { BaseDialog } from '../_blocks/Dialog'
 
 export default function AppUIProvider({
   children,
