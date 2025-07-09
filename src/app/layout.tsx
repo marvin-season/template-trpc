@@ -7,6 +7,7 @@ import { TRPCReactProvider } from '@/trpc/react'
 import { SiteSwitcher } from '@/app/_components/DevTools'
 import Profile from '@/app/_components/Profile'
 import { auth } from '@/server/auth'
+import AppUIProvider from '@/app/_provider/AppUIProvider'
 
 export const metadata: Metadata = {
   title: 'Create T3 App',
@@ -29,7 +30,9 @@ export default async function RootLayout({
         <SiteSwitcher />
         <SessionProvider session={session}>
           <Profile />
-          <TRPCReactProvider>{children}</TRPCReactProvider>
+          <TRPCReactProvider>
+            <AppUIProvider>{children}</AppUIProvider>
+          </TRPCReactProvider>
         </SessionProvider>
       </body>
     </html>
