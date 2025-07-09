@@ -3,23 +3,37 @@
 import { Button, Input } from '@/components/ui'
 import { useDialogStore } from '@/store/store-dialog'
 
+const Form = () => {
+  const dialogStore = useDialogStore()
+  return (
+    <form className='flex flex-col gap-4'>
+      <Input type='text' placeholder='Name' />
+      <Input type='email' placeholder='Email' />
+      <div className='flex gap-2 justify-end'>
+        <Button
+          variant={'secondary'}
+          type='button'
+          onClick={() => dialogStore.toggle()}
+        >
+          Close
+        </Button>
+        <Button type='submit'>Submit</Button>
+      </div>
+    </form>
+  )
+}
+
 export default function TestPage() {
   const dialogStore = useDialogStore()
 
   return (
-    <div className='overflow-y-scroll h-screen'>
+    <div className='overflow-y-scroll h-screen justify-center items-center flex'>
       <Button
         size={'sm'}
         onClick={() =>
           dialogStore.show({
             title: 'Dialog',
-            content: (
-              <form className='flex flex-col gap-4'>
-                <Input type='text' placeholder='Name' />
-                <Input type='email' placeholder='Email' />
-                <Button type='submit'>Submit</Button>
-              </form>
-            ),
+            content: <Form />,
           })
         }
       >
