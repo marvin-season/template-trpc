@@ -1,21 +1,19 @@
+import type { ReactNode } from 'react'
 import { create } from 'zustand'
 
 interface DialogStore {
-  isOpen: boolean
-  content: React.ReactNode | null
-  footer: React.ReactNode | null
-  open: (props?: {
-    content?: React.ReactNode
-    footer?: React.ReactNode
-  }) => void
+  open: boolean
+  content: ReactNode | null
+  title: ReactNode | null
+  show: (props?: { content?: ReactNode; title?: ReactNode }) => void
   toggle: () => void
 }
 
 export const useDialogStore = create<DialogStore>((set) => ({
-  isOpen: false,
+  open: false,
   content: null,
-  footer: null,
-  toggle: () => set((state) => ({ isOpen: !state.isOpen })),
-  open: (props) =>
-    set({ isOpen: true, content: props?.content, footer: props?.footer }),
+  title: null,
+  toggle: () => set((state) => ({ open: !state.open })),
+  show: (props) =>
+    set({ open: true, content: props?.content, title: props?.title }),
 }))

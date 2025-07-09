@@ -11,13 +11,12 @@ import { useDialogStore } from '@/store/store-dialog'
 export default function BaseDialog() {
   const dialogStore = useDialogStore()
   return (
-    <Dialog open={dialogStore.isOpen} onOpenChange={dialogStore.toggle}>
+    <Dialog open={dialogStore.open} onOpenChange={dialogStore.toggle}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Dialog</DialogTitle>
+          <DialogTitle>{dialogStore.title}</DialogTitle>
         </DialogHeader>
         {dialogStore.content}
-        {dialogStore.footer}
       </DialogContent>
     </Dialog>
   )
