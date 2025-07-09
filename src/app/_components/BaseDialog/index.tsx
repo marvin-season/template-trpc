@@ -6,17 +6,21 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui'
-import { useDialogStore } from '@/store/store-dialog'
+import { useDialogStore } from '@/app/_store/store-dialog'
+export { useFilePreviewDialog } from './_components/FilePreviewDialog'
 
 export default function BaseDialog() {
-  const dialogStore = useDialogStore()
+  const open = useDialogStore((state) => state.open)
+  const toggle = useDialogStore((state) => state.toggle)
+  const title = useDialogStore((state) => state.title)
+  const content = useDialogStore((state) => state.content)
   return (
-    <Dialog open={dialogStore.open} onOpenChange={dialogStore.toggle}>
+    <Dialog open={open} onOpenChange={toggle}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>{dialogStore.title}</DialogTitle>
+          <DialogTitle>{title}</DialogTitle>
         </DialogHeader>
-        {dialogStore.content}
+        {content}
       </DialogContent>
     </Dialog>
   )

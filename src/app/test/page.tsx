@@ -1,20 +1,17 @@
 'use client'
 
 import { Button, Input } from '@/components/ui'
-import { useDialogStore } from '@/store/store-dialog'
+import { useDialogStore } from '@/app/_store/store-dialog'
+import { useFilePreviewDialog } from '@/app/_components/BaseDialog'
 
 const Form = () => {
-  const dialogStore = useDialogStore()
+  const toggle = useDialogStore((state) => state.toggle)
   return (
-    <form className='flex size-1 flex-col gap-4'>
+    <form className='flex flex-col gap-4'>
       <Input type='text' placeholder='Name' />
       <Input type='email' placeholder='Email' />
       <div className='flex justify-end gap-2'>
-        <Button
-          variant={'secondary'}
-          type='button'
-          onClick={() => dialogStore.toggle()}
-        >
+        <Button variant={'secondary'} type='button' onClick={() => toggle()}>
           Close
         </Button>
         <Button type='submit'>Submit</Button>
@@ -24,14 +21,15 @@ const Form = () => {
 }
 
 export default function TestPage() {
-  const dialogStore = useDialogStore()
+  const showBaseDialog = useDialogStore((state) => state.show)
+  const filePreviewDialog = useFilePreviewDialog()
 
   return (
     <div className='flex h-screen items-center justify-center overflow-y-scroll'>
       <Button
         size={'sm'}
         onClick={() =>
-          dialogStore.show({
+          showBaseDialog({
             title: 'Dialog',
             content: <Form />,
           })
@@ -39,6 +37,7 @@ export default function TestPage() {
       >
         Open
       </Button>
+      <Button onClick={() => filePreviewDialog.show()}>Preview</Button>
     </div>
   )
 }
