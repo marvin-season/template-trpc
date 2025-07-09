@@ -1,7 +1,11 @@
 'use client'
 
 import { Button, Input } from '@/components/ui'
-import { useDialog, useFilePreviewDialog } from '@/app/_blocks/Dialog'
+import {
+  useDialog,
+  useFilePreviewDialog,
+  useSignDialog,
+} from '@/app/_blocks/Dialog'
 
 const Form = () => {
   const toggle = useDialog((state) => state.toggle)
@@ -22,7 +26,7 @@ const Form = () => {
 export default function TestPage() {
   const showBaseDialog = useDialog((state) => state.show)
   const filePreviewDialog = useFilePreviewDialog()
-
+  const signDialog = useSignDialog()
   return (
     <div className='flex h-screen items-center justify-center overflow-y-scroll'>
       <Button
@@ -37,6 +41,7 @@ export default function TestPage() {
         Open
       </Button>
       <Button onClick={() => filePreviewDialog.show()}>Preview</Button>
+      <Button onClick={() => signDialog.show()}>Sign</Button>
     </div>
   )
 }

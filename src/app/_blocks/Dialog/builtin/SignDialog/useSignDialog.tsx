@@ -1,14 +1,13 @@
 import { useDialog } from '@/app/_blocks/Dialog/useDialog'
-import { FilePreview } from '.'
 
-export function useFilePreviewDialog() {
+export function useSignDialog() {
   const show = useDialog((state) => state.show)
 
   return {
     show: () => {
       show({
-        title: 'File Preview',
-        content: <FilePreview />,
+        title: '登陆注册',
+        content: <>111</>,
       })
     },
   }
