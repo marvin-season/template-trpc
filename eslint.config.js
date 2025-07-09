@@ -1,52 +1,39 @@
-import { FlatCompat } from '@eslint/eslintrc'
-import tseslint from 'typescript-eslint'
+import betterTailwindcss from 'eslint-plugin-better-tailwindcss';
+import eslintParserTypeScript from "@typescript-eslint/parser";
 
-const compat = new FlatCompat({
-  baseDirectory: import.meta.dirname,
-})
-
-export default tseslint.config(
+export default [
   {
     ignores: ['.next'],
   },
-  ...compat.extends('next/core-web-vitals'),
   {
-    files: ['**/*.ts', '**/*.tsx'],
-    extends: [
-      ...tseslint.configs.recommended,
-      ...tseslint.configs.recommendedTypeChecked,
-      ...tseslint.configs.stylisticTypeChecked,
-    ],
-    rules: {
-      '@typescript-eslint/no-explicit-any': 'off',
-      "@typescript-eslint/no-unsafe-argument": "off",
-      "@typescript-eslint/no-unsafe-member-access": "off",
-      '@typescript-eslint/prefer-nullish-coalescing': 'off',
-      '@typescript-eslint/array-type': 'off',
-      '@typescript-eslint/consistent-type-definitions': 'off',
-      '@typescript-eslint/consistent-type-imports': [
-        'warn',
-        { prefer: 'type-imports', fixStyle: 'inline-type-imports' },
-      ],
-      '@typescript-eslint/no-unused-vars': [
-        'warn',
-        { argsIgnorePattern: '^_' },
-      ],
-      '@typescript-eslint/require-await': 'off',
-      '@typescript-eslint/no-misused-promises': [
-        'error',
-        { checksVoidReturn: { attributes: false } },
-      ],
-    },
+    files: ["**/*.{ts,tsx,cts,mts}"],
+    languageOptions: {
+      parser: eslintParserTypeScript,
+      parserOptions: {
+        project: true
+      }
+    }
   },
   {
-    linterOptions: {
-      reportUnusedDisableDirectives: true,
-    },
+    files: ["**/*.{jsx,tsx}"],
     languageOptions: {
       parserOptions: {
-        projectService: true,
+        ecmaFeatures: {
+          jsx: true
+        }
+      }
+    },
+    settings: {
+      'better-tailwindcss': {
+        entryPoint: 'src/styles/globals.css',
       },
     },
+    plugins: {
+      'better-tailwindcss': betterTailwindcss,
+    },
+    rules: {
+        // enable all recommended rules to report a warning
+        ...betterTailwindcss.configs["recommended-warn"]?.rules,
+      }
   },
-)
+]

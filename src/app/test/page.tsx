@@ -6,10 +6,10 @@ import { useDialogStore } from '@/store/store-dialog'
 const Form = () => {
   const dialogStore = useDialogStore()
   return (
-    <form className='flex flex-col gap-4'>
+    <form className='flex size-1 flex-col gap-4'>
       <Input type='text' placeholder='Name' />
       <Input type='email' placeholder='Email' />
-      <div className='flex gap-2 justify-end'>
+      <div className='flex justify-end gap-2'>
         <Button
           variant={'secondary'}
           type='button'
@@ -27,7 +27,7 @@ export default function TestPage() {
   const dialogStore = useDialogStore()
 
   return (
-    <div className='overflow-y-scroll h-screen justify-center items-center flex'>
+    <div className='flex h-screen items-center justify-center overflow-y-scroll'>
       <Button
         size={'sm'}
         onClick={() =>
