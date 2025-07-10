@@ -6,13 +6,13 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui'
-import { useDialogStore } from '@/app/_store/store-dialog'
+import { useDialog } from '../useDialog'
 
 export function BaseDialog() {
-  const open = useDialogStore((state) => state.open)
-  const toggle = useDialogStore((state) => state.toggle)
-  const title = useDialogStore((state) => state.title)
-  const content = useDialogStore((state) => state.content)
+  const open = useDialog((state) => state.open)
+  const toggle = useDialog((state) => state.toggle)
+  const title = useDialog((state) => state.title)
+  const content = useDialog((state) => state.content)
   return (
     <Dialog open={open} onOpenChange={toggle}>
       <DialogContent>

@@ -28,19 +28,37 @@ export default function TestPage() {
   const filePreviewDialog = useFilePreviewDialog()
   const signDialog = useSignDialog()
   return (
-    <div className='flex h-screen items-center justify-center overflow-y-scroll'>
+    <div
+      className={`
+        flex h-screen items-center justify-center gap-2 overflow-y-scroll
+      `}
+    >
       <Button
         size={'sm'}
         onClick={() =>
           showBaseDialog({
             title: 'Dialog',
             content: <Form />,
+            context: {
+              name: 'John Doe',
+              email: 'john.doe@example.com',
+            },
           })
         }
       >
         Open
       </Button>
-      <Button onClick={() => filePreviewDialog.show()}>Preview</Button>
+      <Button
+        variant={'outline'}
+        size={'sm'}
+        onClick={() =>
+          filePreviewDialog.show({
+            file: '## hello',
+          })
+        }
+      >
+        Preview
+      </Button>
       <Button onClick={() => signDialog.show()}>Sign</Button>
     </div>
   )

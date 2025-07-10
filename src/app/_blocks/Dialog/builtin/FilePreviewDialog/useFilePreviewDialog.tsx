@@ -5,10 +5,10 @@ export function useFilePreviewDialog() {
   const show = useDialog((state) => state.show)
 
   return {
-    show: () => {
+    show: (context: { file: string }) => {
       show({
         title: 'File Preview',
-        content: <FilePreview />,
+        content: <FilePreview file={context.file} />,
       })
     },
   }
