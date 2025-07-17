@@ -2,8 +2,9 @@
 docker run -it --rm \
   -v "$PWD":/app \
   -w /app \
-  -p 6666:12345 \
+  -p 3000:12345 \
   --entrypoint sh \
+  --name node-app \
   node:22-alpine
 
 
