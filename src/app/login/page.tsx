@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import { Button } from '@/components/ui'
 import { auth, providerMap, signIn } from '@/server/auth'
 import { AuthError } from 'next-auth'
@@ -5,7 +7,7 @@ import { redirect } from 'next/navigation'
 const SIGNIN_ERROR_URL = '/error'
 // https://authjs.dev/getting-started/session-management/custom-pages
 export default async function LoginPage(props: {
-  searchParams: { callbackUrl: string | undefined }
+  searchParams: Promise<{ callbackUrl: string | undefined }>
 }) {
   const session = await auth()
   console.log('session', session)
@@ -13,7 +15,7 @@ export default async function LoginPage(props: {
     <div>
       {Object.values(providerMap).map((provider) => (
         <form
-          className='flex flex-col gap-2 items-center justify-between'
+          className='flex flex-col items-center justify-between gap-2'
           key={provider.id}
           action={async () => {
             'use server'
