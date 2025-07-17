@@ -1,0 +1,26 @@
+services:
+  app:
+    platform: 'linux/amd64'
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        NEXT_PUBLIC_CLIENTVAR: 'clientvar'
+    working_dir: /app
+    ports:
+      - '6666:3000'
+    image: t3-app
+    environment:
+      - DATABASE_URL=$DATABASE_URL
+      - AUTH_SECRET=$AUTH_SECRET
+      - AUTH_GITHUB_ID=$AUTH_GITHUB_ID
+      - AUTH_GITHUB_SECRET=$AUTH_GITHUB_SECRET
+      - SKIP_ENV_VALIDATION=$SKIP_ENV_VALIDATION
+      - NEXT_MODEL_PROVIDER=$NEXT_MODEL_PROVIDER
+      - NEXT_DEEPSEEK_MODEL_ID=$NEXT_DEEPSEEK_MODEL_ID
+      - NEXT_DEEPSEEK_BASE_URL=$NEXT_DEEPSEEK_BASE_URL
+      - NEXT_DEEPSEEK_API_KEY=$NEXT_DEEPSEEK_API_KEY
+      - NEXT_OLLAMA_ENDPOINT=$NEXT_OLLAMA_ENDPOINT
+      - NEXT_OLLAMA_MODEL=$NEXT_OLLAMA_MODEL
+      - AUTH_TRUST_HOST=$AUTH_TRUST_HOST
+      - NEXTAUTH_URL=$NEXTAUTH_URL
