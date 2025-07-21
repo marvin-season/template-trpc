@@ -8,11 +8,10 @@
   },
   "editor.tokenColorCustomizations": {
     "textMateRules": [
-      // 关键字（如 function, return, const）
       {
         "scope": "keyword",
         "settings": {
-          "foreground": "#867b26",
+          "foreground": "#887e85", // 例如 function、return、const
           "fontStyle": "bold"
         }
       },
@@ -23,62 +22,25 @@
           "foreground": "#758bdf"
         }
       },
-      // 参数
       {
-        "scope": "variable.parameter",
+        "scope": "storage.type.function",
         "settings": {
-          "foreground": "#9876AA",
+          "foreground": "#7281be", // 修改为你喜欢的 function 关键字颜色
+          "fontStyle": "bold" // 可选，例如加粗
+        }
+      },
+      {
+        "scope": "variable.other.constant",
+        "settings": {
+          "foreground": "#ceaf79", // const 声明的变量
           "fontStyle": "italic"
         }
       },
-      // 普通变量
       {
-        "scope": "variable",
+        "scope": "variable.other.readwrite",
         "settings": {
-          "foreground": "#A9B7C6"
-        }
-      },
-      // 字符串
-      {
-        "scope": "string",
-        "settings": {
-          "foreground": "#6A8759"
-        }
-      },
-      // 数字
-      {
-        "scope": "constant.numeric",
-        "settings": {
-          "foreground": "#6897BB"
-        }
-      },
-      // 注释
-      {
-        "scope": "comment",
-        "settings": {
-          "foreground": "#808080",
-          "fontStyle": "italic"
-        }
-      },
-      // 类型（如 string, number, JSX types）
-      {
-        "scope": ["support.type", "entity.name.type", "entity.name.class"],
-        "settings": {
-          "foreground": "#A9B7C6"
-        }
-      },
-      // HTML/JSX 标签
-      {
-        "scope": ["entity.name.tag", "support.class.component"],
-        "settings": {
-          "foreground": "#beb199"
-        }
-      },
-      // 属性名（如 HTML/JSX 中的 className、href）
-      {
-        "scope": "entity.other.attribute-name",
-        "settings": {
-          "foreground": "#9876AA"
+          "foreground": "#41899d", // 普通变量
+          "fontStyle": ""
         }
       }
     ]
