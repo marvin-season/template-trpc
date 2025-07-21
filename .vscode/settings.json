@@ -1,3 +1,156 @@
 {
+  "// ": "此配置用于增强 warning 的显示效果",
+  "workbench.colorCustomizations": {
+    "editorError.foreground": "#F40",
+    "editorWarning.foreground": "#FFA500" // 橙色警告颜色
+    // "editorWarning.border": "#FFA500",
+    // "editorWarning.background": "#FFA500" // 可选：淡黄色背景
+  },
+  "editor.tokenColorCustomizations": {
+    "textMateRules": [
+      // 关键字（如 function, return, const）
+      {
+        "scope": "keyword",
+        "settings": {
+          "foreground": "#867b26",
+          "fontStyle": "bold"
+        }
+      },
+      // 函数名
+      {
+        "scope": "entity.name.function",
+        "settings": {
+          "foreground": "#758bdf"
+        }
+      },
+      // 参数
+      {
+        "scope": "variable.parameter",
+        "settings": {
+          "foreground": "#9876AA",
+          "fontStyle": "italic"
+        }
+      },
+      // 普通变量
+      {
+        "scope": "variable",
+        "settings": {
+          "foreground": "#A9B7C6"
+        }
+      },
+      // 字符串
+      {
+        "scope": "string",
+        "settings": {
+          "foreground": "#6A8759"
+        }
+      },
+      // 数字
+      {
+        "scope": "constant.numeric",
+        "settings": {
+          "foreground": "#6897BB"
+        }
+      },
+      // 注释
+      {
+        "scope": "comment",
+        "settings": {
+          "foreground": "#808080",
+          "fontStyle": "italic"
+        }
+      },
+      // 类型（如 string, number, JSX types）
+      {
+        "scope": ["support.type", "entity.name.type", "entity.name.class"],
+        "settings": {
+          "foreground": "#A9B7C6"
+        }
+      },
+      // HTML/JSX 标签
+      {
+        "scope": ["entity.name.tag", "support.class.component"],
+        "settings": {
+          "foreground": "#beb199"
+        }
+      },
+      // 属性名（如 HTML/JSX 中的 className、href）
+      {
+        "scope": "entity.other.attribute-name",
+        "settings": {
+          "foreground": "#9876AA"
+        }
+      }
+    ]
+  },
+  "editor.fontSize": 15,
+  "editor.fontFamily": "JetBrains Mono, monospace",
+  "window.commandCenter": true,
+  "workbench.iconTheme": "material-icon-theme",
+  "explorer.confirmDelete": false,
+  "workbench.colorTheme": "One Dark Pro Mix",
+  "window.openFilesInNewWindow": "default",
+  "window.openFoldersInNewWindow": "on",
+  // TypeScript 编辑特性
+  "editor.gotoLocation.multipleDefinitions": "goto",
+  "typescript.validate.enable": true, // 启用类型检查
+  "typescript.suggest.autoImports": true, // 启用自动导入
+  "typescript.updateImportsOnFileMove.enabled": "always", // 移动文件时更新导入路径
+  "typescript.preferences.importModuleSpecifier": "non-relative", // 使用非相对路径导入（需配合路径别名）
+  "typescript.referencesCodeLens.enabled": true, // 显示引用数量
+  "typescript.implementationsCodeLens.enabled": true, // 开启后，VSCode 会在接口（interface）、抽象类（abstract class）、方法签名的上方，显示有多少个地方实现了它，并可以快速跳转。
+  "editor.codeActionsOnSave": {
+    "source.fixAll": "explicit",
+    "source.removeUnusedImports": "explicit"
+  },
+
+  // 文件类型与语言关联
+  "files.associations": {
+    "*.ts": "typescript",
+    "*.tsx": "typescriptreact"
+  },
+
+  // 启用 TypeScript 项目配置（tsconfig）智能感知
+  "typescript.tsdk": "node_modules/typescript/lib", // 使用项目中安装的 ts 而非 VS Code 内置的版本
+  "typescript.enablePromptUseWorkspaceTsdk": true,
+  "[jsonc]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "git.confirmSync": false,
+  "security.promptForLocalFileProtocolHandling": false,
+  "git.autofetch": true,
+  "backgroundCover.imagePath": "",
+  "backgroundCover.blur": 0,
+  "backgroundCover.sizeModel": "cover",
+  "backgroundCover.opacity": 0.1,
+  "editor.accessibilitySupport": "off",
+  "editor.formatOnSave": true,
+  "[html]": {
+    "editor.defaultFormatter": "vscode.html-language-features"
+  },
+  "javascript.updateImportsOnFileMove.enabled": "never",
+  "cursor.cpp.disabledLanguages": ["plaintext"],
+  "remote.SSH.remotePlatform": {
+    "tencent": "macOS"
+  },
+  "cursor.general.disableHttp2": true,
+  "http.noProxy": ["http://127.0.0.1:7890"],
+  "explorer.fileNesting.enabled": true,
+  "explorer.fileNesting.patterns": {
+    "*.ts": "${capture}.js, ${capture}.typegen.ts",
+    "*.js": "${capture}.js.map, ${capture}.min.js, ${capture}.d.ts",
+    "*.jsx": "${capture}.js",
+    "*.tsx": "${capture}.ts, ${capture}.typegen.ts",
+    "tsconfig.json": "tsconfig.*.json",
+    "package.json": "package-lock.json, yarn.lock, pnpm-lock.yaml, bun.lockb, bun.lock",
+    "*.mts": "${capture}.typegen.ts",
+    "*.cts": "${capture}.typegen.ts"
+  },
   "cSpell.words": ["DEEPSEEK", "NEXTAUTH", "OLLAMA"]
 }
