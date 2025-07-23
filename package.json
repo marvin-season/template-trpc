@@ -18,7 +18,8 @@
     "lint:fix": "next lint --fix",
     "preview": "next build && next start",
     "start": "next start --port 12345",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "mr": "./.shell/mr.sh"
   },
   "dependencies": {
     "@ai-sdk/deepseek": "^0.2.14",
