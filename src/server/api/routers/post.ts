@@ -14,6 +14,11 @@ export const postRouter = createTRPCRouter({
       },
     })
   }),
+  get: publicProcedure.input(z.number()).query(async ({ ctx, input }) => {
+    return ctx.db.post.findUnique({
+      where: { id: input },
+    })
+  }),
   create: protectedProcedure
     .input(z.object({ name: z.string().min(1) }))
     .mutation(async ({ ctx, input }) => {
