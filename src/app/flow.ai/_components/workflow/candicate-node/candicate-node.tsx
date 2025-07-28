@@ -1,3 +1,5 @@
+'use client'
+
 import { useEventListener } from 'ahooks'
 import { CUSTOM_NODE } from '../nodes/constant'
 import { useWorkflowStore } from '../context/store'

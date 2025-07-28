@@ -1,3 +1,9 @@
+import Workflow from './_components/workflow'
+
 export default function Page() {
-  return <>a</>
+  return (
+    <>
+      <Workflow />
+    </>
+  )
 }

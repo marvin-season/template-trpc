@@ -1,4 +1,12 @@
-import { Background, Controls, ReactFlow, useStoreApi } from 'reactflow'
+'use client'
+
+import {
+  Background,
+  BezierEdge,
+  Controls,
+  ReactFlow,
+  useStoreApi,
+} from 'reactflow'
 import 'reactflow/dist/style.css'
 import {
   CustomNode,
@@ -7,16 +15,15 @@ import {
 import { CustomEdge } from '@/app/flow.ai/_components/workflow/edges'
 import { Operator } from './operator'
 import { CandicateNode } from './candicate-node'
-import { useContextMenu } from '@/app/flow.ai/_components/workflow/hooks/km.tsx'
-import { openContextMenu } from '@/app/flow.ai/_components/workflow/handles/open-context-menu.tsx'
+
 import { useRef } from 'react'
 import { useWorkflowStore } from './context/store'
 import { useEventListener, useKeyPress } from 'ahooks'
 import { useNodeInteraction } from './hooks'
-import flow from '@/api/flow'
 import { getKeyboardKeyCodeBySystem } from './utils'
-import { convertToReactFlowGraph } from '@/utils/javascript-node.ts'
-import { BezierEdge } from '@/app/flow.ai/_components/workflow/edges/bezier-edge.tsx'
+import { openContextMenu } from '@/app/flow.ai/_components/workflow/handles/open-context-menu'
+import { useContextMenu } from '@/app/flow.ai/_components/workflow/hooks/km'
+import { convertToReactFlowGraph } from '@/app/flow.ai/_utils/javascript-node'
 
 function Demo() {}
 

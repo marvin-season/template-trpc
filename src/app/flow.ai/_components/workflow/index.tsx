@@ -1,3 +1,5 @@
+'use client'
+
 import Workflow from './workflow'
 import { ReactFlowProvider } from 'reactflow'
 import { WorkflowProvider } from './context'
