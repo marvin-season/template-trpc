@@ -1,38 +1,42 @@
-import { useCallback } from 'react'
-import { type NodeDragHandler, useReactFlow } from 'reactflow'
-import type { FlowNode } from '../types'
-import { produce } from 'immer'
+import { useCallback } from "react"
+import { NodeDragHandler, useStoreApi } from "reactflow"
+import { FlowNode } from "../types";
+import { produce } from "immer";
 
 export default function useNodeInteraction() {
-  const { getNodes, setNodes } = useReactFlow()
 
-  const handleNodeDragStart = useCallback<NodeDragHandler>((e, node) => {
-    console.log('handleNodeDragStart', { e, node })
-  }, [])
+    const workflowStore = useStoreApi()
 
-  const handleNodeDrag = useCallback<NodeDragHandler>((e, node: FlowNode) => {
-    console.log('handleNodeDrag', { e, node })
-    e.stopPropagation()
 
-    const nodes = getNodes()
+    const handleNodeDragStart = useCallback<NodeDragHandler>((e, node) => {
+        console.log('handleNodeDragStart', { e, node });
+    }, []);
 
-    const newNodes = produce(nodes, (draft) => {
-      const currentNode = draft.find((n) => n.id === node.id)!
+    const handleNodeDrag = useCallback<NodeDragHandler>((e, node: FlowNode) => {
+        console.log('handleNodeDrag', { e, node });
+        e.stopPropagation();
+        const { getNodes, setNodes } = workflowStore.getState();
 
-      currentNode.position.x = node.position.x
-      currentNode.position.y = node.position.y
-    })
+        const nodes = getNodes();
 
-    setNodes(newNodes)
-  }, [])
+        const newNodes = produce(nodes, (draft) => {
+            const currentNode = draft.find(n => n.id === node.id)!
 
-  const handleNodeDragStop = useCallback<NodeDragHandler>((e, node) => {
-    console.log('handleNodeDragStop', { e, node })
-  }, [])
+            currentNode.position.x = node.position.x
+            currentNode.position.y = node.position.y
+        })
 
-  return {
-    handleNodeDragStart,
-    handleNodeDrag,
-    handleNodeDragStop,
-  }
+        setNodes(newNodes)
+
+    }, []);
+    
+    const handleNodeDragStop = useCallback<NodeDragHandler>((e, node) => {
+        console.log('handleNodeDragStop', { e, node });
+    }, []);
+
+
+
+    return {
+        handleNodeDragStart, handleNodeDrag, handleNodeDragStop
+    }
 }

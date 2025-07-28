@@ -1,6 +1,12 @@
 'use client'
 
-import { Background, BezierEdge, Controls, ReactFlow } from 'reactflow'
+import {
+  Background,
+  BezierEdge,
+  Controls,
+  ReactFlow,
+  useStoreApi,
+} from 'reactflow'
 import 'reactflow/dist/style.css'
 import { CustomNode, JavaScriptNode } from './nodes'
 import { CustomEdge } from './edges'
@@ -35,6 +41,7 @@ const initEdges: any = edges
 console.log({ initNodes, initEdges })
 
 const Workflow = () => {
+  const { getState } = useStoreApi()
   const setMousePosition = useWorkflowStore((s) => s.setMousePosition)
 
   const { handleNodeDragStart, handleNodeDrag, handleNodeDragStop } =
@@ -42,9 +49,7 @@ const Workflow = () => {
 
   const workflowContainerRef = useRef<HTMLDivElement>(null)
   useContextMenu(openContextMenu)
-  useKeyPress(`${getKeyboardKeyCodeBySystem('ctrl')}.s`, (e) => {
-    e.preventDefault()
-  }),
+  useKeyPress(`${getKeyboardKeyCodeBySystem('ctrl')}.s`, (e) => {}),
     { exactMatch: true, useCapture: true }
   useEventListener('mousemove', (e) => {
     const containerClientRect =
