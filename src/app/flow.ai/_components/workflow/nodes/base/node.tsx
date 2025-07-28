@@ -1,39 +1,46 @@
-import { FC, memo, ReactElement } from "react";
-import { NodeProps } from "reactflow";
-import cn from 'classnames';
-import { BaseSourceHandle, BaseTargetHandle } from "../../handle";
+import { type FC, memo, type ReactElement } from 'react'
+import { type NodeProps } from 'reactflow'
+import { cn } from '@/lib/utils'
+import { BaseSourceHandle, BaseTargetHandle } from '../../handle'
 
 type BaseNodeProps = {
-  children: ReactElement;
-} & NodeProps;
+  children: ReactElement
+} & NodeProps
 
 const BaseNode: FC<BaseNodeProps> = ({ id, data, children, selected }) => {
   return (
     <div
-      className={cn("border-primary-600 border-solid flex border-[2px] rounded-2xl", selected && "border-blue-600")}
+      className={cn(
+        `border-primary-600 flex rounded-2xl border-[2px] border-solid`,
+        selected && `border-blue-600`,
+      )}
       style={{
-        width: "auto",
-        height: "auto",
+        width: 'auto',
+        height: 'auto',
       }}
     >
       <div
-        className={
-          "p-6 group relative shadow-xs border border-transparent rounded-[15px] w-[240px] bg-[#fcfdff] border-solid"
-        }
+        className={`
+          group relative w-[240px] rounded-[15px] border border-solid
+          border-transparent bg-[#fcfdff] p-6 shadow-xs
+        `}
       >
         {children}
         <BaseTargetHandle
-          id={id} data={data}
-          handleClassName="!top-4 !-left-[9px] !translate-y-0"
-          handleId="target" />
-        <BaseSourceHandle id={id}
+          id={id}
           data={data}
-          handleClassName="!top-4 !-right-[9px] !translate-y-0"
-          handleId="source" />
+          handleClassName='!top-4 !-left-[9px] !translate-y-0'
+          handleId='target'
+        />
+        <BaseSourceHandle
+          id={id}
+          data={data}
+          handleClassName='!top-4 !-right-[9px] !translate-y-0'
+          handleId='source'
+        />
       </div>
-
     </div>
-  );
-};
+  )
+}
 
-export default memo(BaseNode);
+export default memo(BaseNode)

@@ -1,16 +1,13 @@
-import React from "react";
-import Blocks from "./blocks";
-import {Block} from "../types";
-import {generateNewNode} from "../utils";
-import {useWorkflowStore} from '@/pages/workflow/context/store.ts';
-import { NODES_INITIAL_DATA } from "../nodes/constant";
+import Blocks from './blocks'
+import { type Block } from '../types'
+import { generateNewNode } from '../utils'
+import { useWorkflowStore } from '../context/store'
+import { NODES_INITIAL_DATA } from '../nodes/constant'
 
 export default function () {
-
-  const setCandidateNode = useWorkflowStore(s => s.setCandidateNode)
+  const setCandidateNode = useWorkflowStore((s) => s.setCandidateNode)
 
   const handleOnSelect = (block: Block) => {
-    
     const newNode = generateNewNode({
       data: {
         ...NODES_INITIAL_DATA[block.type],
@@ -22,16 +19,21 @@ export default function () {
       },
     })
 
-    console.log('newNode', newNode);
+    console.log('newNode', newNode)
 
     setCandidateNode(newNode)
   }
 
   return (
     <>
-      <div className="rounded-lg border-[0.5px] border-gray-200 bg-white shadow-lg w-[300px] h-[500px] !min-w-[256px]">
-        <Blocks onSelect={handleOnSelect}/>
+      <div
+        className={`
+          h-[500px] w-[300px] !min-w-[256px] rounded-lg border-[0.5px]
+          border-gray-200 bg-white shadow-lg
+        `}
+      >
+        <Blocks onSelect={handleOnSelect} />
       </div>
     </>
-  );
+  )
 }

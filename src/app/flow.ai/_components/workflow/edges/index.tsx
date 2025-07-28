@@ -1,8 +1,9 @@
-import { memo, useCallback, useState } from 'react';
-import type { EdgeProps } from 'reactflow';
-import { BaseEdge, Position, getBezierPath } from 'reactflow';
+import { memo } from 'react'
+import type { EdgeProps } from 'reactflow'
+import { BaseEdge, Position, getBezierPath } from 'reactflow'
 
-export const CustomEdge = memo(({
+export const CustomEdge = memo(
+  ({
     id,
     data,
     source,
@@ -14,29 +15,33 @@ export const CustomEdge = memo(({
     targetX,
     targetY,
     selected,
-}: EdgeProps) => {
+  }: EdgeProps) => {
     const [edgePath, labelX, labelY] = getBezierPath({
-        sourceX: sourceX - 8,
-        sourceY,
-        sourcePosition: Position.Right,
-        targetX: targetX + 8,
-        targetY,
-        targetPosition: Position.Left,
-        curvature: 0.16,
-    });
+      sourceX: sourceX - 8,
+      sourceY,
+      sourcePosition: Position.Right,
+      targetX: targetX + 8,
+      targetY,
+      targetPosition: Position.Left,
+      curvature: 0.16,
+    })
 
     return (
-        <>
-            <BaseEdge
-                id={id}
-                path={edgePath}
-                style={{
-                    stroke: selected || data?._connectedNodeIsHovering || data?._runned ? '#2970FF' : '#D0D5DD',
-                    strokeWidth: 2,
-                }}
-            />
-        </>
-    );
-});
+      <>
+        <BaseEdge
+          id={id}
+          path={edgePath}
+          style={{
+            stroke:
+              selected || data?._connectedNodeIsHovering || data?._runned
+                ? '#2970FF'
+                : '#D0D5DD',
+            strokeWidth: 2,
+          }}
+        />
+      </>
+    )
+  },
+)
 
 CustomEdge.displayName = 'CustomEdge'
