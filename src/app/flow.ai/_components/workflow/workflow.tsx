@@ -1,18 +1,9 @@
 'use client'
 
-import {
-  Background,
-  BezierEdge,
-  Controls,
-  ReactFlow,
-  useStoreApi,
-} from 'reactflow'
+import { Background, BezierEdge, Controls, ReactFlow } from 'reactflow'
 import 'reactflow/dist/style.css'
-import {
-  CustomNode,
-  JavaScriptNode,
-} from '@/app/flow.ai/_components/workflow/nodes'
-import { CustomEdge } from '@/app/flow.ai/_components/workflow/edges'
+import { CustomNode, JavaScriptNode } from './nodes'
+import { CustomEdge } from './edges'
 import { Operator } from './operator'
 
 import { useRef } from 'react'
@@ -20,10 +11,10 @@ import { useWorkflowStore } from './context/store'
 import { useEventListener, useKeyPress } from 'ahooks'
 import { useNodeInteraction } from './hooks'
 import { getKeyboardKeyCodeBySystem } from './utils'
-import { openContextMenu } from '@/app/flow.ai/_components/workflow/handles/open-context-menu'
-import { useContextMenu } from '@/app/flow.ai/_components/workflow/hooks/km'
+import { openContextMenu } from './handles/open-context-menu'
+import { useContextMenu } from './hooks/km'
 import { convertToReactFlowGraph } from '@/app/flow.ai/_utils/javascript-node'
-import CandidateNode from '@/app/flow.ai/_components/workflow/candidate-node/candidate-node'
+import CandidateNode from './candidate-node/candidate-node'
 
 function Demo() {}
 
@@ -39,15 +30,11 @@ const edgeTypes = {
   'custom-bezier': BezierEdge,
 }
 
-// const initNodes = (await flow.getFlowApi()).nodes;
-// const initEdges = (await flow.getFlowApi()).edges;
-
 const initNodes = nodes
 const initEdges: any = edges
 console.log({ initNodes, initEdges })
 
 const Workflow = () => {
-  const { getState } = useStoreApi()
   const setMousePosition = useWorkflowStore((s) => s.setMousePosition)
 
   const { handleNodeDragStart, handleNodeDrag, handleNodeDragStop } =
@@ -56,9 +43,7 @@ const Workflow = () => {
   const workflowContainerRef = useRef<HTMLDivElement>(null)
   useContextMenu(openContextMenu)
   useKeyPress(`${getKeyboardKeyCodeBySystem('ctrl')}.s`, (e) => {
-    const { getNodes, edges } = getState()
     e.preventDefault()
-    flow.setNodesApi({ nodes: getNodes(), edges })
   }),
     { exactMatch: true, useCapture: true }
   useEventListener('mousemove', (e) => {

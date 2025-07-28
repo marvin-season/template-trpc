@@ -4,7 +4,7 @@ import { useEventListener } from 'ahooks'
 import { CUSTOM_NODE } from '../nodes/constant'
 import { useWorkflowStore } from '../context/store'
 import { CustomNode } from '../nodes'
-import { useReactFlow, useStoreApi } from 'reactflow'
+import { useReactFlow } from 'reactflow'
 import { produce } from 'immer'
 import { useRef } from 'react'
 
@@ -14,7 +14,6 @@ export default function CandidateNode() {
   const mousePosition = useWorkflowStore((s) => s.mousePosition)
   const reactflow = useReactFlow()
 
-  const store = useStoreApi()
   const candidateNodeRef = useRef<HTMLDivElement>(null)
 
   useEventListener(
@@ -24,9 +23,9 @@ export default function CandidateNode() {
         console.log('click candidateNode')
 
         e.preventDefault()
-        const { getNodes, setNodes } = store.getState()
+        const { screenToFlowPosition, getNodes, setNodes } = reactflow
         const nodes = getNodes()
-        const { screenToFlowPosition } = reactflow
+
         const { x, y } = screenToFlowPosition({
           x: mousePosition.pageX,
           y: mousePosition.pageY,
