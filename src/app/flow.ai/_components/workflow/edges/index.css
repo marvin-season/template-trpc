@@ -1,0 +1,11 @@
+/* src/pages/workflow/edges/FlowingEdge.css */
+.flowing-edge-path {
+    stroke-dasharray: 5;
+    animation: flow 1s linear infinite;
+}
+
+@keyframes flow {
+    to {
+        stroke-dashoffset: -10;
+    }
+}

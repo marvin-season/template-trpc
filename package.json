@@ -56,6 +56,7 @@
     "react-dom": "^19.0.0",
     "react-markdown": "^10.1.0",
     "react-pdf": "^10.0.1",
+    "reactflow": "^11.11.4",
     "rehype-raw": "^7.0.0",
     "server-only": "^0.0.1",
     "superjson": "^2.2.1",
