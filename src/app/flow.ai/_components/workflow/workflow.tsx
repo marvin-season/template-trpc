@@ -14,7 +14,6 @@ import {
 } from '@/app/flow.ai/_components/workflow/nodes'
 import { CustomEdge } from '@/app/flow.ai/_components/workflow/edges'
 import { Operator } from './operator'
-import { CandicateNode } from './candicate-node'
 
 import { useRef } from 'react'
 import { useWorkflowStore } from './context/store'
@@ -24,6 +23,7 @@ import { getKeyboardKeyCodeBySystem } from './utils'
 import { openContextMenu } from '@/app/flow.ai/_components/workflow/handles/open-context-menu'
 import { useContextMenu } from '@/app/flow.ai/_components/workflow/hooks/km'
 import { convertToReactFlowGraph } from '@/app/flow.ai/_utils/javascript-node'
+import CandidateNode from '@/app/flow.ai/_components/workflow/candidate-node/candidate-node'
 
 function Demo() {}
 
@@ -78,7 +78,7 @@ const Workflow = () => {
   return (
     <div className='h-full' ref={workflowContainerRef}>
       <Operator />
-      <CandicateNode />
+      <CandidateNode />
       <ReactFlow
         nodeTypes={nodeTypes}
         edgeTypes={edgeTypes}

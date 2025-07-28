@@ -8,7 +8,7 @@ import { useReactFlow, useStoreApi } from 'reactflow'
 import { produce } from 'immer'
 import { useRef } from 'react'
 
-export default function () {
+export default function CandidateNode() {
   const setCandidateNode = useWorkflowStore((s) => s.setCandidateNode)
   const candidateNode = useWorkflowStore((s) => s.candidateNode) as any
   const mousePosition = useWorkflowStore((s) => s.mousePosition)
