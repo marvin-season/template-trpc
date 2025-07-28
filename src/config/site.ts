@@ -7,4 +7,8 @@ export const sites = [
     name: 'banana',
     path: 'banana.ai',
   },
+  {
+    name: 'flow',
+    path: 'flow.ai',
+  },
 ]
