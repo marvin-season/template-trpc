@@ -16,12 +16,14 @@ export const convertToReactFlowGraph = (obj: any) => {
   devLog(prototypes)
   const nodes: Node[] = prototypes.map((prototype, index) => {
     const properties = Object.getOwnPropertyNames(prototype)
+
     return {
       id: `node-${index}`,
       type: 'javascript',
       data: {
         label: `${prototype.constructor.name}`,
         properties,
+        constructor: prototype.constructor,
       },
       position: { x: 100, y: index * 150 },
     }

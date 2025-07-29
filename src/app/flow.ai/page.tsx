@@ -6,6 +6,16 @@ import { convertToReactFlowGraph } from './_utils/javascript-node'
 import { useMemo } from 'react'
 import useSelect, { Select } from '@/app/_hooks/ui/useSelect'
 import { devLog } from '@/utils/common'
+class User {
+  private name: string
+  constructor(name: string) {
+    this.name = name
+  }
+
+  getName() {
+    return this.name
+  }
+}
 
 const options = [
   {
@@ -19,6 +29,10 @@ const options = [
   {
     label: 'Function',
     value: () => {},
+  },
+  {
+    label: 'User',
+    value: new User('Marvin'),
   },
 ]
 
