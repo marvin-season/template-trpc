@@ -1,4 +1,4 @@
-import type { Edge, NodeProps } from 'reactflow'
+import type { Edge, Node } from 'reactflow'
 
 export const flattenPrototypeChain = (obj: any): any[] => {
   const prototypes = []
@@ -12,7 +12,7 @@ export const flattenPrototypeChain = (obj: any): any[] => {
 
 export const convertToReactFlowGraph = (obj: any) => {
   const prototypes = flattenPrototypeChain(obj)
-  const nodes = prototypes.map((prototype, index) => {
+  const nodes: Node[] = prototypes.map((prototype, index) => {
     const properties = Object.getOwnPropertyNames(prototype)
     return {
       id: `node-${index}`,
@@ -22,9 +22,7 @@ export const convertToReactFlowGraph = (obj: any) => {
         properties,
       },
       position: { x: 100, y: index * 150 },
-      targetPosition: 'top',
-      sourcePosition: 'bottom',
-    } satisfies NodeProps[]
+    }
   })
 
   const edges: Edge[] = prototypes.slice(1).map((_, index) => ({

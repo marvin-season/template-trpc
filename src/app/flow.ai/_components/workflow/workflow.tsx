@@ -77,7 +77,6 @@ const Workflow = () => {
         onNodeDragStart={handleNodeDragStart}
         onNodeDrag={handleNodeDrag}
         onNodeDragStop={handleNodeDragStop}
-        fitView
       >
         <Background />
         <Controls />
