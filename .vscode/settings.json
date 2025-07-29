@@ -1,6 +1,13 @@
 {
-    "editor.codeActionsOnSave": {
-        "source.fixAll.eslint": "explicit"
-    },
-    "editor.tabSize": 2
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit"
+  },
+  "editor.tabSize": 2,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "reactSnippets.settings.prettierEnabled": true,
+  "prettier.configPath": "/Users/marvin/personal/template-trpc/.prettierrc.yaml"
 }

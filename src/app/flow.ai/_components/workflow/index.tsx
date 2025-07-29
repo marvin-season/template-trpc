@@ -22,9 +22,13 @@ import { useContextMenu } from './hooks/km'
 import { convertToReactFlowGraph } from '@flow.ai/_utils/javascript-node'
 import CandidateNode from './candidate-node/candidate-node'
 
-function Demo() {}
 
-const { nodes, edges } = convertToReactFlowGraph(Demo)
+const { nodes, edges } = convertToReactFlowGraph({
+  username: 'John Doe',
+  age: 20,
+  isAdmin: true,
+  createdAt: new Date(),
+})
 console.log({ nodes, edges })
 const nodeTypes = {
   custom: CustomNode,
