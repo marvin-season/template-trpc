@@ -13,7 +13,7 @@ import { CustomEdge } from './edges'
 import { Operator } from './operator'
 
 import { useRef } from 'react'
-import { useWorkflowStore } from './context/store'
+import { useWorkflowStore } from './context'
 import { useEventListener, useKeyPress } from 'ahooks'
 import { useNodeInteraction } from './hooks'
 import { getKeyboardKeyCodeBySystem } from './utils'

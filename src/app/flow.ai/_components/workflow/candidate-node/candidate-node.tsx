@@ -2,7 +2,7 @@
 
 import { useEventListener } from 'ahooks'
 import { CUSTOM_NODE } from '../nodes/constant'
-import { useWorkflowStore } from '../context/store'
+import { useWorkflowStore } from '../context'
 import { CustomNode } from '../nodes'
 import { useReactFlow, useStoreApi } from 'reactflow'
 import { produce } from 'immer'

@@ -1,7 +1,7 @@
 import Blocks from './blocks'
 import { type Block } from '../types'
 import { generateNewNode } from '../utils'
-import { useWorkflowStore } from '../context/store'
+import { useWorkflowStore } from '../context'
 import { NODES_INITIAL_DATA } from '../nodes/constant'
 
 export default function () {
