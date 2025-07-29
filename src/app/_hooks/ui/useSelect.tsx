@@ -1,29 +1,44 @@
 import {
-  Select,
+  Select as SelectRoot,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { useState } from "react"
+import { useCallback, useState } from "react"
 
-interface ISelectProps {
-  placeholder?: string
-  defaultValue?: string
+interface ISelectProps<T = string> {
+  placeholder?: T
+  defaultValue?: T
   options: {
     label: string
-    value: string
+    value: T
   }[]
-  onSelected?: (value: string) => void
+  onChange?: (value: T) => void
 }
 
-export default function useSelect(props: ISelectProps) {
-  const { options, onSelected, placeholder, defaultValue } = props
+export default function useSelect<T = string>(props: ISelectProps<T>) {
+  const { defaultValue, onChange } = props
 
-  const [value, setValue] = useState(defaultValue)
-  const select = <Select onValueChange={value => {
+  const [value, setValue] = useState<T | undefined>(defaultValue)
+
+  const handleSelected = useCallback((value: T) => {
     setValue(value)
-    onSelected?.(value)
+    onChange?.(value)
+  }, [onChange])
+
+  return {
+    ...props,
+    value,
+    onChange: handleSelected,
+  }
+}
+
+export function Select(props: ISelectProps<string>) {
+  const { options, onChange, placeholder, defaultValue } = props
+
+  return <SelectRoot onValueChange={value => {
+    onChange?.(value)
   }} defaultValue={defaultValue}>
     <SelectTrigger className="w-[180px]">
       <SelectValue placeholder={placeholder} />
@@ -35,9 +50,5 @@ export default function useSelect(props: ISelectProps) {
         </SelectItem>
       ))}
     </SelectContent>
-  </Select>
-  return {
-    select,
-    value
-  }
+  </SelectRoot>
 }
