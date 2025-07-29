@@ -27,7 +27,8 @@
     /* Path Aliases */
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@flow.ai/*": ["./src/app/flow.ai/*"]
     }
   },
   "include": [

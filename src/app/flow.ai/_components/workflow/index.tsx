@@ -19,7 +19,7 @@ import { useNodeInteraction } from './hooks'
 import { getKeyboardKeyCodeBySystem } from './utils'
 import { openContextMenu } from './handles/open-context-menu'
 import { useContextMenu } from './hooks/km'
-import { convertToReactFlowGraph } from '@/app/flow.ai/_utils/javascript-node'
+import { convertToReactFlowGraph } from '@flow.ai/_utils/javascript-node'
 import CandidateNode from './candidate-node/candidate-node'
 
 function Demo() {}

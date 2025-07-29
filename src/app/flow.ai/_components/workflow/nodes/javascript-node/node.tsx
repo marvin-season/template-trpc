@@ -1,4 +1,4 @@
-import { JavaScriptNodeData } from '@/app/flow.ai/_components/workflow/types.ts'
+import type { JavaScriptNodeData } from '@flow.ai/_components/workflow/types'
 
 export default function Node({ data }: { data: JavaScriptNodeData }) {
   console.log('🚀  data.proto', data.label)
