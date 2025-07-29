@@ -1,3 +1,4 @@
+import { devLog } from '@/utils/common'
 import type { Edge, Node } from 'reactflow'
 
 export const flattenPrototypeChain = (obj: any): any[] => {
@@ -12,13 +13,14 @@ export const flattenPrototypeChain = (obj: any): any[] => {
 
 export const convertToReactFlowGraph = (obj: any) => {
   const prototypes = flattenPrototypeChain(obj)
+  devLog(prototypes)
   const nodes: Node[] = prototypes.map((prototype, index) => {
     const properties = Object.getOwnPropertyNames(prototype)
     return {
       id: `node-${index}`,
       type: 'javascript',
       data: {
-        label: `${prototype.name || prototype.constructor.name}`,
+        label: `${prototype.constructor.name}`,
         properties,
       },
       position: { x: 100, y: index * 150 },
