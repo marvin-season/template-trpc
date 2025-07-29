@@ -1,1 +1,1 @@
-export { default as CandicateNode } from './Candidate-node'
+export { default as CandidateNode } from './candidate-node'
