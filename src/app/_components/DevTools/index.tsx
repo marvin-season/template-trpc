@@ -7,7 +7,9 @@ export function SiteSwitcher() {
   }
 
   return (
-    <div className='fixed top-0 right-0 opacity-50 bg-green-400 flex gap-2 cursor-pointer z-50'>
+    <div className={`
+      fixed top-0 right-0 z-50 flex cursor-pointer gap-2 bg-green-400 opacity-50
+    `}>
       {sites.map((site) => (
         // 打开新的站点
         <a

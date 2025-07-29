@@ -4,7 +4,9 @@ import Control from './control';
 export default function () {
     return (
         <>
-            <div className='flex items-center mt-1 gap-2 absolute left-4 bottom-4 z-[9]'>
+            <div className={`
+              absolute bottom-4 left-4 z-[9] mt-1 flex items-center gap-2
+            `}>
                 <Control />
             </div>
         </>

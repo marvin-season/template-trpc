@@ -45,9 +45,14 @@ export function SidebarNavigation({ children }: { children: React.ReactNode }) {
                       {item.items ? (
                         <Collapsible defaultOpen className='group/collapsible'>
                           <CollapsibleTrigger asChild>
-                            <SidebarMenuButton className='w-full justify-between'>
+                            <SidebarMenuButton className={`
+                              w-full justify-between
+                            `}>
                               <span>{item.title}</span>
-                              <ChevronRight className='h-4 w-4 transition-transform group-data-[state=open]/collapsible:rotate-90' />
+                              <ChevronRight className={`
+                                h-4 w-4 transition-transform
+                                group-data-[state=open]/collapsible:rotate-90
+                              `} />
                             </SidebarMenuButton>
                           </CollapsibleTrigger>
                           <CollapsibleContent>
@@ -91,8 +96,10 @@ export function SidebarNavigation({ children }: { children: React.ReactNode }) {
           </SidebarContent>
         </Sidebar>
 
-        <div className='flex-1 flex flex-col overflow-hidden'>
-          <header className='h-14 flex items-center px-6 border-b bg-white shadow-sm'>
+        <div className='flex flex-1 flex-col overflow-hidden'>
+          <header className={`
+            flex h-14 items-center border-b bg-white px-6 shadow-sm
+          `}>
             <SidebarTrigger />
             <div className='ml-4'>
               <h1 className='text-lg font-semibold'>Apple AI Platform</h1>
