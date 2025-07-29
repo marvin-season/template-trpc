@@ -132,6 +132,58 @@ export async function SiteNavigationCard() {
               </Button>
             </div>
           </div>
+
+          {/* Flow AI 卡片 */}
+          <div className={`
+            group overflow-hidden rounded-2xl border border-gray-100 bg-white
+            shadow-lg transition-all duration-300
+            hover:shadow-2xl
+          `}>
+            <div className='p-8'>
+              <div className={`
+                mb-6 flex h-16 w-16 items-center justify-center rounded-2xl
+                bg-gradient-to-r from-yellow-100 to-orange-100
+                transition-transform duration-300
+                group-hover:scale-110
+              `}>
+                <span className='text-3xl'>�</span>
+              </div>
+
+              <h2 className='mb-3 text-2xl font-bold text-gray-800'>
+                Flow AI
+              </h2>
+              <p className='mb-6 leading-relaxed text-gray-600'>
+                基于 Flow 的 AI 平台，提供丰富的 AI 功能模块，让创作更有趣。
+              </p>
+
+              <div className='mb-6 space-y-3'>
+                <div className='flex items-center text-sm text-gray-500'>
+                  <span className='mr-2 h-2 w-2 rounded-full bg-blue-400'></span>
+                  基于 Flow 的 AI 平台
+                </div>
+                <div className='flex items-center text-sm text-gray-500'>
+                  <span className='mr-2 h-2 w-2 rounded-full bg-blue-400'></span>
+                  Flow 的 AI 平台
+                </div>
+                <div className='flex items-center text-sm text-gray-500'>
+                  <span className='mr-2 h-2 w-2 rounded-full bg-red-400'></span>
+                  丰富的 AI 功能模块
+                </div>
+              </div>
+
+              <Button
+                asChild
+                className={`
+                  w-full bg-blue-500 text-white
+                  group-hover:bg-gradient-to-r group-hover:from-blue-500
+                  group-hover:to-orange-500
+                  hover:bg-blue-600
+                `}
+              >
+                <Link href={`http://flow.ai.${host}`}>进入 Flow AI →</Link>
+              </Button>
+            </div>
+          </div>
         </div>
 
         {/* 底部信息 */}
