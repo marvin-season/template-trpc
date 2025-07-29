@@ -1,7 +1,8 @@
 import type { JavaScriptNodeData } from '@flow.ai/_components/workflow/types'
+import { devLog } from '@/utils/common'
 
 export default function Node({ data }: { data: JavaScriptNodeData }) {
-  console.log('🚀  data.proto', data.label)
+  devLog('🚀  data.proto', data.label)
   return (
     <>
       <div className='flex-col gap-2'>

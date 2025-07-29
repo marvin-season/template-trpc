@@ -43,3 +43,18 @@ export function getRandomInt(min: number, max: number) {
 export function renderMarkdown(text: string) {
   return marked.parse(text) as string
 }
+
+export function devLog(...args: any) {
+  const style = `
+    color:#fff;font-size:12px;font-weight:bold;border-radius:8px;padding:2px 4px;margin:2px 0;
+    background:linear-gradient(135deg, #12c2e9, #c471ed, #f64f59);
+  `
+  if (
+    process.env.NEXT_PUBLIC_APP_ENV === 'production' ||
+    typeof window === 'undefined'
+  ) {
+    return
+  }
+   
+  console.log('%c🚀devLog', style, ...args)
+}
