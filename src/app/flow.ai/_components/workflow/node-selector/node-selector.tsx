@@ -25,15 +25,8 @@ export default function () {
   }
 
   return (
-    <>
-      <div
-        className={`
-          h-[500px] w-[300px] !min-w-[256px] rounded-lg border-[0.5px]
-          border-gray-200 bg-white shadow-lg
-        `}
-      >
-        <Blocks onSelect={handleOnSelect} />
-      </div>
-    </>
+    <div className='flex flex-col gap-2 p-2'>
+      <Blocks onSelect={handleOnSelect} />
+    </div>
   )
 }
