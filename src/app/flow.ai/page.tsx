@@ -1,9 +1,16 @@
-import Workflow from './_components/workflow'
+'use client'
 
-export default function Page() {
+import Workflow from './_components/workflow'
+import { ReactFlowProvider } from 'reactflow'
+
+export default function WorkflowPage() {
   return (
     <>
-      <Workflow />
+      <ReactFlowProvider>
+        <Workflow />
+      </ReactFlowProvider>
     </>
   )
 }
+
+WorkflowPage.displayName = 'WorkflowPage'
