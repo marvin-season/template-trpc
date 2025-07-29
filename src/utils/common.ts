@@ -50,7 +50,7 @@ export function devLog(...args: any) {
     background:linear-gradient(135deg, #12c2e9, #c471ed, #f64f59);
   `
   if (
-    process.env.NEXT_PUBLIC_APP_ENV === 'production' ||
+    process.env.NODE_ENV === 'production' ||
     typeof window === 'undefined'
   ) {
     return
