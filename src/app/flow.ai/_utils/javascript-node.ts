@@ -1,5 +1,5 @@
 import { devLog } from '@/utils/common'
-import type { Edge, Node } from 'reactflow'
+import { MarkerType, type Edge, type Node } from 'reactflow'
 
 export const flattenPrototypeChain = (obj: any): any[] => {
   const prototypes = []
@@ -32,6 +32,12 @@ export const convertToReactFlowGraph = (obj: any) => {
     source: `node-${index}`,
     target: `node-${index + 1}`,
     type: 'custom-bezier',
+    markerEnd: {
+      type: MarkerType.Arrow,
+      width: 20,
+      height: 20,
+      color: '#04f',
+    },
   }))
 
   return { nodes, edges }

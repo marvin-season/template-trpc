@@ -4,8 +4,7 @@ import {
   Background,
   BezierEdge,
   Controls,
-  ReactFlow,
-  useStoreApi,
+  ReactFlow
 } from 'reactflow'
 import 'reactflow/dist/style.css'
 import { CustomNode, JavaScriptNode } from './nodes'
@@ -21,15 +20,10 @@ import { openContextMenu } from './handles/open-context-menu'
 import { useContextMenu } from './hooks/km'
 import { convertToReactFlowGraph } from '@flow.ai/_utils/javascript-node'
 import CandidateNode from './candidate-node/candidate-node'
+import { devLog } from '@/utils/common'
 
 
-const { nodes, edges } = convertToReactFlowGraph({
-  username: 'John Doe',
-  age: 20,
-  isAdmin: true,
-  createdAt: new Date(),
-})
-console.log({ nodes, edges })
+const { nodes, edges } = convertToReactFlowGraph([])
 const nodeTypes = {
   custom: CustomNode,
   javascript: JavaScriptNode,
@@ -40,12 +34,10 @@ const edgeTypes = {
   'custom-bezier': BezierEdge,
 }
 
-const initNodes = nodes
-const initEdges: any = edges
-console.log({ initNodes, initEdges })
+
+devLog({ nodes, edges })
 
 const Workflow = () => {
-  const { getState } = useStoreApi()
   const setMousePosition = useWorkflowStore((s) => s.setMousePosition)
 
   const { handleNodeDragStart, handleNodeDrag, handleNodeDragStop } =
@@ -53,7 +45,7 @@ const Workflow = () => {
 
   const workflowContainerRef = useRef<HTMLDivElement>(null)
   useContextMenu(openContextMenu)
-  useKeyPress(`${getKeyboardKeyCodeBySystem('ctrl')}.s`, (e) => {}),
+  useKeyPress(`${getKeyboardKeyCodeBySystem('ctrl')}.s`, (e) => { }),
     { exactMatch: true, useCapture: true }
   useEventListener('mousemove', (e) => {
     const containerClientRect =
@@ -76,8 +68,8 @@ const Workflow = () => {
       <ReactFlow
         nodeTypes={nodeTypes}
         edgeTypes={edgeTypes}
-        nodes={initNodes}
-        edges={initEdges}
+        nodes={nodes}
+        edges={edges}
         onNodeDragStart={handleNodeDragStart}
         onNodeDrag={handleNodeDrag}
         onNodeDragStop={handleNodeDragStop}
