@@ -4,7 +4,9 @@ import {
   Background,
   BezierEdge,
   Controls,
-  ReactFlow
+  ReactFlow,
+  type Edge,
+  type Node
 } from 'reactflow'
 import 'reactflow/dist/style.css'
 import { CustomNode, JavaScriptNode } from './nodes'
@@ -18,12 +20,9 @@ import { useNodeInteraction } from './hooks'
 import { getKeyboardKeyCodeBySystem } from './utils'
 import { openContextMenu } from './handles/open-context-menu'
 import { useContextMenu } from './hooks/km'
-import { convertToReactFlowGraph } from '@flow.ai/_utils/javascript-node'
 import CandidateNode from './candidate-node/candidate-node'
-import { devLog } from '@/utils/common'
 
 
-const { nodes, edges } = convertToReactFlowGraph([])
 const nodeTypes = {
   custom: CustomNode,
   javascript: JavaScriptNode,
@@ -35,9 +34,13 @@ const edgeTypes = {
 }
 
 
-devLog({ nodes, edges })
+interface IWorkflowProps {
+  nodes: Node[]
+  edges: Edge[]
+}
+const Workflow = (props: IWorkflowProps) => {
+  const { nodes, edges } = props
 
-const Workflow = () => {
   const setMousePosition = useWorkflowStore((s) => s.setMousePosition)
 
   const { handleNodeDragStart, handleNodeDrag, handleNodeDragStop } =
