@@ -5,21 +5,17 @@ import {
 } from '@/components/ui/popover'
 
 interface IPopoverProps {
-  content: React.ReactNode
+  children: React.ReactNode
   trigger: React.ReactNode
 }
 
-export default function usePopover(props: IPopoverProps) {
-  return props
-}
-
 export function Popover(props: IPopoverProps) {
-  const { content, trigger } = props
+  const { children, trigger } = props
 
   return (
     <PopoverRoot defaultOpen={false}>
       <PopoverTrigger asChild>{trigger}</PopoverTrigger>
-      <PopoverContent className='p-2'>{content}</PopoverContent>
+      <PopoverContent className='p-2'>{children}</PopoverContent>
     </PopoverRoot>
   )
 }
