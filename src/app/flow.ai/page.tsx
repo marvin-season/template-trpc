@@ -4,7 +4,7 @@ import Workflow from './_components/workflow'
 import { ReactFlowProvider } from 'reactflow'
 import { convertToReactFlowGraph } from './_utils/javascript-node'
 import { useMemo } from 'react'
-import useSelect, { Select } from '@/app/_hooks/ui/useSelect'
+import { Select, useSelect } from '@/app/_components/Select'
 import { devLog } from '@/utils/common'
 class User {
   private name: string
