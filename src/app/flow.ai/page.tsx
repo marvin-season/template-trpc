@@ -10,31 +10,31 @@ import { devLog } from '@/utils/common'
 const options = [
   {
     label: 'Array',
-    value: []
+    value: [],
   },
   {
     label: 'Object',
-    value: {}
+    value: {},
   },
   {
     label: 'Function',
-    value: () => { }
-  }
+    value: () => {},
+  },
 ]
 
 export default function WorkflowPage() {
   const { value, ...restProps } = useSelect({
     defaultValue: 'Array',
-    options: options.map(option => ({
+    options: options.map((option) => ({
       label: option.label,
-      value: option.label
+      value: option.label,
     })),
     onChange: (value) => {
       devLog(value)
-    }
+    },
   })
   const { nodes, edges } = useMemo(() => {
-    const option = options.find(option => option.label === value)
+    const option = options.find((option) => option.label === value)
     devLog('option', option)
     return convertToReactFlowGraph(option?.value)
   }, [value])
