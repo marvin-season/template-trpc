@@ -1,27 +1,26 @@
-import betterTailwindcss from 'eslint-plugin-better-tailwindcss';
-import eslintParserTypeScript from "@typescript-eslint/parser";
-
-export default [
+import betterTailwindcss from 'eslint-plugin-better-tailwindcss'
+import eslintParserTypeScript from '@typescript-eslint/parser'
+import gitignore from 'eslint-config-flat-gitignore'
+import { defineConfig } from 'eslint/config'
+export default defineConfig([
+  gitignore(),
   {
-    ignores: ['.next'],
-  },
-  {
-    files: ["**/*.{ts,tsx,cts,mts}"],
+    files: ['**/*.{ts,tsx,cts,mts}'],
     languageOptions: {
       parser: eslintParserTypeScript,
       parserOptions: {
-        project: true
-      }
-    }
+        project: true,
+      },
+    },
   },
   {
-    files: ["**/*.{jsx,tsx}"],
+    files: ['**/*.{jsx,tsx}'],
     languageOptions: {
       parserOptions: {
         ecmaFeatures: {
-          jsx: true
-        }
-      }
+          jsx: true,
+        },
+      },
     },
     settings: {
       'better-tailwindcss': {
@@ -32,8 +31,8 @@ export default [
       'better-tailwindcss': betterTailwindcss,
     },
     rules: {
-        // enable all recommended rules to report a warning
-        ...betterTailwindcss.configs["recommended-warn"]?.rules,
-      }
+      // enable all recommended rules to report a warning
+      ...betterTailwindcss.configs['recommended-warn']?.rules,
+    },
   },
-]
+])
