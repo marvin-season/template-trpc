@@ -31,17 +31,23 @@ export default function Node({ data }: { data: JavaScriptNodeData }) {
             {data.properties.map((property) => {
               return (
                 <a
+                  key={property}
                   className={`
-                    flex cursor-pointer justify-between
+                    group/item flex cursor-pointer items-center justify-between
                     hover:text-blue-400
                   `}
-                  title='click to view in MDN'
-                  key={property}
+                  title='Click to view in MDN'
                   href={`${MDN_PREFIX}/${data.constructor.name}/${property}`}
                   target='_blank'
                 >
-                  {property}
-                  <SquareArrowOutUpRight size={12} />
+                  <span>{property}</span>
+                  <SquareArrowOutUpRight
+                    size={12}
+                    className={`
+                      opacity-0 transition-opacity duration-200
+                      group-hover/item:opacity-100
+                    `}
+                  />
                 </a>
               )
             })}
