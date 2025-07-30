@@ -11,4 +11,8 @@ export const sites = [
     name: 'flow',
     path: 'flow.ai',
   },
+  {
+    name: 'doc',
+    path: 'doc.ai',
+  },
 ]
