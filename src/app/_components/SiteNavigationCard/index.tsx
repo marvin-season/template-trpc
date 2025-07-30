@@ -87,6 +87,23 @@ const sitesData: SiteData[] = [
       'group-hover:bg-gradient-to-r group-hover:from-emerald-500 group-hover:to-teal-500 hover:bg-emerald-600',
     href: 'doc.ai',
   },
+  {
+    id: 'write',
+    name: 'Write AI',
+    description:
+      '智能写作助手平台，提供文案创作、内容优化、多语言翻译等功能，让写作更高效更有创意。',
+    icon: '✍️',
+    iconBgClass: 'bg-gradient-to-r from-purple-100 to-pink-100',
+    features: [
+      { text: '智能文案创作助手', color: 'bg-purple-400' },
+      { text: '内容优化与润色', color: 'bg-pink-400' },
+      { text: '多语言翻译支持', color: 'bg-violet-400' },
+    ],
+    buttonClass: 'bg-purple-500 text-white',
+    buttonHoverClass:
+      'group-hover:bg-gradient-to-r group-hover:from-purple-500 group-hover:to-pink-500 hover:bg-purple-600',
+    href: 'write.ai',
+  },
 ]
 
 export async function SiteNavigationCard() {
