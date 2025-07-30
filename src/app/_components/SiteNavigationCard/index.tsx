@@ -89,7 +89,7 @@ const sitesData: SiteData[] = [
   },
   {
     id: 'write',
-    name: 'Write AI',
+    name: 'Writer AI',
     description:
       '智能写作助手平台，提供文案创作、内容优化、多语言翻译等功能，让写作更高效更有创意。',
     icon: '✍️',
@@ -102,7 +102,7 @@ const sitesData: SiteData[] = [
     buttonClass: 'bg-purple-500 text-white',
     buttonHoverClass:
       'group-hover:bg-gradient-to-r group-hover:from-purple-500 group-hover:to-pink-500 hover:bg-purple-600',
-    href: 'write.ai',
+    href: 'writer.ai',
   },
 ]
 

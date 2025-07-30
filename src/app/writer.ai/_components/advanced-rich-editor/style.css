@@ -1,0 +1,26 @@
+.node-ai-acceptor {
+  padding: 8px;
+  font-size: 18px;
+  position: relative;
+  border: 2px solid transparent;
+  border-radius: 10px;
+  animation: marqueeBorder 3s linear infinite;
+}
+
+@keyframes marqueeBorder {
+  0% {
+    border-color: red;
+  }
+  25% {
+    border-color: yellow;
+  }
+  50% {
+    border-color: green;
+  }
+  75% {
+    border-color: blue;
+  }
+  100% {
+    border-color: red;
+  }
+}

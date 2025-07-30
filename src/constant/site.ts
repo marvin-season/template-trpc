@@ -16,7 +16,7 @@ export const sites = [
     path: 'doc.ai',
   },
   {
-    name: 'write',
-    path: 'write.ai',
+    name: 'writer',
+    path: 'writer.ai',
   },
 ]
