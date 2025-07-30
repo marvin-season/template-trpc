@@ -8,17 +8,21 @@ import {
 } from '@/components/ui/sheet'
 
 interface ISheetProps {
-  trigger: React.ReactNode
+  trigger?: React.ReactNode
   children: React.ReactNode
   title?: React.ReactNode
   description?: React.ReactNode
+
+  open?: boolean
+
+  onOpenChange?: (open: boolean) => void
 }
 
 export function Sheet(props: ISheetProps) {
-  const { trigger, children, title, description } = props
+  const { trigger, children, title, description, open, onOpenChange } = props
   return (
-    <SheetRoot>
-      <SheetTrigger asChild>{trigger}</SheetTrigger>
+    <SheetRoot open={open} onOpenChange={onOpenChange}>
+      <SheetTrigger>{trigger}</SheetTrigger>
       <SheetContent>
         <SheetHeader>
           {title && <SheetTitle>{title}</SheetTitle>}
