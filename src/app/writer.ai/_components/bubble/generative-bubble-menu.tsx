@@ -2,7 +2,7 @@ import { useCurrentEditor } from '@tiptap/react'
 import { Fragment } from 'react'
 import { Button } from '@/components/ui/button'
 import { Magic } from '@/components/icon'
-import EditorBubble from '@/app/writer.ai/_components/rich-editor/editor-bubble'
+import EditorBubble from './editor-bubble'
 
 const GenerativeBubbleMenu = ({ children, open, onOpenChange }: any) => {
   const { editor } = useCurrentEditor()
