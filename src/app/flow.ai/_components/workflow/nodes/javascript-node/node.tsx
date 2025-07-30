@@ -1,7 +1,8 @@
 'use client'
 
+import { Properties } from '@/app/flow.ai/_components/workflow/nodes/components/properties'
 import type { JavaScriptNodeData } from '@flow.ai/_components/workflow/types'
-import { ChevronDown, ChevronRight, SquareArrowOutUpRight } from 'lucide-react'
+import { ChevronDown, ChevronRight } from 'lucide-react'
 import { useState } from 'react'
 const MDN_PREFIX =
   'https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects'
@@ -32,31 +33,10 @@ export default function Node({ data }: { data: JavaScriptNodeData }) {
           )}
         </div>
         {isOpen && (
-          <div className='flex flex-col gap-1 text-sm text-gray-500'>
-            {data.properties.map((property) => {
-              return (
-                <a
-                  key={property}
-                  className={`
-                    group/item flex cursor-pointer items-center justify-between
-                    hover:text-blue-400
-                  `}
-                  title='Click to view in MDN'
-                  href={`${MDN_PREFIX}/${data.constructor.name}/${property}`}
-                  target='_blank'
-                >
-                  <span>{property}</span>
-                  <SquareArrowOutUpRight
-                    size={12}
-                    className={`
-                      opacity-0 transition-opacity duration-200
-                      group-hover/item:opacity-100
-                    `}
-                  />
-                </a>
-              )
-            })}
-          </div>
+          <Properties
+            properties={data.properties}
+            name={data.constructor.name}
+          />
         )}
       </div>
     </>

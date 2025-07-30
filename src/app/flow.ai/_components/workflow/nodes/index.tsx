@@ -27,7 +27,9 @@ export const CustomNode = (props: NodeProps) => {
         </BaseNode>
       }
     >
-      <BasePanel {...props}>{PanelComponent && <PanelComponent />}</BasePanel>
+      <BasePanel {...props}>
+        {PanelComponent && <PanelComponent data={nodeData} />}
+      </BasePanel>
     </Popover>
   )
 }
