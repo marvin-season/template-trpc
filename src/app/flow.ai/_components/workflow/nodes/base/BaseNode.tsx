@@ -11,7 +11,7 @@ const BaseNode: FC<BaseNodeProps> = ({ id, data, children, selected }) => {
   return (
     <div
       className={cn(
-        `border-primary-600 flex rounded-2xl border-[2px] border-solid`,
+        `flex rounded-2xl border-[2px] border-solid border-gray-600`,
         selected && `border-blue-600`,
       )}
       style={{

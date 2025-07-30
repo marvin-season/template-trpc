@@ -6,7 +6,7 @@ import {
   Controls,
   ReactFlow,
   type Edge,
-  type Node
+  type Node,
 } from 'reactflow'
 import 'reactflow/dist/style.css'
 import { CustomNode, JavaScriptNode } from './nodes'
@@ -21,7 +21,7 @@ import { getKeyboardKeyCodeBySystem } from './utils'
 import { openContextMenu } from './handles/open-context-menu'
 import { useContextMenu } from './hooks/km'
 import CandidateNode from './candidate-node/candidate-node'
-
+import { devLog } from '@/utils/common'
 
 const nodeTypes = {
   custom: CustomNode,
@@ -32,7 +32,6 @@ const edgeTypes = {
   'custom': CustomEdge,
   'custom-bezier': BezierEdge,
 }
-
 
 interface IWorkflowProps {
   nodes: Node[]
@@ -48,8 +47,7 @@ const Workflow = (props: IWorkflowProps) => {
 
   const workflowContainerRef = useRef<HTMLDivElement>(null)
   useContextMenu(openContextMenu)
-  useKeyPress(`${getKeyboardKeyCodeBySystem('ctrl')}.s`, (e) => { }),
-    { exactMatch: true, useCapture: true }
+  useKeyPress(`${getKeyboardKeyCodeBySystem('ctrl')}.s`, (e) => {})
   useEventListener('mousemove', (e) => {
     const containerClientRect =
       workflowContainerRef.current?.getBoundingClientRect()
@@ -73,6 +71,7 @@ const Workflow = (props: IWorkflowProps) => {
         edgeTypes={edgeTypes}
         nodes={nodes}
         edges={edges}
+        onSelect={devLog}
         onNodeDragStart={handleNodeDragStart}
         onNodeDrag={handleNodeDrag}
         onNodeDragStop={handleNodeDragStop}

@@ -17,7 +17,7 @@ const BaseJavaScriptNode: FC<BaseNodeProps> = ({
   return (
     <div
       className={cn(
-        `border-primary-600 flex rounded-2xl border-[2px] border-solid`,
+        `flex rounded-2xl border border-solid border-gray-300`,
         selected && `border-blue-600`,
       )}
       style={{

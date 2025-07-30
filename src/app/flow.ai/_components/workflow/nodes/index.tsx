@@ -1,7 +1,6 @@
 import type { NodeProps } from 'reactflow'
-import BaseNode from './base/node'
+import { BaseNode, BaseJavaScriptNode } from './base'
 import { NodeComponentMap } from './constant'
-import BaseJavaScriptNode from './base/BaseJavaScriptNode'
 import { default as JavaScriptCommonNode } from './javascript-node/node'
 
 export { default as StartNode } from './start/node'

@@ -1,42 +1,34 @@
-import { useCallback } from "react"
-import { NodeDragHandler, useStoreApi } from "reactflow"
-import { FlowNode } from "../types";
-import { produce } from "immer";
+import { useCallback } from 'react'
+import { type NodeDragHandler, useStoreApi } from 'reactflow'
+import { type FlowNode } from '../types'
+import { produce } from 'immer'
 
 export default function useNodeInteraction() {
+  const workflowStore = useStoreApi()
 
-    const workflowStore = useStoreApi()
+  const handleNodeDragStart = useCallback<NodeDragHandler>((e, node) => {}, [])
 
+  const handleNodeDrag = useCallback<NodeDragHandler>((e, node: FlowNode) => {
+    e.stopPropagation()
+    const { getNodes, setNodes } = workflowStore.getState()
 
-    const handleNodeDragStart = useCallback<NodeDragHandler>((e, node) => {
-        console.log('handleNodeDragStart', { e, node });
-    }, []);
+    const nodes = getNodes()
 
-    const handleNodeDrag = useCallback<NodeDragHandler>((e, node: FlowNode) => {
-        console.log('handleNodeDrag', { e, node });
-        e.stopPropagation();
-        const { getNodes, setNodes } = workflowStore.getState();
+    const newNodes = produce(nodes, (draft) => {
+      const currentNode = draft.find((n) => n.id === node.id)!
 
-        const nodes = getNodes();
+      currentNode.position.x = node.position.x
+      currentNode.position.y = node.position.y
+    })
 
-        const newNodes = produce(nodes, (draft) => {
-            const currentNode = draft.find(n => n.id === node.id)!
+    setNodes(newNodes)
+  }, [])
 
-            currentNode.position.x = node.position.x
-            currentNode.position.y = node.position.y
-        })
+  const handleNodeDragStop = useCallback<NodeDragHandler>((e, node) => {}, [])
 
-        setNodes(newNodes)
-
-    }, []);
-    
-    const handleNodeDragStop = useCallback<NodeDragHandler>((e, node) => {
-        console.log('handleNodeDragStop', { e, node });
-    }, []);
-
-
-
-    return {
-        handleNodeDragStart, handleNodeDrag, handleNodeDragStop
-    }
+  return {
+    handleNodeDragStart,
+    handleNodeDrag,
+    handleNodeDragStop,
+  }
 }
