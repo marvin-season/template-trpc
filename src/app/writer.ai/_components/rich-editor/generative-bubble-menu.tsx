@@ -1,10 +1,8 @@
 import { useCurrentEditor } from '@tiptap/react'
-import EditorBubble from '../editor-bubble'
-import { AISelector } from './ai-selector'
-import { Fragment, useEffect } from 'react'
+import { Fragment } from 'react'
 import { Button } from '@/components/ui/button'
 import { Magic } from '@/components/icon'
-import { removeAIHighlight } from '../extentions/highlight/ai-highlight'
+import EditorBubble from '@/app/writer.ai/_components/rich-editor/editor-bubble'
 
 const GenerativeBubbleMenu = ({ children, open, onOpenChange }: any) => {
   const { editor } = useCurrentEditor()
@@ -12,9 +10,6 @@ const GenerativeBubbleMenu = ({ children, open, onOpenChange }: any) => {
   if (!editor) {
     return null
   }
-  useEffect(() => {
-    if (!open) removeAIHighlight(editor)
-  }, [open])
 
   return (
     <EditorBubble
@@ -30,7 +25,6 @@ const GenerativeBubbleMenu = ({ children, open, onOpenChange }: any) => {
         bg-background shadow-xl
       `}
     >
-      {open && <AISelector open={open} onOpenChange={onOpenChange} />}
       {!open && (
         <Fragment>
           <Button

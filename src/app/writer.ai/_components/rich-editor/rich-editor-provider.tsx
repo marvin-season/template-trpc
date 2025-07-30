@@ -1,7 +1,7 @@
-import { EditorProvider } from "@tiptap/react";
-import type { EditorProviderProps } from "@tiptap/react";
-import "./styles.css";
-import useExtentions from "./hooks/useExtentions";
+import { EditorProvider } from '@tiptap/react'
+import type { EditorProviderProps } from '@tiptap/react'
+import './styles.css'
+import useExtensions from './hooks/useExtensions'
 
 export default function RichEditorProvider({
   extensions = [],
@@ -11,7 +11,7 @@ export default function RichEditorProvider({
   editorProps,
   ...props
 }: EditorProviderProps) {
-  const defaultExtentions = useExtentions();
+  const defaultExtensions = useExtensions()
   return (
     <>
       <EditorProvider
@@ -23,11 +23,11 @@ export default function RichEditorProvider({
           },
         }}
         content={content}
-        extensions={[...defaultExtentions, ...extensions]}
+        extensions={[...defaultExtensions, ...extensions]}
         {...props}
       >
         {children}
       </EditorProvider>
     </>
-  );
+  )
 }
