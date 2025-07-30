@@ -1,3 +1,5 @@
+'use client'
+
 import type { JavaScriptNodeData } from '@flow.ai/_components/workflow/types'
 import { ChevronDown, ChevronRight, SquareArrowOutUpRight } from 'lucide-react'
 import { useState } from 'react'

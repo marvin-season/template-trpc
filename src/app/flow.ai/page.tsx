@@ -2,7 +2,7 @@
 
 import Workflow from './_components/workflow'
 import { ReactFlowProvider } from 'reactflow'
-import { convertToReactFlowGraph } from './_utils/javascript-node'
+import { convertToReactFlowGraph } from './_utils/generate-js-node'
 import { useMemo } from 'react'
 import { Select, useSelect } from '@/app/_components/Select'
 import { devLog } from '@/utils/common'

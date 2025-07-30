@@ -3,13 +3,14 @@ import type { ComponentType } from 'react'
 /**
  *  node
  */
-import { EndNode, IfElseNode, StartNode } from './index'
+import { EndNode, IfElseNode, JavaScriptNode, StartNode } from './index'
 import { BlockEnum } from '../types'
 
 export const NodeComponentMap: Record<string, ComponentType<any>> = {
   'start': StartNode,
   'end': EndNode,
   'if-else': IfElseNode,
+  'javascript': JavaScriptNode,
 }
 
 export const CUSTOM_NODE = 'custom'

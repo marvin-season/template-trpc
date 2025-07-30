@@ -1,3 +1,4 @@
+import { CUSTOM_NODE } from '@flow.ai/_components/workflow/nodes/constant'
 import { devLog } from '@/utils/common'
 import { MarkerType, type Edge, type Node } from 'reactflow'
 
@@ -19,8 +20,9 @@ export const convertToReactFlowGraph = (obj: any) => {
 
     return {
       id: `node-${index}`,
-      type: 'javascript',
+      type: CUSTOM_NODE,
       data: {
+        type: 'javascript',
         label: `${prototype.constructor.name}`,
         properties,
         constructor: prototype.constructor,

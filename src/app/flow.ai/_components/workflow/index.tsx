@@ -9,7 +9,7 @@ import {
   type Node,
 } from 'reactflow'
 import 'reactflow/dist/style.css'
-import { CustomNode, JavaScriptNode } from './nodes'
+import { CustomNode } from './nodes'
 import { CustomEdge } from './edges'
 import { Operator } from './operator'
 
@@ -25,7 +25,6 @@ import { devLog } from '@/utils/common'
 
 const nodeTypes = {
   custom: CustomNode,
-  javascript: JavaScriptNode,
 }
 
 const edgeTypes = {
