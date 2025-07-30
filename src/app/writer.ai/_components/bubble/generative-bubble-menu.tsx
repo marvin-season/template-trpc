@@ -17,7 +17,6 @@ const GenerativeBubbleMenu = ({ children, open, onOpenChange }: any) => {
         placement: open ? 'bottom-start' : 'top',
         onHidden: () => {
           onOpenChange(false)
-          editor.chain().unsetHighlight().run()
         },
       }}
       className={`
