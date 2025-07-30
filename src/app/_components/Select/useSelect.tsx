@@ -1,3 +1,5 @@
+'use client'
+
 import type { ISelectProps } from '.'
 import { useState, useCallback } from 'react'
 

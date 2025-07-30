@@ -1,4 +1,4 @@
-import { sites } from '@/config/site'
+import { sites } from '@/constant/site'
 import { NextRequest, NextResponse } from 'next/server'
 
 function rewriteSite(req: NextRequest) {

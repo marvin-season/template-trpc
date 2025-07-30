@@ -6,7 +6,7 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
 } from '@/components/ui/navigation-menu'
-import { navigation } from '@/config/navigation'
+import { navigation } from '@/constant/navigation'
 
 export function Navigation() {
   return (
@@ -18,11 +18,13 @@ export function Navigation() {
               <>
                 <NavigationMenuTrigger>{item.title}</NavigationMenuTrigger>
                 <NavigationMenuContent>
-                  <div className={`
+                  <div
+                    className={`
                     grid w-[400px] gap-3 p-4
                     md:w-[500px] md:grid-cols-2
                     lg:w-[600px]
-                  `}>
+                  `}
+                  >
                     {item.items.map((subItem) => (
                       <NavigationMenuLink
                         key={subItem.id}
@@ -39,10 +41,12 @@ export function Navigation() {
                           {subItem.title}
                         </div>
                         {subItem.description && (
-                          <p className={`
+                          <p
+                            className={`
                             line-clamp-2 text-sm leading-snug
                             text-muted-foreground
-                          `}>
+                          `}
+                          >
                             {subItem.description}
                           </p>
                         )}
