@@ -19,7 +19,10 @@ export default function Node({ data }: { data: JavaScriptNodeData }) {
             mb-2 flex cursor-pointer items-center justify-between gap-2 border-b
             pb-2 text-sm
           `}
-          onClick={() => setIsOpen(!isOpen)}
+          onClick={(e) => {
+            e.stopPropagation()
+            setIsOpen(!isOpen)
+          }}
         >
           <span>{'Props'}</span>
           {!isOpen ? (
