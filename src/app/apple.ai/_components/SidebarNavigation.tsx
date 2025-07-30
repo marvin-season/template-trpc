@@ -46,16 +46,14 @@ export function SidebarNavigation({ children }: { children: React.ReactNode }) {
                         <Collapsible defaultOpen className='group/collapsible'>
                           <CollapsibleTrigger asChild>
                             <SidebarMenuButton
-                              className={`
-                              w-full justify-between
-                            `}
+                              className={`w-full justify-between`}
                             >
                               <span>{item.title}</span>
                               <ChevronRight
                                 className={`
-                                h-4 w-4 transition-transform
-                                group-data-[state=open]/collapsible:rotate-90
-                              `}
+                                  h-4 w-4 transition-transform
+                                  group-data-[state=open]/collapsible:rotate-90
+                                `}
                               />
                             </SidebarMenuButton>
                           </CollapsibleTrigger>
@@ -102,9 +100,7 @@ export function SidebarNavigation({ children }: { children: React.ReactNode }) {
 
         <div className='flex flex-1 flex-col overflow-hidden'>
           <header
-            className={`
-            flex h-14 items-center border-b bg-white px-6 shadow-sm
-          `}
+            className={`flex h-14 items-center border-b bg-white px-6 shadow-sm`}
           >
             <SidebarTrigger />
             <div className='ml-4'>

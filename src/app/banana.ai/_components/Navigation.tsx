@@ -20,10 +20,10 @@ export function Navigation() {
                 <NavigationMenuContent>
                   <div
                     className={`
-                    grid w-[400px] gap-3 p-4
-                    md:w-[500px] md:grid-cols-2
-                    lg:w-[600px]
-                  `}
+                      grid w-[400px] gap-3 p-4
+                      md:w-[500px] md:grid-cols-2
+                      lg:w-[600px]
+                    `}
                   >
                     {item.items.map((subItem) => (
                       <NavigationMenuLink
@@ -43,9 +43,9 @@ export function Navigation() {
                         {subItem.description && (
                           <p
                             className={`
-                            line-clamp-2 text-sm leading-snug
-                            text-muted-foreground
-                          `}
+                              line-clamp-2 text-sm leading-snug
+                              text-muted-foreground
+                            `}
                           >
                             {subItem.description}
                           </p>
