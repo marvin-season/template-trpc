@@ -1,9 +1,11 @@
 import type { NodeProps } from 'reactflow'
-import { BaseNode } from './base'
-import { NodeComponentMap } from './constant'
-import { Sheet } from '@/app/_components/Sheet'
-import { PanelComponentMap } from './panel/constants'
+import BaseNode from './base'
 import { BasePanel } from './panel/base/panel'
+
+import { NodeComponentMap } from './constant'
+import { PanelComponentMap } from './panel/constants'
+
+import { Sheet } from '@/app/_components/Sheet'
 
 export { default as StartNode } from './start/node'
 export { default as EndNode } from './end/node'
