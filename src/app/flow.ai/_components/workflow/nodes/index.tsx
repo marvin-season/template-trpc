@@ -3,6 +3,7 @@ import { BaseNode, BaseJavaScriptNode } from './base'
 import { NodeComponentMap } from './constant'
 import { default as JavaScriptCommonNode } from './javascript-node/node'
 import { Sheet } from '@/app/_components/Sheet'
+import { JavaScriptPanel } from '@flow.ai/_components/workflow/panel'
 
 export { default as StartNode } from './start/node'
 export { default as EndNode } from './end/node'
@@ -37,7 +38,7 @@ export const JavaScriptNode = (props: NodeProps) => {
         </BaseJavaScriptNode>
       }
     >
-      aa
+      <JavaScriptPanel {...props} />
     </Sheet>
   )
 }
