@@ -5,7 +5,7 @@ import { BasePanel } from './panel/base/panel'
 import { NodeComponentMap } from './constant'
 import { PanelComponentMap } from './panel/constants'
 
-import { Sheet } from '@/app/_components/Sheet'
+import { Popover } from '@/app/_components'
 
 export { default as StartNode } from './start/node'
 export { default as EndNode } from './end/node'
@@ -20,7 +20,7 @@ export const CustomNode = (props: NodeProps) => {
   const PanelComponent = PanelComponentMap[nodeData.type]
 
   return (
-    <Sheet
+    <Popover
       trigger={
         <BaseNode {...props}>
           <NodeComponent data={nodeData} />
@@ -28,7 +28,7 @@ export const CustomNode = (props: NodeProps) => {
       }
     >
       <BasePanel {...props}>{PanelComponent && <PanelComponent />}</BasePanel>
-    </Sheet>
+    </Popover>
   )
 }
 
