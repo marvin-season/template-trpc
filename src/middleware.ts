@@ -21,9 +21,7 @@ function rewriteSite(req: NextRequest) {
   return NextResponse.rewrite(url)
 }
 
-export function middleware(req: NextRequest) {
-  return rewriteSite(req)
-}
+export function middleware(req: NextRequest) {}
 export const config = {
   matcher: ['/((?!api|_next|static|favicon.ico|.*\\..*).*)'],
 }

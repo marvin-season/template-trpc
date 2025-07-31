@@ -1,5 +1,9 @@
 export const sites = [
   {
+    name: 'home',
+    path: '',
+  },
+  {
     name: 'apple',
     path: 'apple.ai',
   },

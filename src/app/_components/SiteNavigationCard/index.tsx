@@ -192,7 +192,7 @@ export async function SiteNavigationCard() {
                     ${site.buttonHoverClass}
                   `}
                 >
-                  <Link href={`http://${site.href}.${host}`}>
+                  <Link href={`http://${host}/${site.href}`}>
                     进入 {site.name} →
                   </Link>
                 </Button>

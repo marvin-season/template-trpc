@@ -18,7 +18,7 @@ export function SiteSwitcher() {
         <a
           key={site.path}
           target='_blank'
-          href={`http://${site.path}.localhost:${process.env.PORT}`}
+          href={`http://localhost:${process.env.PORT}/${site.path}`}
         >
           {site.name}
         </a>
