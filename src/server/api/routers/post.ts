@@ -26,7 +26,7 @@ export const postRouter = createTRPCRouter({
       }),
     )
     .query(async ({ ctx, input }) => {
-      const result = await fetch(input.url)
+      const result = await fetch(input.url, { cache: 'force-cache' })
 
       const txt = await result.text()
       return txt
