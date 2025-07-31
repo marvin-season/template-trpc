@@ -19,6 +19,18 @@ export const postRouter = createTRPCRouter({
       where: { id: input },
     })
   }),
+  getDemo: publicProcedure
+    .input(
+      z.object({
+        url: z.string(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const result = await fetch(input.url)
+
+      const txt = await result.text()
+      return txt
+    }),
   create: protectedProcedure
     .input(z.object({ name: z.string().min(1) }))
     .mutation(async ({ ctx, input }) => {
