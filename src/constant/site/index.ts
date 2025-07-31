@@ -1,19 +1,4 @@
-import { apple, banana, flow, doc, writer } from './data'
-
-export interface SiteData {
-  id: string
-  name: string
-  description: string
-  icon: string
-  iconBgClass: string
-  features: Array<{
-    text: string
-    color: string
-  }>
-  buttonClass: string
-  buttonHoverClass: string
-  href: string
-}
+import { apple, banana, flow, doc, writer, type SiteData } from './data'
 
 export interface Site {
   data?: SiteData

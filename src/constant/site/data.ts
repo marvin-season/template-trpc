@@ -1,4 +1,18 @@
-import type { SiteData } from '.'
+export interface SiteData {
+  id: string
+  name: string
+  description: string
+  icon: string
+  iconBgClass: string
+  features: Array<{
+    text: string
+    color: string
+  }>
+  buttonClass: string
+  buttonHoverClass: string
+  href: string
+}
+
 const apple: SiteData = {
   id: 'apple',
   name: 'Apple AI',
