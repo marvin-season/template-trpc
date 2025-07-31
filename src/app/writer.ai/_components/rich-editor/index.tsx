@@ -2,6 +2,8 @@ import { EditorProvider } from '@tiptap/react'
 import type { EditorProviderProps } from '@tiptap/react'
 import './styles.css'
 import useExtensions from './hooks/useExtensions'
+import { toast } from 'sonner'
+import { useEffect } from 'react'
 
 export default function RichEditorProvider({
   extensions = [],
@@ -12,6 +14,10 @@ export default function RichEditorProvider({
   ...props
 }: EditorProviderProps) {
   const defaultExtensions = useExtensions()
+
+  useEffect(() => {
+    toast.message('You can select some text to see the effect')
+  }, [])
   return (
     <>
       <EditorProvider

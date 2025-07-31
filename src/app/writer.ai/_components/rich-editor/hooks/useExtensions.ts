@@ -30,7 +30,7 @@ export default function useExtensions() {
         if (node.type.name === 'codeBlock') {
           return 'code here...'
         }
-        return '妙笔生花'
+        return 'Starting your story...'
       },
     }),
     TextStyle,

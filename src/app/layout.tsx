@@ -8,6 +8,7 @@ import { SiteSwitcher } from '@/app/_components/DevTools'
 import Profile from '@/app/_components/Profile'
 import { auth } from '@/server/auth'
 import AppUIProvider from '@/app/_provider/AppUIProvider'
+import { Toaster } from '@/components/ui'
 
 export const metadata: Metadata = {
   title: 'Create T3 App',
@@ -32,6 +33,7 @@ export default async function RootLayout({
       `}
     >
       <body>
+        <Toaster position='top-right' />
         <SiteSwitcher />
         <SessionProvider session={session}>
           <Profile />
