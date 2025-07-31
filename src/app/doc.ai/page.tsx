@@ -6,5 +6,12 @@ export default async function Page() {
     url: 'https://raw.githubusercontent.com/AmbroseRen/Picture/master/book/Literature/Poem/%E6%82%89%E8%BE%BE%E5%A4%9A.txt',
   })
 
-  return <TxtViewer txt={txt} />
+  console.log('text page')
+
+  return (
+    <div>
+      <div>TEXT</div>
+      <TxtViewer txt={txt} />
+    </div>
+  )
 }
