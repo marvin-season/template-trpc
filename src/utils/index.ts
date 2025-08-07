@@ -1,6 +1,12 @@
 import { sleep } from '@/utils/common'
-import type { RetryConfig, UpdateUserRequest, User } from '@/types/api'
-import { HttpError } from '@/types/api'
+
+export interface RetryConfig {
+  retryCount?: number
+  delay?: number
+  backoff?: 'fixed' | 'exponential'
+  shouldRetry?: (error: unknown) => boolean
+  onRetry?: (attempt: number, error: unknown) => void
+}
 
 // 默认重试配置
 const DEFAULT_RETRY_CONFIG: Required<RetryConfig> = {
@@ -73,10 +79,10 @@ const fetchWithRetry = attachRetry(fetch, {
   delay: 2000,
   backoff: 'exponential',
   shouldRetry: (error) => {
+    console.error('error', error)
     // 只对网络错误和 5xx 错误进行重试
     if (error instanceof TypeError) return true
-    if (error instanceof HttpError && error.status >= 500 && error.status < 600)
-      return true
+    if (error instanceof Error) return true
     return false
   },
   onRetry: (attempt, error) => {
@@ -85,72 +91,18 @@ const fetchWithRetry = attachRetry(fetch, {
   },
 })
 
-/**
- * 用户相关的 API 函数
- */
-class UserAPI {
-  private baseURL: string
-
-  constructor(baseURL: string = '/api') {
-    this.baseURL = baseURL
-  }
-
-  /**
-   * 获取用户信息
-   */
-  async fetchUser(userId?: string): Promise<User> {
-    const url = userId
-      ? `${this.baseURL}/users/${userId}`
-      : `${this.baseURL}/users/me`
-
-    const response = await fetchWithRetry(url, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-
-    if (!response.ok) {
-      throw new HttpError(
-        `获取用户信息失败`,
-        response.status,
-        response.statusText,
-      )
-    }
-
-    return response.json()
-  }
-
-  /**
-   * 更新用户信息
-   */
-  async updateUser(userId: string, data: UpdateUserRequest): Promise<User> {
-    const response = await fetchWithRetry(`${this.baseURL}/users/${userId}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    })
-
-    if (!response.ok) {
-      throw new HttpError(
-        `更新用户信息失败`,
-        response.status,
-        response.statusText,
-      )
-    }
-
-    return response.json()
+function attachParse<T extends (...args: any[]) => Promise<any>>(fn: T) {
+  return async (...args: Parameters<T>) => {
+    const data = await fn(...args)
+    return data.json()
   }
 }
 
-// 创建用户 API 实例
-export const userAPI = new UserAPI()
+function fetchPost() {
+  return attachParse(fetchWithRetry)(
+    'http://localhost:12345/api/trpc/post.list',
+  )
+}
 
-// 导出重试工具函数
-export { attachRetry, fetchWithRetry }
-
-// 使用示例（在实际项目中应该移除）
-// const user = await userAPI.fetchUser()
-// console.log('用户信息:', user)
+const data = await fetchPost()
+console.log('data', data)
