@@ -91,8 +91,11 @@ const fetchWithRetry = attachRetry(fetch, {
   },
 })
 
-function attachParse<T extends (...args: any[]) => Promise<any>>(fn: T) {
-  return async function <P>(...args: Parameters<T>) {
+type TFetch = typeof fetch
+type TFetchArgs = Parameters<TFetch>
+
+function attachParse<T extends TFetch>(fn: T) {
+  return async function <P>(...args: TFetchArgs) {
     const data = await fn(...args)
     return data.json() as Promise<P>
   }
