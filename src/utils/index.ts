@@ -92,17 +92,15 @@ const fetchWithRetry = attachRetry(fetch, {
 })
 
 function attachParse<T extends (...args: any[]) => Promise<any>>(fn: T) {
-  return async (...args: Parameters<T>) => {
+  return async function <P>(...args: Parameters<T>) {
     const data = await fn(...args)
-    return data.json()
+    return data.json() as Promise<P>
   }
 }
 
-function fetchPost() {
-  return attachParse(fetchWithRetry)(
-    'http://localhost:12345/api/trpc/post.list',
-  )
-}
+const fetchWithParse = attachParse(fetchWithRetry)
 
-const data = await fetchPost()
+const data = await fetchWithParse<[]>(
+  'http://localhost:12345/api/trpc/post.list',
+)
 console.log('data', data)
