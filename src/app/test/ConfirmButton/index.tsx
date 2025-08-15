@@ -101,8 +101,8 @@ export function ConfirmButton({
       <div
         className={cn(
           `
-            absolute top-0 left-0 flex gap-2 transition-all duration-300
-            ease-in-out
+            absolute top-0 left-0 z-1 flex gap-2 bg-white/20 backdrop-blur-[2px]
+            transition-all duration-300 ease-in-out
           `,
           isConfirming
             ? `
@@ -123,7 +123,6 @@ export function ConfirmButton({
         <Button
           disabled={isLoading}
           onClick={handleConfirm}
-          variant={variant}
           size={size}
           className='whitespace-nowrap'
         >

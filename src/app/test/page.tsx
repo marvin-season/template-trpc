@@ -13,11 +13,31 @@ export default function Page() {
           await sleep(1000)
           toast.success('删除成功！')
         }}
-        onCancel={() => toast.info('操作取消')}
         variant='destructive'
       >
         删除
       </ConfirmButton>
+      <ConfirmButton
+        size='sm'
+        onConfirm={async () => {
+          await sleep(1000)
+          toast.success('删除成功！')
+        }}
+        variant='destructive'
+      >
+        删除
+      </ConfirmButton>
+      <ConfirmButton
+        size='sm'
+        onConfirm={async () => {
+          await sleep(1000)
+          toast.success('删除成功！')
+        }}
+        variant='destructive'
+      >
+        删除
+      </ConfirmButton>
+      删除删除删除
     </div>
   )
 }
