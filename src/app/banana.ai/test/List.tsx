@@ -1,6 +1,6 @@
 'use server'
 
-import { Table } from '@/app/test/Table'
+import { Table } from './Table'
 
 export default async function List({ list }: { list: any[] }) {
   return (

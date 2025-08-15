@@ -1,5 +1,5 @@
-import List from '@/app/test/List'
-import { Provider } from '@/app/test/Provider'
+import List from './List'
+import { Provider } from './Provider'
 import { apiCaller } from '@/trpc/server'
 
 export default async function Page() {
