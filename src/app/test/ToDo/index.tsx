@@ -1,45 +1,42 @@
 'use client'
 
-import { sleep } from 'aio-tool'
-import { useState } from 'react'
-import { toast } from 'sonner'
-import { ConfirmButton } from '@/app/test/ConfirmButton'
-import { Button } from '@/components/ui'
+import { useRef, useState, startTransition, useOptimistic } from 'react'
 import { addTodo } from '@/app/test/ToDo/action'
+import { Button } from '@/components/ui'
 
 export function ToDo() {
+  const formRef = useRef<HTMLFormElement>(null)
   const [todos, setTodos] = useState<string[]>([])
+
+  const [optimisticTodos, addOptimisticTodo] = useOptimistic(
+    todos,
+    (state, newTodo: string) => [...state, newTodo],
+  )
+
+  async function formAction(formData: FormData) {
+    const todo = formData.get('todo') as string
+    if (!todo) return
+
+    // 乐观更新
+    addOptimisticTodo(todo)
+    formRef.current?.reset()
+
+    // 提交到服务端
+    const res = await addTodo(todo)
+    startTransition(() => {
+      setTodos((prev) => [...prev, res]) // ✅ 函数式更新
+    })
+  }
 
   return (
     <>
-      <form
-        action={async (formData) => {
-          const todo = formData.get('todo')
-          if (!todo) {
-            return
-          }
-          const res = await addTodo(todo as string)
-          setTodos([...todos, res])
-        }}
-      >
+      <form action={formAction} ref={formRef}>
         <input name='todo' type='text' placeholder='please input todo' />
         <Button type='submit'>添加</Button>
       </form>
       <ul>
-        {todos.map((todo) => (
-          <li key={todo}>
-            {todo}
-            <ConfirmButton
-              size='sm'
-              onConfirm={async () => {
-                await sleep(1000)
-                toast.success('删除成功！')
-              }}
-              variant='destructive'
-            >
-              删除
-            </ConfirmButton>
-          </li>
+        {optimisticTodos.map((todo, index) => (
+          <li key={`${todo}-${index}`}>{todo}</li>
         ))}
       </ul>
     </>
