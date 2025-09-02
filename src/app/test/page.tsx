@@ -7,7 +7,7 @@ import {
   type IOptions,
 } from '@/utils/notification'
 import { useLocalStorageState } from 'ahooks'
-import { useCallback, useEffect } from 'react'
+import { useCallback, useEffect, useMemo } from 'react'
 
 registerServiceWorker('sw.js')
 
@@ -23,38 +23,43 @@ export function useSilentNotification(message: IMessage, options: IOptions) {
     },
   )
 
-  const shouldNotification = useCallback(() => {
-    const time = Date.now() - (silentNotification?.lastNotificationTime || 0)
-    if (time >= wait) {
-      return true
+  const passedTime = useMemo(() => {
+    if (silentNotification?.lastNotificationTime) {
+      return Date.now() - (silentNotification.lastNotificationTime || 0)
     }
-    return false
-  }, [silentNotification, wait])
+
+    return 0
+  }, [silentNotification])
 
   const sendNotification = useCallback(
     async (msg?: IMessage) => {
-      if (shouldNotification()) {
-        await notification({ ...message, ...msg })
-        setSilentNotification({
-          lastNotificationTime: Date.now(),
-          lastNotificationTimeForDebug: new Date().toLocaleString(),
-        })
-      }
+      await notification({ ...message, ...msg })
+      setSilentNotification({
+        lastNotificationTime: Date.now(),
+        lastNotificationTimeForDebug: new Date().toLocaleString(),
+      })
     },
-    [shouldNotification, setSilentNotification, message],
+    [setSilentNotification, message],
   )
 
   // 轮询机制
   useEffect(() => {
     registerServiceWorker('sw.js')
-    sendNotification()
+    // sendNotification()
 
-    const timer = setInterval(async () => {
-      await sendNotification()
-    }, wait)
+    const intervalTime = wait - passedTime < 0 ? wait : wait - passedTime
+    let timer: ReturnType<typeof setInterval>
+    console.log({ intervalTime, passedTime })
+
+    if (intervalTime > 0) {
+      timer = setInterval(async () => {
+        console.log('dddd', intervalTime)
+        await sendNotification()
+      }, intervalTime)
+    }
 
     return () => clearInterval(timer)
-  }, [sendNotification, wait])
+  }, [sendNotification, wait, passedTime])
 
   return {
     sendNotification,
@@ -68,7 +73,7 @@ export default function Page() {
       icon: '/images/icon.png',
     },
     {
-      wait: 1000 * 60,
+      wait: 1000 * 10,
     },
   )
 
