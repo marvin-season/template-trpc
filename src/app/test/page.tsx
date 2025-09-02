@@ -1,21 +1,18 @@
 'use client'
 
-import { notification, registerServiceWorker } from '@/utils/notification'
+import {
+  notification,
+  registerServiceWorker,
+  type IMessage,
+  type IOptions,
+} from '@/utils/notification'
 import { useLocalStorageState } from 'ahooks'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect } from 'react'
 
-const message = {
-  title: '新提醒',
-  body: '这是定时器推送的消息 ' + new Date().toLocaleTimeString(),
-  url: window.location.origin,
-}
 registerServiceWorker('sw.js')
 
-// 推送间隔
-const pushInterval = 1000 * 10 // 10秒
-
-export function useSilentNotification() {
-  const [debugInterval, setDebugInterval] = useState(pushInterval)
+export function useSilentNotification(message: IMessage, options: IOptions) {
+  const { wait } = options
   const [silentNotification, setSilentNotification] = useLocalStorageState(
     'silent-notification',
     {
@@ -27,55 +24,53 @@ export function useSilentNotification() {
   )
 
   const shouldNotification = useCallback(() => {
-    console.log(silentNotification.lastNotificationTimeForDebug)
-    const time = Date.now() - silentNotification.lastNotificationTime
-    if (time > pushInterval) {
+    const time = Date.now() - (silentNotification?.lastNotificationTime || 0)
+    if (time >= wait) {
       return true
     }
     return false
-  }, [silentNotification.lastNotificationTime])
+  }, [silentNotification, wait])
 
-  const sendNotification = useCallback(async () => {
-    if (shouldNotification()) {
-      await notification(message)
-
-      setSilentNotification({
-        lastNotificationTime: Date.now(),
-        lastNotificationTimeForDebug: new Date().toLocaleString(),
-      })
-    }
-  }, [shouldNotification, setSilentNotification])
+  const sendNotification = useCallback(
+    async (msg?: IMessage) => {
+      if (shouldNotification()) {
+        await notification({ ...message, ...msg })
+        setSilentNotification({
+          lastNotificationTime: Date.now(),
+          lastNotificationTimeForDebug: new Date().toLocaleString(),
+        })
+      }
+    },
+    [shouldNotification, setSilentNotification, message],
+  )
 
   // 轮询机制
   useEffect(() => {
+    registerServiceWorker('sw.js')
+    sendNotification()
+
     const timer = setInterval(async () => {
       await sendNotification()
-      setDebugInterval(pushInterval)
-    }, pushInterval)
+    }, wait)
 
     return () => clearInterval(timer)
-  }, [])
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setDebugInterval((prev) => (prev - 1000 < 0 ? 0 : prev - 1000))
-    }, 1000)
-
-    return () => clearInterval(timer)
-  }, [])
+  }, [sendNotification, wait])
 
   return {
     sendNotification,
-    debugInterval,
   }
 }
-
 export default function Page() {
-  const { debugInterval } = useSilentNotification()
-
-  return (
-    <div className=''>
-      <span>倒计时: {debugInterval / 1000}s</span>
-    </div>
+  useSilentNotification(
+    {
+      title: '新提醒',
+      body: `这是定时器推送的消息`,
+      icon: '/images/icon.png',
+    },
+    {
+      wait: 1000 * 60,
+    },
   )
+
+  return <div className=''></div>
 }

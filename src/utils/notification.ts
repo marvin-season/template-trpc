@@ -1,7 +1,11 @@
 export interface IMessage {
   title: string
   body: string
-  url: string
+  icon: string
+}
+
+export interface IOptions {
+  wait: number
 }
 
 export async function requestPermission() {

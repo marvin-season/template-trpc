@@ -21,7 +21,7 @@ self.addEventListener('message', (event) => {
     self.registration.showNotification(data.title, {
       body: data.body,
       icon: '/icon.png',
-      data: { url: data.url },
+      data: { url: globalThis.location.origin },
     }),
   )
 })
