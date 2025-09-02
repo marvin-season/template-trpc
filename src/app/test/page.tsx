@@ -20,13 +20,14 @@ export function useSilentNotification() {
     'silent-notification',
     {
       defaultValue: {
-        lastNotificationTime: Date.now(), // 上次通知客户端时间戳
+        lastNotificationTime: 0, // 上次通知客户端时间戳
         lastNotificationTimeForDebug: new Date().toLocaleString(), // 上次通知客户端时间戳
       },
     },
   )
 
   const shouldNotification = useCallback(() => {
+    console.log(silentNotification.lastNotificationTimeForDebug)
     const time = Date.now() - silentNotification.lastNotificationTime
     if (time > pushInterval) {
       return true
@@ -74,7 +75,8 @@ export default function Page() {
 
   return (
     <div className='p-6'>
-      <button onClick={handleNotification}>通知{debugInterval}</button>
+      <span>{debugInterval}</span>
+      <button onClick={handleNotification}>通知</button>
     </div>
   )
 }
