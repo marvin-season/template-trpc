@@ -35,7 +35,7 @@ export function useSilentNotification() {
     return false
   }, [silentNotification.lastNotificationTime])
 
-  const sendNotification = async () => {
+  const sendNotification = useCallback(async () => {
     if (shouldNotification()) {
       await notification(message)
 
@@ -44,7 +44,7 @@ export function useSilentNotification() {
         lastNotificationTimeForDebug: new Date().toLocaleString(),
       })
     }
-  }
+  }, [shouldNotification, setSilentNotification])
 
   // 轮询机制
   useEffect(() => {
