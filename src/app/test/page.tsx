@@ -1,6 +1,5 @@
 'use client'
 
-import { Button } from '@/components/ui'
 import { notification, registerServiceWorker } from '@/utils/notification'
 import { useLocalStorageState } from 'ahooks'
 import { useCallback, useEffect, useState } from 'react'
@@ -72,14 +71,11 @@ export function useSilentNotification() {
 }
 
 export default function Page() {
-  const { sendNotification, debugInterval } = useSilentNotification()
+  const { debugInterval } = useSilentNotification()
 
   return (
     <div className=''>
       <span>倒计时: {debugInterval / 1000}s</span>
-      <div>
-        <Button onClick={sendNotification}>通知</Button>
-      </div>
     </div>
   )
 }
