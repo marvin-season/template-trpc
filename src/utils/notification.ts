@@ -30,8 +30,22 @@ export async function requestPermission() {
   }
 }
 
-export async function registerServiceWorker(url: string) {
-  await navigator.serviceWorker.register(url)
+export async function registerServiceWorker(url: string, publicKey = '') {
+  const reg = await navigator.serviceWorker.register(url)
+  await navigator.serviceWorker.ready
+  // 注册当前 service 到 服务端
+  // 订阅 push
+  // const subscription = await reg.pushManager.subscribe({
+  //   userVisibleOnly: true,
+  //   applicationServerKey: publicKey,
+  // })
+
+  // // 把订阅信息发到后端
+  // await fetch('/api/subscribe', {
+  //   method: 'POST',
+  //   headers: { 'Content-Type': 'application/json' },
+  //   body: JSON.stringify(subscription),
+  // })
 }
 
 export async function postMessage(message: IMessage) {
