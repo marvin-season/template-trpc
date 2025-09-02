@@ -1,5 +1,6 @@
 'use client'
 
+import { Button } from '@/components/ui'
 import { notification, registerServiceWorker } from '@/utils/notification'
 import { useLocalStorageState } from 'ahooks'
 import { useCallback, useEffect, useState } from 'react'
@@ -12,7 +13,7 @@ const message = {
 registerServiceWorker('sw.js')
 
 // 推送间隔
-const pushInterval = 1000 * 60 // 10秒
+const pushInterval = 1000 * 10 // 10秒
 
 export function useSilentNotification() {
   const [debugInterval, setDebugInterval] = useState(pushInterval)
@@ -35,7 +36,7 @@ export function useSilentNotification() {
     return false
   }, [silentNotification.lastNotificationTime])
 
-  const handleNotification = async () => {
+  const sendNotification = async () => {
     if (shouldNotification()) {
       await notification(message)
 
@@ -49,7 +50,7 @@ export function useSilentNotification() {
   // 轮询机制
   useEffect(() => {
     const timer = setInterval(async () => {
-      await handleNotification()
+      await sendNotification()
       setDebugInterval(pushInterval)
     }, pushInterval)
 
@@ -65,18 +66,20 @@ export function useSilentNotification() {
   }, [])
 
   return {
-    handleNotification,
+    sendNotification,
     debugInterval,
   }
 }
 
 export default function Page() {
-  const { handleNotification, debugInterval } = useSilentNotification()
+  const { sendNotification, debugInterval } = useSilentNotification()
 
   return (
-    <div className='p-6'>
-      <span>{debugInterval}</span>
-      <button onClick={handleNotification}>通知</button>
+    <div className=''>
+      <span>倒计时: {debugInterval / 1000}s</span>
+      <div>
+        <Button onClick={sendNotification}>通知</Button>
+      </div>
     </div>
   )
 }
