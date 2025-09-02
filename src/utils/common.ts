@@ -49,12 +49,9 @@ export function devLog(...args: any) {
     color:#fff;font-size:12px;font-weight:bold;border-radius:8px;padding:2px 4px;margin:2px 0;
     background:linear-gradient(135deg, #12c2e9, #c471ed, #f64f59);
   `
-  if (
-    process.env.NODE_ENV === 'production' ||
-    typeof window === 'undefined'
-  ) {
+  if (process.env.NODE_ENV === 'production' || typeof window === 'undefined') {
     return
   }
-   
+
   console.log('%c🚀devLog', style, ...args)
 }
