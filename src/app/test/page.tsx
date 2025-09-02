@@ -12,7 +12,7 @@ const message = {
 registerServiceWorker('sw.js')
 
 // 推送间隔
-const pushInterval = 1000 * 10 // 10秒
+const pushInterval = 1000 * 60 // 10秒
 
 export function useSilentNotification() {
   const [debugInterval, setDebugInterval] = useState(pushInterval)
@@ -58,7 +58,7 @@ export function useSilentNotification() {
 
   useEffect(() => {
     const timer = setInterval(() => {
-      setDebugInterval((prev) => prev - 1000)
+      setDebugInterval((prev) => (prev - 1000 < 0 ? 0 : prev - 1000))
     }, 1000)
 
     return () => clearInterval(timer)
