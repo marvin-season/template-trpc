@@ -2,7 +2,7 @@
 
 import { notification, registerServiceWorker } from '@/utils/notification'
 import { useLocalStorageState } from 'ahooks'
-import { useCallback, useEffect } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
 const message = {
   title: '新提醒',
@@ -11,21 +11,24 @@ const message = {
 }
 registerServiceWorker('sw.js')
 
-const interval = 1000 * 10 // 10秒
+// 推送间隔
+const pushInterval = 1000 * 10 // 10秒
 
 export function useSilentNotification() {
+  const [debugInterval, setDebugInterval] = useState(pushInterval)
   const [silentNotification, setSilentNotification] = useLocalStorageState(
     'silent-notification',
     {
       defaultValue: {
-        lastNotificationTime: 0, // 上次通知客户端时间戳
+        lastNotificationTime: Date.now(), // 上次通知客户端时间戳
+        lastNotificationTimeForDebug: new Date().toLocaleString(), // 上次通知客户端时间戳
       },
     },
   )
 
   const shouldNotification = useCallback(() => {
     const time = Date.now() - silentNotification.lastNotificationTime
-    if (time > interval) {
+    if (time > pushInterval) {
       return true
     }
     return false
@@ -37,23 +40,41 @@ export function useSilentNotification() {
 
       setSilentNotification({
         lastNotificationTime: Date.now(),
+        lastNotificationTimeForDebug: new Date().toLocaleString(),
       })
     }
   }
 
-  useEffect(() => {}, [])
+  // 轮询机制
+  useEffect(() => {
+    const timer = setInterval(async () => {
+      await handleNotification()
+      setDebugInterval(pushInterval)
+    }, pushInterval)
+
+    return () => clearInterval(timer)
+  }, [])
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setDebugInterval((prev) => prev - 1000)
+    }, 1000)
+
+    return () => clearInterval(timer)
+  }, [])
 
   return {
     handleNotification,
+    debugInterval,
   }
 }
 
 export default function Page() {
-  const { handleNotification } = useSilentNotification()
+  const { handleNotification, debugInterval } = useSilentNotification()
 
   return (
     <div className='p-6'>
-      <button onClick={handleNotification}>通知</button>
+      <button onClick={handleNotification}>通知{debugInterval}</button>
     </div>
   )
 }
