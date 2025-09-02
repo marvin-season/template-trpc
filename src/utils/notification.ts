@@ -49,6 +49,6 @@ export async function postMessage(message: IMessage) {
 export async function notification(message: IMessage) {
   const permission = await requestPermission()
   if (permission === 'granted') {
-    setTimeout(() => postMessage(message), 2000)
+    return postMessage(message)
   }
 }
