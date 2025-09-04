@@ -6,9 +6,9 @@ export default function useRequestPermission() {
 
   useEffect(() => {
     if ('Notification' in window) {
-      Notification.requestPermission().then((permission) =>
-        setPermission(permission),
-      )
+      Notification.requestPermission().then((permission) => {
+        setPermission(permission)
+      })
     }
   }, [])
 

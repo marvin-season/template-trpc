@@ -8,14 +8,14 @@ importScripts(
   'https://www.gstatic.com/firebasejs/9.23.0/firebase-messaging-compat.js',
 )
 
-firebase.initializeApp({
-  apiKey: '你的apiKey',
-  authDomain: '你的authDomain',
-  projectId: '你的projectId',
-  messagingSenderId: '你的messagingSenderId',
-  appId: '你的appId',
-})
-
+const firebaseConfig = {
+  apiKey: 'AIzaSyCN99e2MFNFCBgZAh4YjbboM7dx4L208cc',
+  authDomain: 'my-awesome-20250904.firebaseapp.com',
+  projectId: 'my-awesome-20250904',
+  storageBucket: 'my-awesome-20250904.firebasestorage.app',
+  messagingSenderId: '447700238822',
+  appId: '1:447700238822:web:57170ca06a374c10671627',
+}
 const messaging = firebase.messaging()
 
 self.addEventListener('push', function (event) {
