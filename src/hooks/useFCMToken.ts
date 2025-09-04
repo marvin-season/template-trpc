@@ -5,8 +5,7 @@ import { messaging } from '@/utils/firebase'
 import { getToken, isSupported } from 'firebase/messaging'
 import useRequestPermission from '@/hooks/useRequestPermission'
 
-const publicVapidKey =
-  'BNjVtgno50n0RxuP89QILAotBPJQo4oKrHN0SsXiEQbEHeZjAJrqUizE8sph9wBbojmf6CcoKbDS0AbDaCSncxM'
+const publicVapidKey = process.env.NEXT_PUBLIC_VAPID_KEY
 
 export default function useFCMToken() {
   const permission = useRequestPermission()
