@@ -1,5 +1,4 @@
-'use client'
-
+import FCM from '@/app/test/FCM'
 export default function Page() {
-  return <div className=''></div>
+  return <FCM />
 }
