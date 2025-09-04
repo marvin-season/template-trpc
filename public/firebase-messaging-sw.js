@@ -24,14 +24,17 @@ const messaging = firebase.messaging()
 // 处理后台推送
 messaging.onBackgroundMessage((payload) => {
   console.log('[firebase-messaging-sw.js] 收到后台消息 ', payload)
-  const { title, body } = payload.notification
+  const { title, body, image } = payload.notification
+  const data = payload.data
   self.registration.showNotification(title, {
     body,
-    icon: '/firebase-logo.png',
+    image,
+    data: { url: data.url },
   })
 })
 
 self.addEventListener('notificationclick', (event) => {
+  console.log('notificationclick', event)
   event.notification.close()
   event.waitUntil(
     clients
@@ -39,7 +42,7 @@ self.addEventListener('notificationclick', (event) => {
       .then((windowClients) => {
         for (const client of windowClients) {
           const clientUrl = new URL(client.url)
-          const notificationUrl = new URL(event.notification.data.url)
+          const notificationUrl = new URL(event.notification.data?.url)
 
           if (
             clientUrl.origin === notificationUrl.origin &&
