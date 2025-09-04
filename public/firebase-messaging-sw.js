@@ -16,19 +16,16 @@ const firebaseConfig = {
   messagingSenderId: '447700238822',
   appId: '1:447700238822:web:57170ca06a374c10671627',
 }
+
+firebase.initializeApp(firebaseConfig)
+
 const messaging = firebase.messaging()
-
-self.addEventListener('push', function (event) {
-  const notification = event.data.text()
-
-  event.waitUntil(self.registration.showNotification(notification))
-})
 
 // 处理后台推送
 messaging.onBackgroundMessage((payload) => {
   console.log('[firebase-messaging-sw.js] 收到后台消息 ', payload)
   const { title, body } = payload.notification
-  globalThis.registration.showNotification(title, {
+  self.registration.showNotification(title, {
     body,
     icon: '/firebase-logo.png',
   })

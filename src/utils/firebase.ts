@@ -1,6 +1,6 @@
 'use client'
 
-import { type FirebaseOptions, initializeApp } from 'firebase/app'
+import { type FirebaseOptions, initializeApp, getApps } from 'firebase/app'
 import { getMessaging } from 'firebase/messaging'
 
 // TODO: Replace the following with your app's Firebase project configuration
@@ -14,7 +14,7 @@ const firebaseConfig: FirebaseOptions = {
   appId: '1:447700238822:web:57170ca06a374c10671627',
 }
 // Initialize Firebase
-const app = initializeApp(firebaseConfig)
+const app = !getApps().length ? initializeApp(firebaseConfig) : getApps()[0]
 
 // Initialize Firebase Cloud Messaging and get a reference to the service
 const messaging = () => getMessaging(app)

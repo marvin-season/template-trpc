@@ -1,9 +1,7 @@
 import useFCMToken from '@/hooks/useFCMToken'
 import { messaging } from '@/utils/firebase'
-import { registerServiceWorker } from '@/utils/notification'
 import { onMessage } from 'firebase/messaging'
 import { useEffect } from 'react'
-registerServiceWorker('firebase-messaging-sw.js')
 export default function useFCM() {
   const token = useFCMToken()
 
