@@ -1,13 +1,14 @@
 // @ts-nocheck
-
-// public/firebase-messaging-sw.js
+// Give the service worker access to Firebase Messaging.
+// Note that you can only use Firebase Messaging here. Other Firebase libraries
+// are not available in the service worker.
+// Replace 10.13.2 with latest version of the Firebase JS SDK.
 importScripts(
-  'https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js',
+  'https://www.gstatic.com/firebasejs/10.13.2/firebase-app-compat.js',
 )
 importScripts(
-  'https://www.gstatic.com/firebasejs/9.23.0/firebase-messaging-compat.js',
+  'https://www.gstatic.com/firebasejs/10.13.2/firebase-messaging-compat.js',
 )
-
 const firebaseConfig = {
   apiKey: 'AIzaSyCN99e2MFNFCBgZAh4YjbboM7dx4L208cc',
   authDomain: 'my-awesome-20250904.firebaseapp.com',
@@ -19,39 +20,30 @@ const firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig)
 
+// Retrieve an instance of Firebase Messaging so that it can handle background
+// messages.
 const messaging = firebase.messaging()
 
-// 处理后台推送
-messaging.onBackgroundMessage((payload) => {
-  console.log('[firebase-messaging-sw.js] 收到后台消息 ', payload)
-  const { title, body, image } = payload.notification
-  const data = payload.data
-  self.registration.showNotification(title, {
-    body,
-    image,
-    data: { url: data.url },
-  })
-})
+// unnecessary
+// self.addEventListener('notificationclick', (event) => {
+//   console.log('notificationclick', event)
+//   event.notification.close()
+//   event.waitUntil(
+//     clients
+//       .matchAll({ type: 'window', includeUncontrolled: true })
+//       .then((windowClients) => {
+//         for (const client of windowClients) {
+//           const clientUrl = new URL(client.url)
+//           const notificationUrl = new URL(event.notification.data?.url)
 
-self.addEventListener('notificationclick', (event) => {
-  console.log('notificationclick', event)
-  event.notification.close()
-  event.waitUntil(
-    clients
-      .matchAll({ type: 'window', includeUncontrolled: true })
-      .then((windowClients) => {
-        for (const client of windowClients) {
-          const clientUrl = new URL(client.url)
-          const notificationUrl = new URL(event.notification.data?.url)
-
-          if (
-            clientUrl.origin === notificationUrl.origin &&
-            'focus' in client
-          ) {
-            return client.focus()
-          }
-        }
-        return clients.openWindow(event.notification.data.url)
-      }),
-  )
-})
+//           if (
+//             clientUrl.origin === notificationUrl.origin &&
+//             'focus' in client
+//           ) {
+//             return client.focus()
+//           }
+//         }
+//         return clients.openWindow(event.notification.data.url)
+//       }),
+//   )
+// })
