@@ -1,4 +1,13 @@
 // @ts-nocheck
+// 注意： ⚠️必须放在脚本导入之前
+self.addEventListener('notificationclick', (event) => {
+  const { FCM_MSG } = event.notification.data
+  const { data } = FCM_MSG
+  console.log('notificationclick', data)
+
+  event.notification.close()
+})
+
 // Give the service worker access to Firebase Messaging.
 // Note that you can only use Firebase Messaging here. Other Firebase libraries
 // are not available in the service worker.
@@ -23,27 +32,3 @@ firebase.initializeApp(firebaseConfig)
 // Retrieve an instance of Firebase Messaging so that it can handle background
 // messages.
 const messaging = firebase.messaging()
-
-// unnecessary
-// self.addEventListener('notificationclick', (event) => {
-//   console.log('notificationclick', event)
-//   event.notification.close()
-//   event.waitUntil(
-//     clients
-//       .matchAll({ type: 'window', includeUncontrolled: true })
-//       .then((windowClients) => {
-//         for (const client of windowClients) {
-//           const clientUrl = new URL(client.url)
-//           const notificationUrl = new URL(event.notification.data?.url)
-
-//           if (
-//             clientUrl.origin === notificationUrl.origin &&
-//             'focus' in client
-//           ) {
-//             return client.focus()
-//           }
-//         }
-//         return clients.openWindow(event.notification.data.url)
-//       }),
-//   )
-// })
