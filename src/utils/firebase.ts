@@ -2,6 +2,7 @@
 
 import { type FirebaseOptions, initializeApp } from 'firebase/app'
 import { getMessaging } from 'firebase/messaging'
+import { getAnalytics } from 'firebase/analytics'
 
 // TODO: Replace the following with your app's Firebase project configuration
 // See: https://firebase.google.com/docs/web/learn-more#config-object
@@ -18,5 +19,6 @@ const app = initializeApp(firebaseConfig)
 
 // Initialize Firebase Cloud Messaging and get a reference to the service
 const messaging = () => getMessaging(app)
+const analytics = () => getAnalytics(app)
 
-export { messaging }
+export { messaging, analytics }
