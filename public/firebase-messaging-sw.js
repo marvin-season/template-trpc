@@ -3,9 +3,10 @@
 self.addEventListener('notificationclick', (event) => {
   const { FCM_MSG } = event.notification.data
   const { data } = FCM_MSG
-  console.log('notificationclick', data)
+  console.log('notificationclick', event)
 
   event.notification.close()
+  event.waitUntil(clients.openWindow(data.link + '?source=notification'))
 })
 
 // Give the service worker access to Firebase Messaging.

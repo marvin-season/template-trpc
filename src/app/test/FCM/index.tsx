@@ -5,9 +5,26 @@ import { onMessage } from 'firebase/messaging'
 import { messaging } from '@/utils/firebase'
 import { toast } from 'sonner'
 import { useEffect } from 'react'
+import { useSearchParams, useRouter, usePathname } from 'next/navigation'
 
 export default function FCM() {
   const token = useFCMToken()
+
+  // 获取查询参数
+  const searchParams = useSearchParams()
+  const router = useRouter()
+  const pathname = usePathname()
+  useEffect(() => {
+    if (searchParams.get('source') === 'notification') {
+      console.log('埋点', searchParams.get('source'))
+      // 去除查询参数
+      router.replace(pathname)
+    }
+  }, [searchParams])
+
+  useEffect(() => {
+    console.log('log')
+  }, [])
 
   useEffect(() => {
     if (token) {
