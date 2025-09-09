@@ -4,7 +4,7 @@ import useFCMToken from '@/hooks/useFCMToken'
 import { onMessage } from 'firebase/messaging'
 import { messaging } from '@/utils/firebase'
 import { toast } from 'sonner'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useSearchParams, useRouter, usePathname } from 'next/navigation'
 import { Button } from '@/components/ui'
 

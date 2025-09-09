@@ -1,5 +1,4 @@
 {
-  "typescript.experimental.useTsgo": false,
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "explicit"
   },
