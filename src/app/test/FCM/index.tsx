@@ -6,6 +6,7 @@ import { messaging } from '@/utils/firebase'
 import { toast } from 'sonner'
 import { useEffect } from 'react'
 import { useSearchParams, useRouter, usePathname } from 'next/navigation'
+import { Button } from '@/components/ui'
 
 export default function FCM() {
   const token = useFCMToken()
@@ -46,7 +47,15 @@ export default function FCM() {
   }, [token])
 
   return (
-    <div className=''>
+    <div className='p-10'>
+      <Button
+        onClick={() => {
+          navigator.clipboard.writeText(token)
+          toast.success('copied')
+        }}
+      >
+        copy
+      </Button>
       <div>{'token: ' + token}</div>
     </div>
   )
