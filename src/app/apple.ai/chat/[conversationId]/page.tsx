@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui'
 import Link from 'next/link'
 import { conversationList } from '../mock/conversation-list'
-import AnimatedContainer from '@/app/_components/AnimationBox'
+import Chat from './_components/chat'
 
 // Fetch the static parameters
 export async function generateStaticParams() {
@@ -37,11 +37,7 @@ export default async function CCPage({
           flex flex-1 flex-col items-center justify-center overflow-auto
         `}
       >
-        <AnimatedContainer>
-          {conversation.chatList.map((chat) => (
-            <div key={chat.id}>{chat.content}</div>
-          ))}
-        </AnimatedContainer>
+        <Chat conversation={conversation} />
       </div>
     </div>
   )

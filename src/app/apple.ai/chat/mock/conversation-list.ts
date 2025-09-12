@@ -32,3 +32,5 @@ export const conversationList = [
     ],
   },
 ]
+
+export type TConversation = (typeof conversationList)[number]
