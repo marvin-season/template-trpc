@@ -1,10 +1,14 @@
 'use client'
 
 import { type TConversation } from '../../mock/conversation-list'
+import { sleep } from 'aio-tool'
 
 import dynamic from 'next/dynamic'
 const AnimatedContainer = dynamic(
-  () => import('@/app/_components/AnimationBox'),
+  async () => {
+    await sleep(5000)
+    return import('@/app/_components/AnimationBox')
+  },
   { ssr: false, loading: () => <div>Loading...</div> },
 )
 
