@@ -16,8 +16,8 @@ export function SiteSwitcher() {
         // 打开新的站点
         <a
           key={site.path}
-          target='_blank'
-          href={`http://localhost:${process.env.PORT}/${site.path}`}
+          // target='_blank'
+          href={`https://localhost:${process.env.PORT}/${site.path}`}
         >
           {site.name}
         </a>
