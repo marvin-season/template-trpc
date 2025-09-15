@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "types": ["@serwist/next/typings"],
     /* Base Options: */
     "esModuleInterop": true,
     "skipLibCheck": true,
@@ -16,7 +17,7 @@
     "checkJs": true,
 
     /* Bundled projects */
-    "lib": ["dom", "dom.iterable", "ES2022"],
+    "lib": ["dom", "dom.iterable", "ES2022", "webworker"],
     "noEmit": true,
     "module": "ESNext",
     "moduleResolution": "Bundler",
@@ -39,5 +40,9 @@
     "**/*.js",
     ".next/types/**/*.ts"
   ],
-  "exclude": ["node_modules", "eslint.config.js"]
+  "exclude": [
+    "node_modules",
+    "eslint.config.js",
+    "public/firebase-messaging-sw.js"
+  ]
 }
