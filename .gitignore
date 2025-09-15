@@ -48,4 +48,4 @@ yarn-error.log*
 certificates
 
 
-public/firebase-messaging-sw
+firebase-messaging-sw.js
