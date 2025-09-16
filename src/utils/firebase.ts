@@ -1,19 +1,25 @@
 'use client'
 
 import { initializeApp } from 'firebase/app'
+import { getMessaging as getMessagingSw } from 'firebase/messaging/sw'
 
 import {
+  type GetTokenOptions,
   getMessaging,
   getToken,
-  type GetTokenOptions,
   isSupported,
 } from 'firebase/messaging'
+
 import { firebaseConfig } from '@/config/firebase'
+
 // Initialize Firebase
-const app = initializeApp(firebaseConfig)
+export const firebaseApp = initializeApp(firebaseConfig)
 
 // Initialize Firebase Cloud Messaging and get a reference to the service
-export const messaging = () => getMessaging(app)
+export const messaging = () => getMessaging(firebaseApp)
+
+// Retrieve an instance of Firebase Messaging so that it can handle background messages.
+export const messagingSw = () => getMessagingSw(firebaseApp)
 
 export const getFCMToken = async (
   params: {
