@@ -54,7 +54,7 @@
     "@trpc/react-query": "^11.0.0",
     "@trpc/server": "^11.0.0",
     "@trpc/tanstack-react-query": "^11.3.1",
-    "ahooks": "^3.9.0",
+    "ahooks": "^3.9.5",
     "ai": "^4.3.16",
     "aio-tool": "^0.0.2",
     "class-variance-authority": "^0.7.1",
@@ -82,6 +82,7 @@
     "reactflow": "^11.11.4",
     "rehype-raw": "^7.0.0",
     "server-only": "^0.0.1",
+    "serwist": "^9.2.1",
     "sonner": "^2.0.6",
     "superjson": "^2.2.1",
     "tailwind-merge": "^3.3.1",
@@ -89,7 +90,6 @@
     "tiptap-markdown": "^0.8.10",
     "usehooks-ts": "^3.1.1",
     "zod": "^3.25.76",
-    "serwist": "^9.2.1",
     "zustand": "^5.0.6"
   },
   "devDependencies": {

@@ -12,6 +12,15 @@ const withSerwist = withSerwistInit({
   swDest: 'public/firebase-messaging-sw.js',
 })
 /** @type {import("next").NextConfig} */
-const config = {}
+const config = {
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'test.com',
+      },
+    ],
+  },
+}
 
 export default withSerwist(config)
