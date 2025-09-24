@@ -3,12 +3,8 @@
 import { conversationList } from '../../mock/conversation-list'
 import { useParams } from 'next/navigation'
 import Link from 'next/link'
-import { useDropdownMenu } from '@/app/_blocks/DropdownMenu'
-import { Button, DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from '@/components/ui'
-
-export interface ConversationListProps {
-  conversationId: string
-}
+import { ConversationOperator } from './ConversationOperator'
+import { sleep } from 'aio-tool'
 
 export default function ConversationList() {
   const params = useParams()
@@ -33,14 +29,12 @@ export default function ConversationList() {
           {conversation.title}
         </Link>
       </div>
-      <DropdownMenu>
-        <DropdownMenuTrigger>
-          <span className='i-[solar--password-minimalistic-linear] shrink-0 opacity-0 group-hover:opacity-100 transition-all'></span>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent>
-          <Button onClick={() =>{}}>Delete</Button>
-        </DropdownMenuContent>
-      </DropdownMenu>
+      <ConversationOperator
+        onClick={async (params) => {
+          console.log(params)
+          await sleep(3000)
+        }}
+      />
     </div>
   ))
 }
