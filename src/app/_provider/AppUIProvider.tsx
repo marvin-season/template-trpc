@@ -1,5 +1,5 @@
 import { BaseDialog } from '../_blocks/Dialog'
-
+import { BaseDropdownMenu } from '../_blocks/DropdownMenu'
 export default function AppUIProvider({
   children,
 }: {
@@ -7,8 +7,9 @@ export default function AppUIProvider({
 }) {
   return (
     <>
-      {children}
+      <BaseDropdownMenu/>
       <BaseDialog />
+      {children}
     </>
   )
 }
