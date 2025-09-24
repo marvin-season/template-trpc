@@ -16,19 +16,23 @@ export default function ConversationList() {
     <div
       key={conversation.id}
       className={`
-        truncate rounded-xl border border-gray-200 px-4 py-2 whitespace-nowrap
-        hover:cursor-pointer hover:bg-gray-100
+        rounded-lg border border-gray-200 px-4 py-2 whitespace-nowrap
+        hover:cursor-pointer hover:bg-slate-50 group
+        flex justify-between items-center
+        ${conversationId === conversation.id ? 'bg-slate-50' : ''}
       `}
     >
-      <Link
-        href={`/template/chat/${conversation.id}`}
-        className={`
-          text-sm text-gray-500
-          ${conversationId === conversation.id ? 'font-bold' : ''}
-        `}
-      >
-        {conversation.title}
-      </Link>
+      <div className='mask-r-from-70% overflow-x-hidden flex-1'>
+        <Link
+          href={`/template/chat/${conversation.id}`}
+          className={`
+            text-sm text-gray-500
+          `}
+        >
+          {conversation.title}
+        </Link>
+      </div>
+      <span className='i-[solar--password-minimalistic-linear] shrink-0 opacity-0 group-hover:opacity-100 transition-all'></span>
     </div>
   ))
 }

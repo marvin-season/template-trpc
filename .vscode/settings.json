@@ -12,5 +12,5 @@
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "reactSnippets.settings.prettierEnabled": true,
-  "prettier.configPath": "/Users/marvin/personal/template-trpc/.prettierrc.yaml"
+  "prettier.configPath": ".prettierrc.yaml"
 }

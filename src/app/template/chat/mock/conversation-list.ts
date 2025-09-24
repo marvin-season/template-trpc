@@ -17,7 +17,7 @@ export const conversationList = [
   },
   {
     id: 'conversation-2',
-    title: 'What is the weather in Tokyo?',
+    title: 'What is the weather in Tokyo?  Xxxx Xxxx',
     chatList: [
       {
         id: 1,
