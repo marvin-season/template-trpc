@@ -8,28 +8,12 @@ import {
 import { useCallback, useMemo, useState } from 'react'
 import { toast } from 'sonner'
 
-export function ConversationOperator<T = 'delete' | 'share'>(props: {
-  onClick: (operations: T) => PromiseLike<void>
-}) {
-  const { onClick } = props
+export function ConversationOperator<
+  T extends { value: string; label: string },
+>(props: { operations: T[]; onClick: (operations: T) => PromiseLike<void> }) {
+  const { onClick, operations } = props
 
   const [loading, setLoading] = useState(false)
-
-  const operations = useMemo(() => {
-    return [
-      {
-        label: 'Delete',
-        value: 'delete',
-      },
-      {
-        label: 'Share',
-        value: 'share',
-      },
-    ] as {
-      label: string
-      value: T
-    }[]
-  }, [])
 
   const handleOperate = useCallback(async (operate: T) => {
     if (loading) {
@@ -58,7 +42,7 @@ export function ConversationOperator<T = 'delete' | 'share'>(props: {
               <Button
                 disabled={loading}
                 onClick={() => {
-                  handleOperate(operation.value)
+                  handleOperate(operation)
                 }}
               >
                 {operation.label}

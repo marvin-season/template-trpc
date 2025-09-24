@@ -30,6 +30,16 @@ export default function ConversationList() {
         </Link>
       </div>
       <ConversationOperator
+        operations={[
+          {
+            label: 'Delete',
+            value: 'delete'
+          },
+          {
+            label: 'Share',
+            value: 'share',
+          },
+        ]}
         onClick={async (params) => {
           console.log(params)
           await sleep(3000)
