@@ -28,7 +28,7 @@ export default async function CCPage({
     <div className='flex h-full flex-col gap-4'>
       <div>
         <Button>
-          <Link href={`/apple.ai/chat`}>Back</Link>
+          <Link href={`/template/chat`}>Back</Link>
         </Button>
         <span>{conversation.title}</span>
       </div>

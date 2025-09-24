@@ -52,7 +52,7 @@ export default function AppleNotFound() {
             </h3>
             <div className='space-y-2 text-sm'>
               <Link
-                href='/apple.ai/analysis'
+                href='/template/analysis'
                 className={`
                   block rounded-md px-4 py-2 text-slate-600 transition-colors
                   hover:bg-slate-50 hover:text-slate-800
@@ -61,7 +61,7 @@ export default function AppleNotFound() {
                 📊 数据分析工具
               </Link>
               <Link
-                href='/apple.ai/generator'
+                href='/template/generator'
                 className={`
                   block rounded-md px-4 py-2 text-slate-600 transition-colors
                   hover:bg-slate-50 hover:text-slate-800
@@ -70,7 +70,7 @@ export default function AppleNotFound() {
                 ✨ AI 内容生成
               </Link>
               <Link
-                href='/apple.ai/models/library'
+                href='/template/models/library'
                 className={`
                   block rounded-md px-4 py-2 text-slate-600 transition-colors
                   hover:bg-slate-50 hover:text-slate-800

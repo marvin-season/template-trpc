@@ -1,4 +1,4 @@
-import { apple, banana, flow, doc, writer, type SiteData } from './data'
+import { template, banana, flow, doc, writer, type SiteData } from './data'
 
 export interface Site {
   data?: SiteData
@@ -13,16 +13,10 @@ export const sites: Site[] = [
     name: 'home',
   },
   {
-    name: 'apple',
-    path: 'apple.ai',
+    name: 'template',
+    path: 'template',
     hidden: true,
-    data: apple,
-  },
-  {
-    name: 'banana',
-    path: 'banana.ai',
-    hidden: true,
-    data: banana,
+    data: template,
   },
   {
     name: 'flow',

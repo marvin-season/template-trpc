@@ -21,7 +21,7 @@ export default function ConversationList() {
       `}
     >
       <Link
-        href={`/apple.ai/chat/${conversation.id}`}
+        href={`/template/chat/${conversation.id}`}
         className={`
           text-sm text-gray-500
           ${conversationId === conversation.id ? 'font-bold' : ''}
