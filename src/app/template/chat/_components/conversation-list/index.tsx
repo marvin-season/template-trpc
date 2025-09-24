@@ -3,6 +3,8 @@
 import { conversationList } from '../../mock/conversation-list'
 import { useParams } from 'next/navigation'
 import Link from 'next/link'
+import { useDropdownMenu } from '@/app/_blocks/DropdownMenu'
+import { Button, DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from '@/components/ui'
 
 export interface ConversationListProps {
   conversationId: string
@@ -11,7 +13,6 @@ export interface ConversationListProps {
 export default function ConversationList() {
   const params = useParams()
   const conversationId = params.conversationId
-
   return conversationList.map((conversation) => (
     <div
       key={conversation.id}
@@ -32,7 +33,14 @@ export default function ConversationList() {
           {conversation.title}
         </Link>
       </div>
-      <span className='i-[solar--password-minimalistic-linear] shrink-0 opacity-0 group-hover:opacity-100 transition-all'></span>
+      <DropdownMenu>
+        <DropdownMenuTrigger>
+          <span className='i-[solar--password-minimalistic-linear] shrink-0 opacity-0 group-hover:opacity-100 transition-all'></span>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent>
+          <Button onClick={() =>{}}>Delete</Button>
+        </DropdownMenuContent>
+      </DropdownMenu>
     </div>
   ))
 }
