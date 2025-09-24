@@ -64,7 +64,6 @@
     "gsap": "^3.13.0",
     "highlight.js": "^11.11.0",
     "immer": "^10.1.1",
-    "install": "^0.13.0",
     "langchain": "^0.3.27",
     "lodash-es": "^4.17.21",
     "lowlight": "^3.3.0",
@@ -94,6 +93,8 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.1",
+    "@iconify/json": "^2.2.387",
+    "@iconify/tailwind4": "^1.0.6",
     "@next/eslint-plugin-next": "^15.4.4",
     "@tailwindcss/postcss": "^4.0.15",
     "@types/lodash-es": "^4.17.12",

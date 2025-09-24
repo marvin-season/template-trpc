@@ -1,3 +1,5 @@
 export default function ChatPage() {
-  return <div>Home ChatPage</div>
+  return <div>
+    <span className="icon-[mdi-light--home]"></span>Home 
+  </div>
 }
