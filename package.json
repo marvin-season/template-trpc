@@ -19,6 +19,7 @@
     "preview": "next build && next start",
     "start": "next start --port 12345",
     "typecheck": "tsc --noEmit",
+    "figma-icons": "tsx ./scripts/figma-icons/load.cts",
     "mr": "./.shell/mr.sh"
   },
   "dependencies": {
