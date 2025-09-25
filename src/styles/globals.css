@@ -1,6 +1,11 @@
 @import 'tailwindcss';
 @import 'tw-animate-css';
 
+@plugin "@iconify/tailwind4" {
+  prefix: 'i';
+  prefixes: mdi-light, vscode-icons;
+};
+
 @custom-variant dark (&:is(.dark *));
 
 @theme {

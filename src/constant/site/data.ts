@@ -13,9 +13,9 @@ export interface SiteData {
   href: string
 }
 
-const apple: SiteData = {
-  id: 'apple',
-  name: 'Apple AI',
+const template: SiteData = {
+  id: 'template',
+  name: 'Template',
   description:
     '简洁优雅的侧边栏设计，专注于高效的 AI 工具集成。提供智能对话、数据分析、模型管理等核心功能。',
   icon: '🍎',
@@ -28,7 +28,7 @@ const apple: SiteData = {
   buttonClass: 'bg-slate-800 text-white',
   buttonHoverClass:
     'group-hover:bg-gradient-to-r group-hover:from-slate-800 group-hover:to-slate-700 hover:bg-slate-900',
-  href: 'apple.ai',
+  href: 'template',
 }
 
 const banana: SiteData = {
@@ -102,4 +102,4 @@ const writer: SiteData = {
   href: 'writer.ai',
 }
 
-export { apple, banana, flow, doc, writer }
+export { template, banana, flow, doc, writer }
