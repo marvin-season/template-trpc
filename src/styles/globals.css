@@ -1,10 +1,13 @@
 @import 'tailwindcss';
 @import 'tw-animate-css';
 
+/* 官方icon库 */
 @plugin "@iconify/tailwind4" {
   prefix: 'i';
   prefixes: mdi-light, vscode-icons;
-};
+}
+
+@plugin '../../scripts/tailwind-plugins/dynamic-icons.mts';
 
 @custom-variant dark (&:is(.dark *));
 
