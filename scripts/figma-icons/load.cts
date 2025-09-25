@@ -1,5 +1,7 @@
+// @ts-nocheck
+
 // https://www.figma.com/design/a8KkXFthBNIzeOtFg3QdQH/template?node-id=0-1&t=4hQAaXAqvv8WiVXF-1
-import path = require('path')
+import path from 'node:path'
 import { loadFigmaIconSets } from 'tailwindcss-plugin-iconify/figma-icon-sets/node'
 
 const token = process.env.FIGMA_ACCESS_TOKEN
