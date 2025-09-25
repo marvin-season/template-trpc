@@ -47,5 +47,6 @@ yarn-error.log*
 .history
 certificates
 
+.figma-cache
 
 firebase-messaging-sw.js
