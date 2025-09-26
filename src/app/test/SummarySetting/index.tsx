@@ -1,12 +1,12 @@
 import { HSlider } from '../Slider'
 import { useCallback, useMemo, useState } from 'react'
 import { Select, Button, Modal, Radio } from 'antd'
-import config, { EConfigKey } from './config'
+import config, { EConfigKey, type TConfigKey } from './config'
 
 export type SummarySettingProps = {}
 
 export function SummarySetting(props: SummarySettingProps) {
-  const initSettings = useMemo(() => {
+  const initSetting = useMemo(() => {
     return {
       summaryType: 'paragraph',
       depth: 1,
@@ -16,40 +16,39 @@ export function SummarySetting(props: SummarySettingProps) {
   }, [])
   const [isModalOpen, setIsModalOpen] = useState(false)
 
-  const [settings, setSettings] =
-    useState<Record<EConfigKey, string | number>>(initSettings)
+  const [setting, setSetting] = useState<Record<TConfigKey, any>>(initSetting)
 
   const convertedSettings = useMemo(() => {
-    const newSettings = { ...settings }
-    Object.keys(newSettings).forEach((key) => {
-      const keyEnum = key as EConfigKey
+    const newSetting = { ...setting }
+    Object.keys(newSetting).forEach((key) => {
+      const keyEnum = key as TConfigKey
       const option = config[keyEnum].find(
-        (option) => option.value === settings[keyEnum],
+        (option) => option.value === setting[keyEnum],
       )
       if (option?.equals) {
-        newSettings[keyEnum] = option.equals
+        newSetting[keyEnum] = option.equals
       }
     })
-    return newSettings
-  }, [settings])
+    return newSetting
+  }, [setting])
 
   const reset = useCallback(() => {
-    setSettings(initSettings)
-  }, [initSettings])
+    setSetting(initSetting)
+  }, [initSetting])
 
   const save = useCallback(() => {
     console.log('save', convertedSettings)
-  }, [settings])
+  }, [setting])
 
   const onChange = useCallback(
-    (key: EConfigKey, value: any) => {
-      setSettings((prev) => ({ ...prev, [key]: value }))
+    (key: TConfigKey, value: any) => {
+      setSetting((prev) => ({ ...prev, [key]: value }))
       const option = config[key].find((option) => option.value === value)
       if (option?.premium) {
         setIsModalOpen(true)
       }
     },
-    [setSettings, setIsModalOpen],
+    [setSetting, setIsModalOpen],
   )
 
   return (
@@ -68,25 +67,25 @@ export function SummarySetting(props: SummarySettingProps) {
       <Radio.Group
         block
         options={config[EConfigKey.SUMMARY_TYPE]}
-        value={settings.summaryType}
+        value={setting.summaryType}
         onChange={(e) => onChange(EConfigKey.SUMMARY_TYPE, e.target.value)}
         optionType='button'
         buttonStyle='solid'
       />
       <HSlider
-        value={settings.depth}
+        value={setting.depth}
         onChange={(value) => onChange(EConfigKey.DEPTH, value)}
         options={config[EConfigKey.DEPTH]}
       />
 
       <HSlider
-        value={settings.length}
+        value={setting.length}
         onChange={(value) => onChange(EConfigKey.LENGTH, value)}
         options={config[EConfigKey.LENGTH]}
       />
 
       <Select
-        value={settings.tone}
+        value={setting.tone}
         onChange={(value) => onChange(EConfigKey.TONE, value)}
         options={config[EConfigKey.TONE]}
         className='w-full'

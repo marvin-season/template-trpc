@@ -1,7 +1,7 @@
 import { ConfigProvider, Slider } from 'antd'
 import type { ComponentProps, CSSProperties } from 'react'
 import { useMemo } from 'react'
-import type { EConfigKey, TOption } from '../SummarySetting/config'
+import type { TOption } from '../SummarySetting/config'
 
 export type SliderProps = ComponentProps<typeof Slider>
 

@@ -5,12 +5,14 @@ export type TOption = {
   equals?: string
 }
 
-export enum EConfigKey {
-  SUMMARY_TYPE = 'summaryType',
-  DEPTH = 'depth',
-  LENGTH = 'length',
-  TONE = 'tone',
-}
+export const EConfigKey = {
+  SUMMARY_TYPE: 'summaryType',
+  DEPTH: 'depth',
+  LENGTH: 'length',
+  TONE: 'tone',
+} as const
+
+export type TConfigKey = (typeof EConfigKey)[keyof typeof EConfigKey]
 
 const summaryTypeOptions: TOption[] = [
   { label: 'Paragraph', value: 'paragraph' },
