@@ -60,5 +60,6 @@
   "tailwindCSS.showPixelEquivalents": true,
   "tailwindCSS.emmetCompletions": true,
   "tailwindCSS.experimental.configFile": "./src/styles/globals.css",
-  "tailwindCSS.experimental.engine": "v4"
+  "tailwindCSS.experimental.engine": "v4",
+  "iconify.cdnEntry": "https://icones.js.org/collections"
 }
