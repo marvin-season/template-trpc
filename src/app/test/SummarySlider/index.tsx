@@ -2,11 +2,12 @@ import { ConfigProvider, Slider } from 'antd'
 import type { ComponentProps, CSSProperties } from 'react'
 import { useMemo } from 'react'
 import type { TOption } from '../SummarySetting/config'
+import type { SliderProps } from 'antd/es/slider'
 
-export type SliderProps = ComponentProps<typeof Slider>
+export type SummarySliderProps = ComponentProps<typeof Slider>
 
-export function HSlider(
-  props: SliderProps & {
+export function SummarySlider(
+  props: SummarySliderProps & {
     options: Array<TOption>
   },
 ) {
