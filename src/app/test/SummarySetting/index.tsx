@@ -51,7 +51,7 @@ export function SummarySetting(props: SummarySettingProps) {
   )
 
   return (
-    <div>
+    <div className='flex flex-col gap-3'>
       <Modal
         title='Basic Modal'
         closable={{ 'aria-label': 'Custom Close Button' }}
@@ -80,7 +80,7 @@ export function SummarySetting(props: SummarySettingProps) {
         </div>
       </div>
 
-      <div className='flex flex-col gap-3'>
+      <div className='flex flex-col gap-1'>
         <div className='flex items-center justify-between'>
           <span>{'Depth'}</span>
           <span>i</span>
@@ -94,7 +94,7 @@ export function SummarySetting(props: SummarySettingProps) {
         </div>
       </div>
 
-      <div className='flex flex-col gap-3'>
+      <div className='flex flex-col gap-1'>
         <div className='flex items-center justify-between'>
           <span>{'Length'}</span>
           <span>i</span>
@@ -120,7 +120,7 @@ export function SummarySetting(props: SummarySettingProps) {
           className='w-full'
         />
       </div>
-      <div>
+      <div className='flex justify-end gap-3'>
         <Button
           onClick={() => {
             setSetting(initSetting)
