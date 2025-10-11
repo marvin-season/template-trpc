@@ -3,7 +3,7 @@
 import React from 'react'
 import { ZodForm, type CustomFieldProps } from '@/app/_components/ZodForm'
 import { z } from 'zod/v4'
-import { Input } from '@/components/ui'
+import { Button, Input } from '@/components/ui'
 
 // 创建一个适配器，将 ui/Input 适配到 ZodForm 的 CustomFieldProps 接口
 const CustomInput: React.FC<CustomFieldProps> = ({
@@ -46,19 +46,21 @@ export default function Page() {
   }
 
   return (
-    <div className='min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-8'>
-      <div className='mx-auto max-w-6xl space-y-12'>
-        <div className='rounded-lg bg-white p-6 shadow-md'>
-          <ZodForm
-            schema={demoSchema}
-            onSubmit={handleDemoSubmit}
-            fieldClassName='mb-4'
-            customComponents={{
-              fancyInput: CustomInput,
-            }}
-          />
+    <ZodForm
+      schema={demoSchema}
+      onSubmit={handleDemoSubmit}
+      fieldClassName='mb-4'
+      customComponents={{
+        fancyInput: CustomInput,
+      }}
+      renderFooter={({ handleReset }) => (
+        <div className='flex justify-end gap-2'>
+          <Button type='submit'>提交</Button>
+          <Button type='button' onClick={() => handleReset()}>
+            重置
+          </Button>
         </div>
-      </div>
-    </div>
+      )}
+    />
   )
 }

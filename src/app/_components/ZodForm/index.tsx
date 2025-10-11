@@ -58,7 +58,11 @@ interface ZodFormProps<T extends ZodRawShape> {
     onChange: (name: string, value: any) => void,
   ) => React.ReactNode
 
-  renderFooter?: () => React.ReactNode
+  renderFooter?: ({
+    handleReset,
+  }: {
+    handleReset: () => void
+  }) => React.ReactNode
 }
 
 // 从 Zod Schema 中提取字段的默认值
@@ -529,7 +533,7 @@ export function ZodForm<T extends ZodRawShape>({
           )}
         </div>
       ))}
-      {renderFooter()}
+      {renderFooter({ handleReset })}
     </form>
   )
 }
