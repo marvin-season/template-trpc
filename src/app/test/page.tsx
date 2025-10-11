@@ -32,10 +32,25 @@ const demoSchema = z.object({
     component: 'fancyInput',
     description: '使用自定义 Input 组件',
   }),
-  skills: z.enum(['react', 'vue', 'angular']).default('react'),
+
+  // 单选枚举
+  framework: z.enum(['react', 'vue', 'angular']).default('react'),
+
+  // ✨ 多选 - 使用数组 + 枚举
+  skills: z
+    .array(z.enum(['typescript', 'javascript', 'python', 'go', 'rust']))
+    .min(1, '至少选择一项技能')
+    .default(['typescript', 'javascript']),
+
+  // Email
   email: z.email().default('test@gmail.com'),
+
+  // 数字
   age: z.number().min(18, '年龄必须大于18岁').default(25),
+
+  // 可选的布尔值
   isActive: z.boolean().optional(),
+
   // 布尔值 - 订阅选项，默认为 false
   newsletter: z.boolean().default(false),
 })

@@ -152,12 +152,31 @@ function parseJSONSchemaField(
     case 'boolean':
       type = 'checkbox'
       break
+    case 'array':
+      // 数组类型 - 检查子项是否有 enum
+      const items = jsonSchema.items as JSONSchema | undefined
+      if (items?.enum && items.enum.length > 0) {
+        // 数组 + enum = 多选
+        type = 'multiselect'
+        options = items.enum.map((val: any) => ({
+          label: String(val),
+          value: val,
+        }))
+      } else {
+        // 普通数组，暂时使用 text
+        type = 'text'
+      }
+      break
     default:
       type = 'text'
   }
 
-  // 如果有 enum，使用 select
-  if (jsonSchema.enum && jsonSchema.enum.length > 0) {
+  // 如果有 enum（非数组），使用 select
+  if (
+    jsonSchema.type !== 'array' &&
+    jsonSchema.enum &&
+    jsonSchema.enum.length > 0
+  ) {
     type = 'select'
     options = jsonSchema.enum.map((val: any) => ({
       label: String(val),
@@ -264,6 +283,42 @@ function renderField(
         </select>
       )
 
+    case 'multiselect':
+      // 多选 - 使用 checkbox group
+      const selectedValues = Array.isArray(value) ? value : []
+      return (
+        <div className='space-y-2'>
+          {field.options?.map((option) => {
+            const isChecked = selectedValues.includes(option.value)
+            return (
+              <div key={option.value} className='flex items-center space-x-2'>
+                <input
+                  type='checkbox'
+                  id={`${field.name}-${option.value}`}
+                  checked={isChecked}
+                  onChange={(e) => {
+                    const newValue = e.target.checked
+                      ? [...selectedValues, option.value]
+                      : selectedValues.filter((v) => v !== option.value)
+                    onChange(field.name, newValue)
+                  }}
+                  className={`
+                    h-4 w-4 rounded border-gray-300 text-blue-600
+                    focus:ring-blue-500
+                  `}
+                />
+                <label
+                  htmlFor={`${field.name}-${option.value}`}
+                  className='text-sm text-gray-700'
+                >
+                  {option.label}
+                </label>
+              </div>
+            )
+          })}
+        </div>
+      )
+
     case 'number':
       return (
         <input
@@ -351,6 +406,8 @@ export function ZodForm<T extends ZodRawShape>({
         // 根据字段类型设置合适的默认值
         if (field.type === 'checkbox') {
           initial[field.name] = false
+        } else if (field.type === 'multiselect') {
+          initial[field.name] = [] // 多选默认为空数组
         } else if (field.type === 'number') {
           initial[field.name] = ''
         } else {
@@ -397,6 +454,9 @@ export function ZodForm<T extends ZodRawShape>({
           value = Number(value)
         } else if (field.type === 'checkbox') {
           value = Boolean(value)
+        } else if (field.type === 'multiselect') {
+          // 确保多选值是数组
+          value = Array.isArray(value) ? value : []
         } else if (field.type === 'date' && value) {
           value = new Date(value)
         }

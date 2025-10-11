@@ -130,6 +130,27 @@ const schema = z.object({
 })
 ```
 
+### 6. 多选（Array + Enum）
+
+```tsx
+const schema = z.object({
+  // ✨ 多选 - 使用 array + enum 组合
+  skills: z
+    .array(z.enum(['typescript', 'javascript', 'python', 'go']))
+    .min(1, '至少选择一项')
+    .default(['typescript']),
+  
+  // 可选的多选
+  hobbies: z.array(z.enum(['reading', 'gaming', 'coding'])).optional(),
+})
+```
+
+**渲染效果：**
+- 自动渲染为 checkbox group
+- 支持多选
+- 默认值为数组
+- 支持最小/最大选择数量验证
+
 ## 🔧 高级用法
 
 ### Optional 字段
@@ -447,6 +468,7 @@ function UserForm() {
 | `z.boolean()`     | `boolean`        | `<input type="checkbox">` | 复选框         |
 | `z.date()`        | `string` + format: `date`  | `<input type="date">`     | 日期选择器     |
 | `z.enum([...])`   | `string` + enum  | `<select>`                | 下拉选择       |
+| `z.array(z.enum([...]))` | `array` + items.enum | Checkbox Group | 多选框组       |
 
 ## 🔍 验证规则支持
 
