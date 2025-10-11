@@ -3,7 +3,7 @@
 import React from 'react'
 import { ZodForm, type CustomFieldProps } from '@/app/_components/ZodForm'
 import { z } from 'zod/v4'
-import { Input } from 'antd'
+import { Input } from '@/components/ui'
 
 // 创建一个适配器，将 ui/Input 适配到 ZodForm 的 CustomFieldProps 接口
 const CustomInput: React.FC<CustomFieldProps> = ({
@@ -34,7 +34,8 @@ const demoSchema = z.object({
   }),
   email: z.email().default('test@gmail.com'),
   age: z.number().min(18, '年龄必须大于18岁').default(25),
-  isActive: z.boolean().default(true),
+  // 布尔值 - 订阅选项，默认为 false
+  newsletter: z.boolean().default(false),
 })
 
 export default function Page() {

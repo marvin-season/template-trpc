@@ -68,16 +68,26 @@ function extractDefaultValue(zodType: ZodType): any | undefined {
   let currentType: any = zodType
 
   // 遍历类型包装器，寻找 ZodDefault
-  while (currentType._def) {
-    if (currentType._def.typeName === 'ZodDefault') {
-      // 找到默认值，调用函数获取
-      return currentType._def.defaultValue()
+  while (currentType) {
+    const def = currentType._def || currentType.def
+    if (!def) break
+
+    // 检查构造函数名称来判断类型
+    const constructorName = currentType.constructor?.name
+
+    if (constructorName === 'ZodDefault') {
+      // 找到默认值
+      const defaultValue =
+        typeof def.defaultValue === 'function'
+          ? def.defaultValue()
+          : def.defaultValue
+      return defaultValue
     } else if (
-      currentType._def.typeName === 'ZodOptional' ||
-      currentType._def.typeName === 'ZodNullable'
+      constructorName === 'ZodOptional' ||
+      constructorName === 'ZodNullable'
     ) {
       // 继续向内查找
-      currentType = currentType._def.innerType
+      currentType = def.innerType
     } else {
       // 其他类型，停止查找
       break
@@ -99,7 +109,6 @@ function parseZodSchema(schema: ZodObject<any>): FieldMetadata[] {
     }
   }
 
-  console.log('[ZodForm] 解析完成的字段列表:', fields)
   return fields
 }
 
@@ -118,30 +127,36 @@ function parseZodType(name: string, zodType: ZodType): FieldMetadata | null {
   let currentType: any = zodType
 
   // 处理 optional、nullable 和 default
-  while (currentType._def) {
+  while (currentType) {
+    const def = currentType._def || currentType.def
+    if (!def) break
+
+    const constructorName = currentType.constructor?.name
+
     if (
-      currentType._def.typeName === 'ZodOptional' ||
-      currentType._def.typeName === 'ZodNullable'
+      constructorName === 'ZodOptional' ||
+      constructorName === 'ZodNullable'
     ) {
       required = false
-      currentType = currentType._def.innerType
-    } else if (currentType._def.typeName === 'ZodDefault') {
+      currentType = def.innerType
+    } else if (constructorName === 'ZodDefault') {
       // 跳过 default，继续解析内部类型
-      currentType = currentType._def.innerType
+      currentType = def.innerType
     } else {
       break
     }
   }
 
   // 根据类型设置字段类型
-  const typeName = currentType._def?.typeName
+  const constructorName = currentType?.constructor?.name
+  const def = currentType?._def || currentType?.def
 
-  switch (typeName) {
+  switch (constructorName) {
     case 'ZodString':
       type = 'text'
       // 检查是否是 email
-      if (currentType._def.checks) {
-        for (const check of currentType._def.checks) {
+      if (def?.checks) {
+        for (const check of def.checks) {
           if (check.kind === 'email') {
             type = 'email'
           } else if (check.kind === 'url') {
@@ -155,9 +170,14 @@ function parseZodType(name: string, zodType: ZodType): FieldMetadata | null {
       }
       break
     case 'ZodNumber':
+    case 'ZodInt':
+    case 'ZodFloat32':
+    case 'ZodFloat64':
+    case 'ZodInt32':
+    case 'ZodUInt32':
       type = 'number'
-      if (currentType._def.checks) {
-        for (const check of currentType._def.checks) {
+      if (def?.checks) {
+        for (const check of def.checks) {
           if (check.kind === 'min') {
             min = check.value
           } else if (check.kind === 'max') {
@@ -176,24 +196,30 @@ function parseZodType(name: string, zodType: ZodType): FieldMetadata | null {
       break
     case 'ZodEnum':
       type = 'select'
-      options = currentType._def.values.map((val: any) => ({
+      options = def?.values?.map((val: any) => ({
         label: String(val),
         value: val,
       }))
       break
     case 'ZodNativeEnum':
       type = 'select'
-      const enumValues = currentType._def.values
-      options = Object.keys(enumValues)
-        .filter((key) => isNaN(Number(key)))
-        .map((key) => ({
-          label: key,
-          value: enumValues[key],
-        }))
+      const enumValues = def?.values
+      if (enumValues) {
+        options = Object.keys(enumValues)
+          .filter((key) => isNaN(Number(key)))
+          .map((key) => ({
+            label: key,
+            value: enumValues[key],
+          }))
+      }
       break
     default:
       type = 'text'
   }
+
+  // 从原始类型获取 metadata
+  const metadata = zodType.meta?.()
+  console.log(`[ZodForm] 字段 "${name}" 的 metadata:`, metadata)
 
   return {
     name,
@@ -208,7 +234,7 @@ function parseZodType(name: string, zodType: ZodType): FieldMetadata | null {
     max,
     minLength,
     maxLength,
-    metadata: currentType.meta?.(),
+    metadata,
   }
 }
 
@@ -234,6 +260,7 @@ function renderField(
         />
       )
     } else {
+      console.warn(`[ZodForm] 自定义组件 "${field.metadata.component}" 未注册`)
     }
   }
 
