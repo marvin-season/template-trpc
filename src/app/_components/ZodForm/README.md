@@ -8,9 +8,9 @@
 - 🔍 **完整的类型支持**：支持 string、number、boolean、date、enum 等类型
 - ✅ **Zod 验证集成**：支持所有 Zod 验证规则（min、max、email、url 等）
 - 🎨 **友好的错误提示**：实时显示验证错误信息
-- 🔧 **灵活配置**：支持自定义样式、默认值、提交文本等
+- 🔧 **灵活配置**：支持自定义样式、提交文本等
 - 📦 **零额外依赖**：仅依赖 Zod 和原生 HTML Form
-- ✨ **自动默认值**：直接从 Zod Schema 的 `.default()` 方法获取默认值
+- ✨ **完全 Schema 驱动**：所有默认值都直接从 Zod Schema 的 `.default()` 方法获取，无需在组件中重复定义
 
 ## 📦 安装
 
@@ -131,13 +131,13 @@ const schema = z.object({
 })
 ```
 
-### 默认值
+### 默认值（完全 Schema 驱动）
 
-ZodForm 完全支持从 Zod Schema 中自动获取默认值，无需手动指定：
+ZodForm 完全依赖 Zod Schema 中的 `.default()` 方法，实现真正的单一数据源：
 
 ```tsx
 const schema = z.object({
-  // ✅ 所有 .default() 值都会自动应用
+  // ✅ 在 Schema 中定义默认值 - 这是唯一的数据源
   username: z.string().default('guest_user'),      // 自动填充
   age: z.number().default(25),                     // 自动填充
   isActive: z.boolean().default(true),             // 自动勾选
@@ -145,24 +145,34 @@ const schema = z.object({
   bio: z.string().optional().default('默认简介'),   // 可选+默认值
 })
 
-// 直接使用，无需手动指定 defaultValues
+// ✅ 直接使用 - 所有默认值都来自 Schema
 <ZodForm schema={schema} onSubmit={handleSubmit} />
+```
 
-// 如果需要覆盖 schema 中的默认值
+**设计理念：**
+- 🎯 **单一数据源**：默认值只在 Schema 中定义一次
+- 🔒 **类型安全**：Schema 即文档，默认值与验证规则在一起
+- 🚫 **避免重复**：不需要在组件 props 中再次指定默认值
+- ✨ **真正的 Schema First**：所有表单行为都由 Schema 驱动
+
+**如果需要覆盖 Schema 默认值：**
+
+```tsx
+// 使用 defaultValues prop 可以覆盖 Schema 中的默认值
 <ZodForm
   schema={schema}
   onSubmit={handleSubmit}
   defaultValues={{
-    username: 'custom_user', // 覆盖 schema 中的默认值
-    isActive: false,         // 覆盖 schema 中的默认值
+    username: 'custom_user', // 覆盖 Schema 中的 'guest_user'
+    isActive: false,         // 覆盖 Schema 中的 true
   }}
 />
 ```
 
 **默认值优先级：**
-1. `defaultValues` prop（最高优先级）
-2. Schema 中的 `.default()` 值
-3. 根据类型的默认值（`false` for boolean, `''` for string/number）
+1. `defaultValues` prop（覆盖层，用于特殊场景）
+2. Schema 中的 `.default()` 值（主要数据源）
+3. 根据类型的兜底默认值（`false` for boolean, `''` for string/number）
 
 ### 自定义样式
 

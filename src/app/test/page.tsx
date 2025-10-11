@@ -120,28 +120,54 @@ export default function Page() {
         {/* 默认值演示表单 */}
         <div className='rounded-lg bg-white p-6 shadow-md'>
           <h2 className='mb-2 text-2xl font-semibold text-gray-800'>
-            🎯 默认值演示
+            🎯 完全 Schema 驱动的默认值
           </h2>
           <p className='mb-6 text-gray-600'>
-            所有字段的默认值都直接从 Zod Schema 中获取，无需手动指定
-            <code className='ml-2 rounded bg-gray-100 px-2 py-1 text-sm'>
-              .default()
-            </code>
+            所有默认值都<strong>只在 Zod Schema 中定义</strong>
+            ，组件自动提取并应用。实现真正的单一数据源！
           </p>
 
           <div className='mb-6 rounded-lg bg-blue-50 p-4'>
             <h3 className='mb-2 font-semibold text-blue-900'>
-              💡 注意查看表单的初始值
+              💡 查看 Schema 定义的默认值如何自动应用
             </h3>
             <ul className='space-y-1 text-sm text-blue-800'>
-              <li>• username 默认值：guest_user</li>
-              <li>• age 默认值：25</li>
-              <li>• isActive 默认值：true（勾选状态）</li>
-              <li>• role 默认值：user</li>
-              <li>• bio 默认值：这是我的个人简介</li>
-              <li>• newsletter 默认值：false</li>
-              <li>• rating 默认值：5</li>
+              <li>
+                • <code>username</code> = 'guest_user' (来自{' '}
+                <code>.default()</code>)
+              </li>
+              <li>
+                • <code>email</code> = 'test@gmail.com' (来自{' '}
+                <code>.default()</code>)
+              </li>
+              <li>
+                • <code>age</code> = 25 (来自 <code>.default()</code>)
+              </li>
+              <li>
+                • <code>isActive</code> = true/已勾选 (来自{' '}
+                <code>.default()</code>)
+              </li>
+              <li>
+                • <code>role</code> = 'user' (来自 <code>.default()</code>)
+              </li>
+              <li>
+                • <code>website</code> = 'https://test.cn' (来自{' '}
+                <code>.default()</code>)
+              </li>
+              <li>
+                • <code>bio</code> = '这是我的个人简介' (来自{' '}
+                <code>.default()</code>)
+              </li>
+              <li>
+                • <code>newsletter</code> = false (来自 <code>.default()</code>)
+              </li>
+              <li>
+                • <code>rating</code> = 5 (来自 <code>.default()</code>)
+              </li>
             </ul>
+            <p className='mt-3 text-sm font-semibold text-blue-900'>
+              ✨ 无需在 ZodForm 组件中再次指定 defaultValues！
+            </p>
           </div>
 
           <ZodForm

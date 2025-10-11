@@ -14,7 +14,6 @@ interface FieldMetadata {
   placeholder?: string
   description?: string
   required: boolean
-  defaultValue?: any
   options?: Array<{ label: string; value: any }>
   min?: number
   max?: number
@@ -32,6 +31,30 @@ interface ZodFormProps<T extends ZodRawShape> {
   className?: string
   fieldClassName?: string
   showReset?: boolean
+}
+
+// 从 Zod Schema 中提取字段的默认值
+function extractDefaultValue(zodType: ZodType): any | undefined {
+  let currentType: any = zodType
+
+  // 遍历类型包装器，寻找 ZodDefault
+  while (currentType._def) {
+    if (currentType._def.typeName === 'ZodDefault') {
+      // 找到默认值，调用函数获取
+      return currentType._def.defaultValue()
+    } else if (
+      currentType._def.typeName === 'ZodOptional' ||
+      currentType._def.typeName === 'ZodNullable'
+    ) {
+      // 继续向内查找
+      currentType = currentType._def.innerType
+    } else {
+      // 其他类型，停止查找
+      break
+    }
+  }
+
+  return undefined
 }
 
 // 解析 Zod Schema 获取字段元数据
@@ -54,7 +77,6 @@ function parseZodType(name: string, zodType: ZodType): FieldMetadata | null {
   let type = 'text'
   let required = true
   let description: string | undefined
-  let defaultValue: any
   let options: Array<{ label: string; value: any }> | undefined
   let min: number | undefined
   let max: number | undefined
@@ -64,7 +86,7 @@ function parseZodType(name: string, zodType: ZodType): FieldMetadata | null {
   // 获取类型定义
   let currentType: any = zodType
 
-  // 处理 optional 和 nullable
+  // 处理 optional、nullable 和 default
   while (currentType._def) {
     if (
       currentType._def.typeName === 'ZodOptional' ||
@@ -73,7 +95,7 @@ function parseZodType(name: string, zodType: ZodType): FieldMetadata | null {
       required = false
       currentType = currentType._def.innerType
     } else if (currentType._def.typeName === 'ZodDefault') {
-      defaultValue = currentType._def.defaultValue()
+      // 跳过 default，继续解析内部类型
       currentType = currentType._def.innerType
     } else {
       break
@@ -155,7 +177,6 @@ function parseZodType(name: string, zodType: ZodType): FieldMetadata | null {
     placeholder: `请输入 ${name}`,
     description,
     required,
-    defaultValue,
     options,
     min,
     max,
@@ -177,7 +198,7 @@ function renderField(
     required: field.required,
   }
 
-  const fieldValue = value ?? field.defaultValue ?? ''
+  const fieldValue = value ?? ''
 
   switch (field.type) {
     case 'checkbox':
@@ -296,20 +317,28 @@ export function ZodForm<T extends ZodRawShape>({
   // 初始化表单数据的辅助函数
   const getInitialFormData = () => {
     const initial: Record<string, any> = {}
+    const shape = schema.shape
+
     fields.forEach((field) => {
-      // 优先使用 props 中的 defaultValues，其次使用 schema 中的默认值
+      // 优先使用 props 中的 defaultValues
       if (defaultValues[field.name] !== undefined) {
         initial[field.name] = defaultValues[field.name]
-      } else if (field.defaultValue !== undefined) {
-        initial[field.name] = field.defaultValue
       } else {
-        // 根据字段类型设置合适的默认值
-        if (field.type === 'checkbox') {
-          initial[field.name] = false
-        } else if (field.type === 'number') {
-          initial[field.name] = ''
+        // 从 schema 中提取默认值
+        const zodType = shape[field.name] as ZodType
+        const schemaDefaultValue = extractDefaultValue(zodType)
+
+        if (schemaDefaultValue !== undefined) {
+          initial[field.name] = schemaDefaultValue
         } else {
-          initial[field.name] = ''
+          // 根据字段类型设置合适的默认值
+          if (field.type === 'checkbox') {
+            initial[field.name] = false
+          } else if (field.type === 'number') {
+            initial[field.name] = ''
+          } else {
+            initial[field.name] = ''
+          }
         }
       }
     })
