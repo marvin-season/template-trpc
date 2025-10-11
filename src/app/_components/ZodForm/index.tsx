@@ -46,12 +46,8 @@ export type CustomFieldComponent = React.ComponentType<CustomFieldProps>
 interface ZodFormProps<T extends ZodRawShape> {
   schema: ZodObject<T>
   onSubmit: (data: z.infer<ZodObject<T>>) => void | Promise<void>
-  defaultValues?: Partial<z.infer<ZodObject<T>>>
-  submitText?: string
-  resetText?: string
   className?: string
   fieldClassName?: string
-  showReset?: boolean
   // 自定义组件注册表
   customComponents?: Record<string, CustomFieldComponent>
   // 完全自定义字段渲染
@@ -61,6 +57,8 @@ interface ZodFormProps<T extends ZodRawShape> {
     error: string | null,
     onChange: (name: string, value: any) => void,
   ) => React.ReactNode
+
+  renderFooter?: () => React.ReactNode
 }
 
 // 从 Zod Schema 中提取字段的默认值
@@ -377,14 +375,11 @@ function renderField(
 export function ZodForm<T extends ZodRawShape>({
   schema,
   onSubmit,
-  defaultValues = {},
-  submitText = '提交',
-  resetText = '重置',
   className = '',
   fieldClassName = '',
-  showReset = true,
   customComponents,
   renderField: customRenderField,
+  renderFooter = () => <button type='submit'></button>,
 }: ZodFormProps<T>) {
   // 解析 schema
   const fields = parseZodSchema(schema)
@@ -395,28 +390,20 @@ export function ZodForm<T extends ZodRawShape>({
     const shape = schema.shape
 
     fields.forEach((field) => {
-      // 优先使用 props 中的 defaultValues
-      if (
-        defaultValues[field.name as keyof typeof defaultValues] !== undefined
-      ) {
-        initial[field.name] =
-          defaultValues[field.name as keyof typeof defaultValues]
-      } else {
-        // 从 schema 中提取默认值
-        const zodType = shape[field.name] as ZodType
-        const schemaDefaultValue = extractDefaultValue(zodType)
+      // 从 schema 中提取默认值
+      const zodType = shape[field.name] as ZodType
+      const schemaDefaultValue = extractDefaultValue(zodType)
 
-        if (schemaDefaultValue !== undefined) {
-          initial[field.name] = schemaDefaultValue
+      if (schemaDefaultValue !== undefined) {
+        initial[field.name] = schemaDefaultValue
+      } else {
+        // 根据字段类型设置合适的默认值
+        if (field.type === 'checkbox') {
+          initial[field.name] = false
+        } else if (field.type === 'number') {
+          initial[field.name] = ''
         } else {
-          // 根据字段类型设置合适的默认值
-          if (field.type === 'checkbox') {
-            initial[field.name] = false
-          } else if (field.type === 'number') {
-            initial[field.name] = ''
-          } else {
-            initial[field.name] = ''
-          }
+          initial[field.name] = ''
         }
       }
     })
@@ -428,7 +415,6 @@ export function ZodForm<T extends ZodRawShape>({
     useState<Record<string, any>>(getInitialFormData)
 
   const [errors, setErrors] = useState<Record<string, string>>({})
-  const [isSubmitting, setIsSubmitting] = useState(false)
 
   // 处理字段变化
   const handleFieldChange = (name: string, value: any) => {
@@ -447,7 +433,6 @@ export function ZodForm<T extends ZodRawShape>({
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setErrors({})
-    setIsSubmitting(true)
 
     try {
       // 数据类型转换
@@ -485,7 +470,6 @@ export function ZodForm<T extends ZodRawShape>({
     } catch (error) {
       console.error('表单提交错误:', error)
     } finally {
-      setIsSubmitting(false)
     }
   }
 
@@ -545,35 +529,7 @@ export function ZodForm<T extends ZodRawShape>({
           )}
         </div>
       ))}
-
-      <div className='flex gap-4'>
-        <Button
-          type='submit'
-          disabled={isSubmitting}
-          className={`
-            rounded-md bg-blue-600 px-4 py-2 text-white
-            hover:bg-blue-700
-            disabled:cursor-not-allowed disabled:bg-gray-400
-          `}
-        >
-          {isSubmitting ? '提交中...' : submitText}
-        </Button>
-
-        {showReset && (
-          <Button
-            type='button'
-            onClick={handleReset}
-            disabled={isSubmitting}
-            className={`
-              rounded-md bg-gray-200 px-4 py-2 text-gray-700
-              hover:bg-gray-300
-              disabled:cursor-not-allowed
-            `}
-          >
-            {resetText}
-          </Button>
-        )}
-      </div>
+      {renderFooter()}
     </form>
   )
 }

@@ -52,7 +52,6 @@ export default function Page() {
           <ZodForm
             schema={demoSchema}
             onSubmit={handleDemoSubmit}
-            submitText='查看效果（打开控制台）'
             fieldClassName='mb-4'
             customComponents={{
               fancyInput: CustomInput,
