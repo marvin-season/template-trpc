@@ -34,12 +34,17 @@ const demoSchema = z.object({
   }),
 
   // 单选枚举
-  framework: z.enum(['react', 'vue', 'angular']).default('react'),
+  framework: z.enum(['react', 'vue', 'angular']).default('react').meta({
+    type: 'single-select',
+  }),
 
   // ✨ 多选 - 使用数组 + 枚举
   skills: z
     .array(z.enum(['typescript', 'javascript', 'python', 'go', 'rust']))
     .min(1, '至少选择一项技能')
+    .meta({
+      type: 'multi-select',
+    })
     .default(['typescript', 'javascript']),
 
   // Email
@@ -54,7 +59,6 @@ const demoSchema = z.object({
   // 布尔值 - 订阅选项，默认为 false
   newsletter: z.boolean().default(false),
 })
-
 export default function Page() {
   const handleDemoSubmit = (data: z.infer<typeof demoSchema>) => {
     console.log('演示表单提交:', data)
