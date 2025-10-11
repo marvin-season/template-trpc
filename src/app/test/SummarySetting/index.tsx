@@ -60,8 +60,6 @@ export function SummarySetting(props: SummarySettingProps) {
         onCancel={() => setIsModalOpen(false)}
       >
         <p>Some contents...</p>
-        <p>Some contents...</p>
-        <p>Some contents...</p>
       </Modal>
       <div className='flex items-center gap-3'>
         <span>{'Summary Type'}</span>
@@ -85,13 +83,11 @@ export function SummarySetting(props: SummarySettingProps) {
           <span>{'Depth'}</span>
           <span>i</span>
         </div>
-        <div className='px-2'>
-          <SummarySlider
-            value={setting.depth}
-            onChange={(value) => onChange(EConfigKey.DEPTH, value)}
-            options={config[EConfigKey.DEPTH]}
-          />
-        </div>
+        <SummarySlider
+          value={setting.depth}
+          onChange={(value) => onChange(EConfigKey.DEPTH, value)}
+          options={config[EConfigKey.DEPTH]}
+        />
       </div>
 
       <div className='flex flex-col gap-1'>
@@ -99,13 +95,11 @@ export function SummarySetting(props: SummarySettingProps) {
           <span>{'Length'}</span>
           <span>i</span>
         </div>
-        <div className='px-2'>
-          <SummarySlider
-            value={setting.length}
-            onChange={(value) => onChange(EConfigKey.LENGTH, value)}
-            options={config[EConfigKey.LENGTH]}
-          />
-        </div>
+        <SummarySlider
+          value={setting.length}
+          onChange={(value) => onChange(EConfigKey.LENGTH, value)}
+          options={config[EConfigKey.LENGTH]}
+        />
       </div>
 
       <div className='flex flex-col gap-3'>

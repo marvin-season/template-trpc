@@ -1,5 +1,7 @@
+import type { ReactNode } from 'react'
+
 export type TOption = {
-  label: string
+  label: ReactNode
   value: string | number
   premium?: boolean
   equals?: string

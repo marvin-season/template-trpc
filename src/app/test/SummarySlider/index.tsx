@@ -2,7 +2,6 @@ import { ConfigProvider, Slider } from 'antd'
 import type { ComponentProps, CSSProperties } from 'react'
 import { useMemo } from 'react'
 import type { TOption } from '../SummarySetting/config'
-import type { SliderProps } from 'antd/es/slider'
 
 export type SummarySliderProps = ComponentProps<typeof Slider>
 
@@ -21,13 +20,13 @@ export function SummarySlider(
       (acc, option, index) => {
         acc[index] = {
           style: {
-            color: option.premium ? '#FFD700' : '#000',
+            marginLeft: option.premium ? '-16px' : '16px',
           },
           label: option.label,
         }
         return acc
       },
-      {} as Exclude<SliderProps['marks'], undefined>,
+      {} as Exclude<SummarySliderProps['marks'], undefined>,
     )
   }, [options])
 
