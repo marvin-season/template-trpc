@@ -34,6 +34,7 @@ const demoSchema = z.object({
   }),
   email: z.email().default('test@gmail.com'),
   age: z.number().min(18, '年龄必须大于18岁').default(25),
+  isActive: z.boolean().optional(),
   // 布尔值 - 订阅选项，默认为 false
   newsletter: z.boolean().default(false),
 })
