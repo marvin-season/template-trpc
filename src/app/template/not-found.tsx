@@ -3,10 +3,12 @@ import { Button } from '@/components/ui/button'
 
 export default function AppleNotFound() {
   return (
-    <div className={`
+    <div
+      className={`
       flex min-h-screen items-center justify-center bg-gradient-to-br
       from-gray-50 to-slate-100
-    `}>
+    `}
+    >
       <div className='text-center'>
         <div className='mb-8'>
           <div className='mb-4 text-9xl font-bold text-slate-400'>404</div>
@@ -18,10 +20,12 @@ export default function AppleNotFound() {
         </div>
 
         <div className='space-y-6'>
-          <div className={`
+          <div
+            className={`
             flex flex-col justify-center gap-4
             sm:flex-row
-          `}>
+          `}
+          >
             <Button
               asChild
               className={`
@@ -43,10 +47,12 @@ export default function AppleNotFound() {
             </Button>
           </div>
 
-          <div className={`
+          <div
+            className={`
             mx-auto max-w-md rounded-lg border border-slate-200 bg-white p-6
             shadow-sm
-          `}>
+          `}
+          >
             <h3 className='mb-3 text-lg font-semibold text-slate-800'>
               推荐功能
             </h3>

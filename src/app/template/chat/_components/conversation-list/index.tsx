@@ -33,7 +33,7 @@ export default function ConversationList() {
         operations={[
           {
             label: 'Delete',
-            value: 'delete'
+            value: 'delete',
           },
           {
             label: 'Share',

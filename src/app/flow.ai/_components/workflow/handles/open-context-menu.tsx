@@ -1,3 +1,1 @@
-export const openContextMenu = (e: MouseEvent) => {
-
-}
+export const openContextMenu = (e: MouseEvent) => {}

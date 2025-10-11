@@ -1,6 +1,6 @@
 import { memo } from 'react'
 import { BaseEdge, type EdgeProps, getBezierPath } from 'reactflow'
-import './index.css'; // Import the CSS file for animations
+import './index.css' // Import the CSS file for animations
 
 export const BezierEdge = memo(
   ({ id, sourceX, sourceY, targetX, targetY, selected }: EdgeProps) => {

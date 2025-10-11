@@ -7,7 +7,7 @@ export default function AppUIProvider({
 }) {
   return (
     <>
-      <BaseDropdownMenu/>
+      <BaseDropdownMenu />
       <BaseDialog />
       {children}
     </>

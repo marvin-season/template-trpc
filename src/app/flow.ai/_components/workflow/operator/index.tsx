@@ -1,1 +1,1 @@
-export { default as Operator } from './operator';
+export { default as Operator } from './operator'
