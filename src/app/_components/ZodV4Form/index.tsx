@@ -3,19 +3,20 @@
 import React, { useMemo, useState } from 'react'
 import { z } from 'zod/v4'
 import { Button } from '@/components/ui'
+import {
+  NativeMultiSelect,
+  NativeRadioGroup,
+  NativeSelect,
+  NativeCheckbox,
+  NativeNumberInput,
+  NativeInput,
+  NativeResetButton,
+  NativeSubmitButton,
+} from './native'
 
 // ============ 类型定义 ============
 
 type ZodSchema = z.ZodTypeAny
-
-interface FieldMeta {
-  type?: 'custom' | 'single-select' | 'multi-select' | 'textarea' | string
-  component?: string
-  description?: string
-  label?: string
-  placeholder?: string
-  [key: string]: any
-}
 
 type ComponentMap = Record<string, React.ComponentType<any>>
 
@@ -25,6 +26,10 @@ interface ZodV4FormProps<T extends ZodSchema> {
   defaultValues?: Partial<z.infer<T>>
   components?: ComponentMap
   className?: string
+
+  renderFooter?: (props: {
+    onReset: (resetFunc: () => void) => void
+  }) => React.ReactNode
 }
 
 /**
@@ -43,120 +48,6 @@ function extractDefaultValues(jsonSchema: any): Record<string, any> {
   return defaults
 }
 
-// ============ 默认组件 ============
-
-const NativeInput: React.FC<any> = ({ value, onChange, ...props }) => (
-  <input
-    {...props}
-    value={value ?? ''}
-    onChange={(e) => onChange(e.target.value)}
-    className={`
-      w-full rounded-md border border-gray-300 px-3 py-2
-      focus:ring-2 focus:ring-blue-500 focus:outline-none
-    `}
-  />
-)
-
-const NativeNumberInput: React.FC<any> = ({ value, onChange, ...props }) => (
-  <input
-    {...props}
-    type='number'
-    value={value ?? ''}
-    onChange={(e) => onChange(Number(e.target.value))}
-    className={`
-      w-full rounded-md border border-gray-300 px-3 py-2
-      focus:ring-2 focus:ring-blue-500 focus:outline-none
-    `}
-  />
-)
-
-const NativeCheckbox: React.FC<any> = ({ value, onChange }) => (
-  <label className='flex cursor-pointer items-center gap-2'>
-    <input
-      type='checkbox'
-      checked={value ?? false}
-      onChange={(e) => onChange(e.target.checked)}
-      className={`
-        h-4 w-4 rounded border-gray-300 text-blue-600
-        focus:ring-blue-500
-      `}
-    />
-  </label>
-)
-
-const NativeRadioGroup: React.FC<any> = ({
-  value,
-  onChange,
-  options,
-  name,
-}) => (
-  <div className='flex flex-col gap-2'>
-    {options.map((option: string) => (
-      <label key={option} className='flex cursor-pointer items-center gap-2'>
-        <input
-          type='radio'
-          name={name}
-          value={option}
-          checked={value === option}
-          onChange={(e) => onChange(e.target.value)}
-          className={`
-            h-4 w-4 border-gray-300 text-blue-600
-            focus:ring-blue-500
-          `}
-        />
-        <span>{option}</span>
-      </label>
-    ))}
-  </div>
-)
-
-const NativeSelect: React.FC<any> = ({ value, onChange, options }) => (
-  <select
-    value={value ?? ''}
-    onChange={(e) => onChange(e.target.value)}
-    className={`
-      w-full rounded-md border border-gray-300 px-3 py-2
-      focus:ring-2 focus:ring-blue-500 focus:outline-none
-    `}
-  >
-    <option value=''>请选择...</option>
-    {options.map((option: string) => (
-      <option key={option} value={option}>
-        {option}
-      </option>
-    ))}
-  </select>
-)
-
-const NativeMultiSelect: React.FC<any> = ({
-  value = [],
-  onChange,
-  options,
-}) => (
-  <div className='flex flex-col gap-2 rounded-md border border-gray-300 p-3'>
-    {options.map((option: string) => (
-      <label key={option} className='flex cursor-pointer items-center gap-2'>
-        <input
-          type='checkbox'
-          checked={value.includes(option)}
-          onChange={(e) => {
-            if (e.target.checked) {
-              onChange([...value, option])
-            } else {
-              onChange(value.filter((v: string) => v !== option))
-            }
-          }}
-          className={`
-            h-4 w-4 rounded border-gray-300 text-blue-600
-            focus:ring-blue-500
-          `}
-        />
-        <span>{option}</span>
-      </label>
-    ))}
-  </div>
-)
-
 // ============ 主组件 ============
 
 export default function ZodV4Form<T extends ZodSchema>({
@@ -165,6 +56,12 @@ export default function ZodV4Form<T extends ZodSchema>({
   defaultValues = {},
   components = {},
   className = '',
+  renderFooter = () => (
+    <div className='flex justify-end gap-2'>
+      <NativeSubmitButton />
+      <NativeResetButton />
+    </div>
+  ),
 }: ZodV4FormProps<T>) {
   // 使用 Zod v4 内置的 JSON Schema 转换
   const jsonSchema = useMemo(() => z.toJSONSchema(schema), [schema])
@@ -215,7 +112,6 @@ export default function ZodV4Form<T extends ZodSchema>({
   const renderField = (name: string, fieldJsonSchema: any) => {
     const value = formData[name]
     const error = errors[name]
-    debugger
     // 从 meta 中获取自定义类型，优先级高于 JSON Schema 的 type
     const { type, component, label, description, placeholder } = fieldJsonSchema
 
@@ -387,6 +283,11 @@ export default function ZodV4Form<T extends ZodSchema>({
     )
   }
 
+  const handleReset = () => {
+    setFormData(initialFormData)
+    setErrors({})
+  }
+
   return (
     <form
       onSubmit={handleSubmit}
@@ -401,19 +302,7 @@ export default function ZodV4Form<T extends ZodSchema>({
         )}
       </div>
 
-      <div className='mt-6 flex gap-2'>
-        <Button type='submit'>提交</Button>
-        <Button
-          type='button'
-          variant='outline'
-          onClick={() => {
-            setFormData(initialFormData)
-            setErrors({})
-          }}
-        >
-          重置
-        </Button>
-      </div>
+      {renderFooter({ onReset: handleReset })}
     </form>
   )
 }
