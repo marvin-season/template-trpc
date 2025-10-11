@@ -2,9 +2,31 @@
 
 import React, { useState } from 'react'
 import type { FormEvent } from 'react'
-import { z, ZodType, ZodObject } from 'zod/v4'
-import type { ZodRawShape } from 'zod/v4'
-import { Button } from '@/components/ui/button'
+import { z, ZodObject, toJSONSchema } from 'zod/v4'
+import type { ZodRawShape, ZodType } from 'zod/v4'
+
+// JSON Schema 类型定义
+type JSONSchema = {
+  type?:
+    | 'object'
+    | 'array'
+    | 'string'
+    | 'number'
+    | 'boolean'
+    | 'null'
+    | 'integer'
+  properties?: Record<string, any>
+  required?: string[]
+  default?: any
+  description?: string
+  minimum?: number
+  maximum?: number
+  minLength?: number
+  maxLength?: number
+  enum?: Array<string | number | boolean | null>
+  format?: string
+  [key: string]: any
+}
 
 // 字段元数据配置（用于 .meta() 方法）
 export interface FieldMeta {
@@ -65,47 +87,29 @@ interface ZodFormProps<T extends ZodRawShape> {
   }) => React.ReactNode
 }
 
-// 从 Zod Schema 中提取字段的默认值
-function extractDefaultValue(zodType: ZodType): any | undefined {
-  let currentType: any = zodType
+// 使用 JSON Schema 解析 Zod Schema 获取字段元数据
+function parseZodSchema(schema: ZodObject<any>): FieldMetadata[] {
+  // 将 Zod Schema 转换为 JSON Schema
+  const jsonSchema = toJSONSchema(schema) as JSONSchema
 
-  // 遍历类型包装器，寻找 ZodDefault
-  while (currentType) {
-    const def = currentType._def || currentType.def
-    if (!def) break
-
-    // 检查构造函数名称来判断类型
-    const constructorName = currentType.constructor?.name
-
-    if (constructorName === 'ZodDefault') {
-      // 找到默认值
-      const defaultValue =
-        typeof def.defaultValue === 'function'
-          ? def.defaultValue()
-          : def.defaultValue
-      return defaultValue
-    } else if (
-      constructorName === 'ZodOptional' ||
-      constructorName === 'ZodNullable'
-    ) {
-      // 继续向内查找
-      currentType = def.innerType
-    } else {
-      // 其他类型，停止查找
-      break
-    }
+  if (jsonSchema.type !== 'object' || !jsonSchema.properties) {
+    return []
   }
 
-  return undefined
-}
-
-// 解析 Zod Schema 获取字段元数据
-function parseZodSchema(schema: ZodObject<any>): FieldMetadata[] {
-  const shape = schema.shape
   const fields: FieldMetadata[] = []
+  const shape = schema.shape
+  const required = jsonSchema.required || []
 
-  for (const [key, zodType] of Object.entries(shape)) {
-    const field = parseZodType(key, zodType as ZodType)
+  for (const [fieldName, fieldSchema] of Object.entries(
+    jsonSchema.properties,
+  )) {
+    const zodType = shape[fieldName]
+    const field = parseJSONSchemaField(
+      fieldName,
+      fieldSchema as JSONSchema,
+      required.includes(fieldName),
+      zodType,
+    )
     if (field) {
       fields.push(field)
     }
@@ -114,114 +118,54 @@ function parseZodSchema(schema: ZodObject<any>): FieldMetadata[] {
   return fields
 }
 
-// 解析单个 Zod 类型
-function parseZodType(name: string, zodType: ZodType): FieldMetadata | null {
+// 从 JSON Schema 解析字段元数据
+function parseJSONSchemaField(
+  name: string,
+  jsonSchema: JSONSchema,
+  isRequired: boolean,
+  zodType: any,
+): FieldMetadata | null {
   let type = 'text'
-  let required = true
-  let description: string | undefined
   let options: Array<{ label: string; value: any }> | undefined
-  let min: number | undefined
-  let max: number | undefined
-  let minLength: number | undefined
-  let maxLength: number | undefined
 
-  // 获取类型定义
-  let currentType: any = zodType
-
-  // 处理 optional、nullable 和 default
-  while (currentType) {
-    const def = currentType._def || currentType.def
-    if (!def) break
-
-    const constructorName = currentType.constructor?.name
-
-    if (
-      constructorName === 'ZodOptional' ||
-      constructorName === 'ZodNullable'
-    ) {
-      required = false
-      currentType = def.innerType
-    } else if (constructorName === 'ZodDefault') {
-      // 跳过 default，继续解析内部类型
-      currentType = def.innerType
-    } else {
-      break
-    }
-  }
-
-  // 根据类型设置字段类型
-  const constructorName = currentType?.constructor?.name
-  const def = currentType?._def || currentType?.def
-
-  switch (constructorName) {
-    case 'ZodString':
-      type = 'text'
-      // 检查是否是 email
-      if (def?.checks) {
-        for (const check of def.checks) {
-          if (check.kind === 'email') {
-            type = 'email'
-          } else if (check.kind === 'url') {
-            type = 'url'
-          } else if (check.kind === 'min') {
-            minLength = check.value
-          } else if (check.kind === 'max') {
-            maxLength = check.value
-          }
-        }
+  // 根据 JSON Schema type 设置字段类型
+  switch (jsonSchema.type) {
+    case 'string':
+      // 检查 format 来确定具体类型
+      if (jsonSchema.format === 'email') {
+        type = 'email'
+      } else if (jsonSchema.format === 'uri' || jsonSchema.format === 'url') {
+        type = 'url'
+      } else if (jsonSchema.format === 'date') {
+        type = 'date'
+      } else if (jsonSchema.format === 'date-time') {
+        type = 'datetime-local'
+      } else {
+        type = 'text'
       }
       break
-    case 'ZodNumber':
-    case 'ZodInt':
-    case 'ZodFloat32':
-    case 'ZodFloat64':
-    case 'ZodInt32':
-    case 'ZodUInt32':
+    case 'number':
+    case 'integer':
       type = 'number'
-      if (def?.checks) {
-        for (const check of def.checks) {
-          if (check.kind === 'min') {
-            min = check.value
-          } else if (check.kind === 'max') {
-            max = check.value
-          } else if (check.kind === 'int') {
-            type = 'number'
-          }
-        }
-      }
       break
-    case 'ZodBoolean':
+    case 'boolean':
       type = 'checkbox'
-      break
-    case 'ZodDate':
-      type = 'date'
-      break
-    case 'ZodEnum':
-      type = 'select'
-      options = def?.values?.map((val: any) => ({
-        label: String(val),
-        value: val,
-      }))
-      break
-    case 'ZodNativeEnum':
-      type = 'select'
-      const enumValues = def?.values
-      if (enumValues) {
-        options = Object.keys(enumValues)
-          .filter((key) => isNaN(Number(key)))
-          .map((key) => ({
-            label: key,
-            value: enumValues[key],
-          }))
-      }
       break
     default:
       type = 'text'
   }
 
-  // 从原始类型获取 metadata
-  const metadata = zodType.meta?.()
-  console.log(`[ZodForm] 字段 "${name}" 的 metadata:`, metadata)
+  // 如果有 enum，使用 select
+  if (jsonSchema.enum && jsonSchema.enum.length > 0) {
+    type = 'select'
+    options = jsonSchema.enum.map((val: any) => ({
+      label: String(val),
+      value: val,
+    }))
+  }
+
+  // 从 Zod 类型获取 metadata（包含自定义组件信息）
+  const metadata = zodType?.meta?.()
 
   return {
     name,
@@ -229,13 +173,13 @@ function parseZodType(name: string, zodType: ZodType): FieldMetadata | null {
     label:
       name.charAt(0).toUpperCase() + name.slice(1).replace(/([A-Z])/g, ' $1'),
     placeholder: `请输入 ${name}`,
-    description,
-    required,
+    description: jsonSchema.description,
+    required: isRequired,
     options,
-    min,
-    max,
-    minLength,
-    maxLength,
+    min: jsonSchema.minimum,
+    max: jsonSchema.maximum,
+    minLength: jsonSchema.minLength,
+    maxLength: jsonSchema.maxLength,
     metadata,
   }
 }
@@ -391,15 +335,23 @@ export function ZodForm<T extends ZodRawShape>({
   // 初始化表单数据的辅助函数
   const getInitialFormData = () => {
     const initial: Record<string, any> = {}
-    const shape = schema.shape
+
+    // 使用 JSON Schema 获取默认值
+    const jsonSchema = toJSONSchema(schema) as JSONSchema
+    const properties = jsonSchema.properties || {}
+    console.log('[ZodForm] JSON Schema:', jsonSchema)
 
     fields.forEach((field) => {
-      // 从 schema 中提取默认值
-      const zodType = shape[field.name] as ZodType
-      const schemaDefaultValue = extractDefaultValue(zodType)
+      const fieldSchema = properties[field.name] as JSONSchema
+      console.log(`[ZodForm] 字段 "${field.name}" 的 JSON Schema:`, fieldSchema)
 
-      if (schemaDefaultValue !== undefined) {
-        initial[field.name] = schemaDefaultValue
+      // 从 JSON Schema 中获取默认值
+      if (fieldSchema?.default !== undefined) {
+        initial[field.name] = fieldSchema.default
+        console.log(
+          `[ZodForm] 字段 "${field.name}" 默认值:`,
+          fieldSchema.default,
+        )
       } else {
         // 根据字段类型设置合适的默认值
         if (field.type === 'checkbox') {
@@ -411,6 +363,7 @@ export function ZodForm<T extends ZodRawShape>({
         }
       }
     })
+    console.log('[ZodForm] 初始化表单数据:', initial)
     return initial
   }
 

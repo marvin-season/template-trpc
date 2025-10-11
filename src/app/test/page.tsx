@@ -32,6 +32,7 @@ const demoSchema = z.object({
     component: 'fancyInput',
     description: '使用自定义 Input 组件',
   }),
+  skills: z.enum(['react', 'vue', 'angular']).default('react'),
   email: z.email().default('test@gmail.com'),
   age: z.number().min(18, '年龄必须大于18岁').default(25),
   isActive: z.boolean().optional(),

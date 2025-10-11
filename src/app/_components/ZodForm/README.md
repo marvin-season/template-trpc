@@ -1,21 +1,22 @@
-# ZodForm - 基于 Zod 的自动表单生成组件
+# ZodForm - 基于 Zod v4 的自动表单生成组件
 
-一个基于 Zod Schema 的自动表单生成组件，无需额外依赖，使用原生 HTML Form 和 Zod 验证。
+一个基于 Zod v4 Schema 的自动表单生成组件，使用原生 JSON Schema 标准和原生 HTML Form。
 
 ## ✨ 特性
 
-- 🎯 **自动字段生成**：根据 Zod Schema 自动生成表单字段
+- 🎯 **自动字段生成**：使用 Zod v4 原生 `toJSONSchema()` API 自动解析字段
 - 🔍 **完整的类型支持**：支持 string、number、boolean、date、enum 等类型
 - ✅ **Zod 验证集成**：支持所有 Zod 验证规则（min、max、email、url 等）
 - 🎨 **友好的错误提示**：实时显示验证错误信息
-- 🔧 **灵活配置**：支持自定义样式、提交文本等
-- 📦 **零额外依赖**：仅依赖 Zod 和原生 HTML Form
-- ✨ **完全 Schema 驱动**：所有默认值都直接从 Zod Schema 的 `.default()` 方法获取，无需在组件中重复定义
-- 🎨 **自定义组件**：通过 `.describe()` 元数据为任意字段指定自定义渲染组件，实现无限扩展性
+- 🔧 **灵活配置**：支持自定义渲染函数和自定义组件
+- 📦 **零额外依赖**：仅依赖 Zod v4 和原生 HTML Form
+- ✨ **完全 Schema 驱动**：使用 JSON Schema 标准，所有默认值、验证规则都从 Schema 中自动提取
+- 🎨 **自定义组件**：通过 `.meta()` 方法为任意字段指定自定义渲染组件，实现无限扩展性
+- 🚀 **基于标准**：使用 JSON Schema 标准，稳定可靠，不依赖 Zod 内部 API
 
 ## 📦 安装
 
-确保已安装 `zod`：
+确保已安装 `zod` (v3.25+ with v4 support)：
 
 ```bash
 pnpm add zod
@@ -25,12 +26,12 @@ pnpm add zod
 
 ```tsx
 import { ZodForm } from '@/app/_components/ZodForm'
-import { z } from 'zod'
+import { z } from 'zod/v4'
 
 const schema = z.object({
-  username: z.string().min(3, '用户名至少3个字符'),
-  email: z.string().email('请输入有效的邮箱'),
-  age: z.number().min(18, '年龄必须大于18岁'),
+  username: z.string().min(3, '用户名至少3个字符').default('guest'),
+  email: z.email().default('user@example.com'), // v4 使用 z.email() 而不是 z.string().email()
+  age: z.number().min(18, '年龄必须大于18岁').default(25),
 })
 
 function MyForm() {
@@ -38,9 +39,31 @@ function MyForm() {
     console.log('表单数据:', data)
   }
 
-  return <ZodForm schema={schema} onSubmit={handleSubmit} submitText='提交' />
+  return (
+    <ZodForm
+      schema={schema}
+      onSubmit={handleSubmit}
+      renderFooter={({ handleReset }) => (
+        <div className='flex gap-4'>
+          <button type='submit'>提交</button>
+          <button type='button' onClick={handleReset}>
+            重置
+          </button>
+        </div>
+      )}
+    />
+  )
 }
 ```
+
+## 🔄 重构说明
+
+**ZodForm 现在使用 Zod v4 的原生 JSON Schema 功能：**
+
+- ✅ 使用 `toJSONSchema(schema)` 将 Zod Schema 转换为标准 JSON Schema
+- ✅ 从 JSON Schema 中提取字段类型、验证规则、默认值等
+- ✅ 不再依赖 Zod 内部 API（`_def`、`typeName` 等）
+- ✅ 更稳定、更标准、更易维护
 
 ## 📖 API
 
@@ -50,22 +73,23 @@ function MyForm() {
 | --- | --- | --- | --- |
 | `schema` | `ZodObject<T>` | 必填 | Zod Schema 对象 |
 | `onSubmit` | `(data: T) => void \| Promise<void>` | 必填 | 表单提交回调函数 |
-| `defaultValues` | `Partial<T>` | `{}` | 表单默认值 |
-| `submitText` | `string` | `'提交'` | 提交按钮文本 |
-| `resetText` | `string` | `'重置'` | 重置按钮文本 |
 | `className` | `string` | `''` | 表单容器样式类 |
 | `fieldClassName` | `string` | `''` | 字段容器样式类 |
-| `showReset` | `boolean` | `true` | 是否显示重置按钮 |
+| `customComponents` | `Record<string, CustomFieldComponent>` | `{}` | 自定义组件注册表 |
+| `renderField` | `(field, value, error, onChange) => ReactNode` | - | 完全自定义字段渲染函数 |
+| `renderFooter` | `({ handleReset }) => ReactNode` | 默认提交按钮 | 自定义表单底部渲染（提交、重置按钮等） |
 
 ## 🎯 支持的字段类型
 
 ### 1. String（字符串）
 
 ```tsx
+import { z } from 'zod/v4'
+
 const schema = z.object({
   name: z.string().min(3).max(20),
-  email: z.string().email(), // 自动识别为 email 类型
-  website: z.string().url(), // 自动识别为 url 类型
+  email: z.email(), // ✅ v4 原生 email 类型
+  website: z.url(), // ✅ v4 原生 url 类型
 })
 ```
 
@@ -75,7 +99,7 @@ const schema = z.object({
 const schema = z.object({
   age: z.number().min(0).max(120),
   price: z.number().positive(),
-  quantity: z.number().int(), // 整数
+  quantity: z.int(), // ✅ v4 使用 z.int() 表示整数
 })
 ```
 
@@ -103,20 +127,6 @@ const schema = z.object({
 const schema = z.object({
   role: z.enum(['admin', 'user', 'guest']),
   status: z.enum(['active', 'inactive']).default('active'),
-})
-```
-
-### 6. Native Enum（原生枚举）
-
-```tsx
-enum UserRole {
-  Admin = 'admin',
-  User = 'user',
-  Guest = 'guest',
-}
-
-const schema = z.object({
-  role: z.nativeEnum(UserRole),
 })
 ```
 
@@ -208,7 +218,7 @@ const handleSubmit = async (data) => {
 
 ### 自定义组件
 
-ZodForm 支持为任意字段指定自定义渲染组件，通过 Zod 的 `.describe()` 方法传递元数据：
+ZodForm 支持为任意字段指定自定义渲染组件，通过 Zod v4 的 `.meta()` 方法传递元数据：
 
 **步骤1: 创建自定义组件（必须符合 `CustomFieldProps` 接口）**
 
@@ -237,25 +247,25 @@ const CustomInput: React.FC<CustomFieldProps> = ({
 }
 ```
 
-**步骤2: 在 Schema 中通过 `.describe()` 指定使用的组件**
+**步骤2: 在 Schema 中通过 `.meta()` 指定使用的组件**
 
 ```tsx
+import { z } from 'zod/v4'
+
 const schema = z.object({
-  // 使用自定义组件 - 通过 JSON 元数据指定
+  // ✅ 使用 .meta() 方法指定自定义组件
   username: z
     .string()
     .min(3)
     .default('guest')
-    .describe(
-      JSON.stringify({
-        component: 'customInput', // 组件名称
-        description: '用户名字段', // 可选的描述文本
-        props: { hint: '额外提示' }, // 可选的自定义属性
-      }),
-    ),
+    .meta({
+      component: 'customInput', // 组件名称
+      description: '用户名字段', // 可选的描述文本
+      props: { hint: '额外提示' }, // 可选的自定义属性
+    }),
 
   // 普通字段 - 使用默认渲染
-  email: z.string().email(),
+  email: z.email(),
 })
 ```
 
@@ -268,33 +278,41 @@ const schema = z.object({
   customComponents={{
     customInput: CustomInput, // 注册组件
   }}
+  renderFooter={({ handleReset }) => (
+    <div className='flex gap-4'>
+      <button type='submit'>提交</button>
+      <button type='button' onClick={handleReset}>
+        重置
+      </button>
+    </div>
+  )}
 />
 ```
 
-**元数据说明：**
+**FieldMeta 接口：**
 
-- `component`: 必填，指定要使用的组件名称
-- `description`: 可选，字段的描述文本（会显示在输入框下方）
-- `props`: 可选，传递给自定义组件的额外属性（通过 `field.customProps` 访问）
+```typescript
+export interface FieldMeta {
+  component?: string // 自定义组件名称
+  description?: string // 字段描述（会覆盖 JSON Schema 的 description）
+  props?: Record<string, any> // 传递给自定义组件的额外属性
+}
+```
 
 **完整示例：**
 
 ```tsx
 import { ZodForm, type CustomFieldProps } from '@/app/_components/ZodForm'
-import { z } from 'zod'
+import { z } from 'zod/v4'
 import { Input } from '@/components/ui'
 
 // 1. 创建自定义组件
-const CustomInput: React.FC<CustomFieldProps> = ({
-  field,
-  value,
-  onChange,
-}) => {
+const FancyInput: React.FC<CustomFieldProps> = ({ field, value, onChange }) => {
   return (
     <div>
       <Input value={value || ''} onChange={(e) => onChange(e.target.value)} />
-      {field.customProps?.hint && (
-        <p className='text-xs text-gray-500'>{field.customProps.hint}</p>
+      {field.metadata?.props?.hint && (
+        <p className='text-xs text-gray-500'>{field.metadata.props.hint}</p>
       )}
     </div>
   )
@@ -305,12 +323,10 @@ const schema = z.object({
   username: z
     .string()
     .default('guest')
-    .describe(
-      JSON.stringify({
-        component: 'customInput',
-        props: { hint: '这是一个自定义输入框' },
-      }),
-    ),
+    .meta({
+      component: 'fancyInput',
+      props: { hint: '这是一个自定义输入框' },
+    }),
 })
 
 // 3. 使用
@@ -320,8 +336,16 @@ function MyForm() {
       schema={schema}
       onSubmit={(data) => console.log(data)}
       customComponents={{
-        customInput: CustomInput,
+        fancyInput: FancyInput,
       }}
+      renderFooter={({ handleReset }) => (
+        <div>
+          <button type='submit'>提交</button>
+          <button type='button' onClick={handleReset}>
+            重置
+          </button>
+        </div>
+      )}
     />
   )
 }
@@ -331,23 +355,28 @@ function MyForm() {
 
 ```tsx
 import { ZodForm } from '@/app/_components/ZodForm'
-import { z } from 'zod'
+import { z } from 'zod/v4'
 
 const userSchema = z.object({
   // 字符串验证
   username: z
     .string()
     .min(3, '用户名至少3个字符')
-    .max(20, '用户名最多20个字符'),
+    .max(20, '用户名最多20个字符')
+    .default('guest_user'),
 
-  // Email 验证
-  email: z.string().email('请输入有效的邮箱地址'),
+  // Email 验证（使用 v4 原生 email）
+  email: z.email('请输入有效的邮箱地址').default('user@example.com'),
 
   // 数字验证
-  age: z.number().min(18, '年龄必须大于18岁').max(100, '年龄必须小于100岁'),
+  age: z
+    .number()
+    .min(18, '年龄必须大于18岁')
+    .max(100, '年龄必须小于100岁')
+    .default(25),
 
-  // URL 验证（可选）
-  website: z.string().url('请输入有效的网址').optional(),
+  // URL 验证（使用 v4 原生 url）
+  website: z.url('请输入有效的网址').optional(),
 
   // 布尔值
   isActive: z.boolean().default(false),
@@ -380,13 +409,24 @@ function UserForm() {
       <ZodForm
         schema={userSchema}
         onSubmit={handleSubmit}
-        defaultValues={{
-          isActive: true,
-          role: 'user',
-        }}
-        submitText='注册'
-        resetText='重置表单'
         fieldClassName='mb-4'
+        renderFooter={({ handleReset }) => (
+          <div className='flex gap-4'>
+            <button
+              type='submit'
+              className='px-4 py-2 bg-blue-600 text-white rounded'
+            >
+              注册
+            </button>
+            <button
+              type='button'
+              onClick={handleReset}
+              className='px-4 py-2 bg-gray-200 rounded'
+            >
+              重置表单
+            </button>
+          </div>
+        )}
       />
     </div>
   )
@@ -395,31 +435,31 @@ function UserForm() {
 
 ## 🎨 字段渲染规则
 
-组件会根据 Zod 类型自动选择合适的输入控件：
+组件使用 JSON Schema 标准自动选择合适的输入控件：
 
-| Zod 类型             | HTML 控件                 | 说明       |
-| -------------------- | ------------------------- | ---------- |
-| `z.string()`         | `<input type="text">`     | 文本输入   |
-| `z.string().email()` | `<input type="email">`    | Email 输入 |
-| `z.string().url()`   | `<input type="url">`      | URL 输入   |
-| `z.number()`         | `<input type="number">`   | 数字输入   |
-| `z.boolean()`        | `<input type="checkbox">` | 复选框     |
-| `z.date()`           | `<input type="date">`     | 日期选择器 |
-| `z.enum()`           | `<select>`                | 下拉选择   |
-| `z.nativeEnum()`     | `<select>`                | 下拉选择   |
+| Zod v4 类型       | JSON Schema Type | HTML 控件                 | 说明           |
+| ----------------- | ---------------- | ------------------------- | -------------- |
+| `z.string()`      | `string`         | `<input type="text">`     | 文本输入       |
+| `z.email()`       | `string` + format: `email` | `<input type="email">`    | Email 输入     |
+| `z.url()`         | `string` + format: `uri`   | `<input type="url">`      | URL 输入       |
+| `z.number()`      | `number`         | `<input type="number">`   | 数字输入       |
+| `z.int()`         | `integer`        | `<input type="number">`   | 整数输入       |
+| `z.boolean()`     | `boolean`        | `<input type="checkbox">` | 复选框         |
+| `z.date()`        | `string` + format: `date`  | `<input type="date">`     | 日期选择器     |
+| `z.enum([...])`   | `string` + enum  | `<select>`                | 下拉选择       |
 
 ## 🔍 验证规则支持
 
-支持的 Zod 验证规则：
+所有 Zod 验证规则都通过 JSON Schema 自动转换和支持：
 
-- ✅ `min()` / `max()` - 最小/最大值或长度
-- ✅ `email()` - Email 格式
-- ✅ `url()` - URL 格式
-- ✅ `int()` - 整数
-- ✅ `positive()` / `negative()` - 正数/负数
-- ✅ `optional()` - 可选字段
-- ✅ `default()` - 默认值
-- ✅ `nullable()` - 可为 null
+- ✅ `min()` / `max()` - 转换为 `minimum` / `maximum` 或 `minLength` / `maxLength`
+- ✅ `z.email()` - 转换为 `format: "email"`
+- ✅ `z.url()` - 转换为 `format: "uri"`
+- ✅ `z.int()` - 转换为 `type: "integer"`
+- ✅ `positive()` / `negative()` - 转换为 `minimum` 约束
+- ✅ `optional()` - 字段不在 `required` 数组中
+- ✅ `default()` - 转换为 JSON Schema 的 `default` 属性
+- ✅ `nullable()` - 支持 null 值
 - ✅ 自定义错误消息
 
 ## 🐛 错误处理
@@ -427,8 +467,10 @@ function UserForm() {
 组件会自动显示 Zod 验证错误：
 
 ```tsx
+import { z } from 'zod/v4'
+
 const schema = z.object({
-  email: z.string().email('这不是一个有效的邮箱地址'),
+  email: z.email('这不是一个有效的邮箱地址'),
   age: z.number().min(18, '你必须年满18岁才能注册'),
 })
 ```
@@ -439,9 +481,10 @@ const schema = z.object({
 
 1. **类型安全**：`onSubmit` 回调的参数类型会自动从 schema 推断
 2. **实时验证**：字段值改变时会清除该字段的错误提示
-3. **提交状态**：提交期间按钮会显示禁用状态
-4. **重置功能**：重置按钮会将表单恢复到默认值
+3. **JSON Schema 标准**：使用 `toJSONSchema()` 转换，不依赖 Zod 内部 API
+4. **重置功能**：通过 `renderFooter` 中的 `handleReset` 实现
 5. **原生 HTML**：生成的是标准 HTML 表单，支持所有原生特性
+6. **Zod v4 特性**：支持 `.meta()` 方法用于自定义组件
 
 ## 📄 许可
 
