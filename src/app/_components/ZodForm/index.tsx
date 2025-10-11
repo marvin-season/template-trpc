@@ -114,7 +114,8 @@ function parseZodSchema(schema: ZodObject<any>): FieldMetadata[] {
       fields.push(field)
     }
   }
-
+  console.log('[ZodForm] JSON Schema:', jsonSchema)
+  console.log('[ZodForm] Fields:', fields)
   return fields
 }
 
@@ -339,19 +340,13 @@ export function ZodForm<T extends ZodRawShape>({
     // 使用 JSON Schema 获取默认值
     const jsonSchema = toJSONSchema(schema) as JSONSchema
     const properties = jsonSchema.properties || {}
-    console.log('[ZodForm] JSON Schema:', jsonSchema)
 
     fields.forEach((field) => {
       const fieldSchema = properties[field.name] as JSONSchema
-      console.log(`[ZodForm] 字段 "${field.name}" 的 JSON Schema:`, fieldSchema)
 
       // 从 JSON Schema 中获取默认值
       if (fieldSchema?.default !== undefined) {
         initial[field.name] = fieldSchema.default
-        console.log(
-          `[ZodForm] 字段 "${field.name}" 默认值:`,
-          fieldSchema.default,
-        )
       } else {
         // 根据字段类型设置合适的默认值
         if (field.type === 'checkbox') {
