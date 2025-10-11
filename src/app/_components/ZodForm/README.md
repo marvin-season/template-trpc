@@ -11,6 +11,7 @@
 - 🔧 **灵活配置**：支持自定义样式、提交文本等
 - 📦 **零额外依赖**：仅依赖 Zod 和原生 HTML Form
 - ✨ **完全 Schema 驱动**：所有默认值都直接从 Zod Schema 的 `.default()` 方法获取，无需在组件中重复定义
+- 🎨 **自定义组件**：通过 `.describe()` 元数据为任意字段指定自定义渲染组件，实现无限扩展性
 
 ## 📦 安装
 
@@ -150,6 +151,7 @@ const schema = z.object({
 ```
 
 **设计理念：**
+
 - 🎯 **单一数据源**：默认值只在 Schema 中定义一次
 - 🔒 **类型安全**：Schema 即文档，默认值与验证规则在一起
 - 🚫 **避免重复**：不需要在组件 props 中再次指定默认值
@@ -164,12 +166,13 @@ const schema = z.object({
   onSubmit={handleSubmit}
   defaultValues={{
     username: 'custom_user', // 覆盖 Schema 中的 'guest_user'
-    isActive: false,         // 覆盖 Schema 中的 true
+    isActive: false, // 覆盖 Schema 中的 true
   }}
 />
 ```
 
 **默认值优先级：**
+
 1. `defaultValues` prop（覆盖层，用于特殊场景）
 2. Schema 中的 `.default()` 值（主要数据源）
 3. 根据类型的兜底默认值（`false` for boolean, `''` for string/number）
@@ -201,6 +204,127 @@ const handleSubmit = async (data) => {
 }
 
 ;<ZodForm schema={schema} onSubmit={handleSubmit} />
+```
+
+### 自定义组件
+
+ZodForm 支持为任意字段指定自定义渲染组件，通过 Zod 的 `.describe()` 方法传递元数据：
+
+**步骤1: 创建自定义组件（必须符合 `CustomFieldProps` 接口）**
+
+```tsx
+import { type CustomFieldProps } from '@/app/_components/ZodForm'
+import { Input } from '@/components/ui'
+
+// 创建适配器组件
+const CustomInput: React.FC<CustomFieldProps> = ({
+  field,
+  value,
+  error,
+  onChange,
+  required,
+}) => {
+  return (
+    <Input
+      type='text'
+      value={value || ''}
+      onChange={(e) => onChange(e.target.value)}
+      placeholder={field.placeholder}
+      required={required}
+      aria-invalid={!!error}
+    />
+  )
+}
+```
+
+**步骤2: 在 Schema 中通过 `.describe()` 指定使用的组件**
+
+```tsx
+const schema = z.object({
+  // 使用自定义组件 - 通过 JSON 元数据指定
+  username: z
+    .string()
+    .min(3)
+    .default('guest')
+    .describe(
+      JSON.stringify({
+        component: 'customInput', // 组件名称
+        description: '用户名字段', // 可选的描述文本
+        props: { hint: '额外提示' }, // 可选的自定义属性
+      }),
+    ),
+
+  // 普通字段 - 使用默认渲染
+  email: z.string().email(),
+})
+```
+
+**步骤3: 注册自定义组件**
+
+```tsx
+<ZodForm
+  schema={schema}
+  onSubmit={handleSubmit}
+  customComponents={{
+    customInput: CustomInput, // 注册组件
+  }}
+/>
+```
+
+**元数据说明：**
+
+- `component`: 必填，指定要使用的组件名称
+- `description`: 可选，字段的描述文本（会显示在输入框下方）
+- `props`: 可选，传递给自定义组件的额外属性（通过 `field.customProps` 访问）
+
+**完整示例：**
+
+```tsx
+import { ZodForm, type CustomFieldProps } from '@/app/_components/ZodForm'
+import { z } from 'zod'
+import { Input } from '@/components/ui'
+
+// 1. 创建自定义组件
+const CustomInput: React.FC<CustomFieldProps> = ({
+  field,
+  value,
+  onChange,
+}) => {
+  return (
+    <div>
+      <Input value={value || ''} onChange={(e) => onChange(e.target.value)} />
+      {field.customProps?.hint && (
+        <p className='text-xs text-gray-500'>{field.customProps.hint}</p>
+      )}
+    </div>
+  )
+}
+
+// 2. 定义 schema
+const schema = z.object({
+  username: z
+    .string()
+    .default('guest')
+    .describe(
+      JSON.stringify({
+        component: 'customInput',
+        props: { hint: '这是一个自定义输入框' },
+      }),
+    ),
+})
+
+// 3. 使用
+function MyForm() {
+  return (
+    <ZodForm
+      schema={schema}
+      onSubmit={(data) => console.log(data)}
+      customComponents={{
+        customInput: CustomInput,
+      }}
+    />
+  )
+}
 ```
 
 ## 📝 完整示例

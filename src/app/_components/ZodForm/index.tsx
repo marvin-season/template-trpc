@@ -2,9 +2,16 @@
 
 import React, { useState } from 'react'
 import type { FormEvent } from 'react'
-import { z, ZodType, ZodObject } from 'zod'
-import type { ZodRawShape } from 'zod'
+import { z, ZodType, ZodObject } from 'zod/v4'
+import type { ZodRawShape } from 'zod/v4'
 import { Button } from '@/components/ui/button'
+
+// 字段元数据配置（用于 .meta() 方法）
+export interface FieldMeta {
+  component?: string
+  description?: string
+  props?: Record<string, any>
+}
 
 // 字段元数据类型
 interface FieldMetadata {
@@ -19,7 +26,21 @@ interface FieldMetadata {
   max?: number
   minLength?: number
   maxLength?: number
+  // 自定义元数据（从 Zod description 中解析）
+  metadata?: Record<string, any>
 }
+
+// 自定义字段渲染器的 Props
+export interface CustomFieldProps {
+  field: FieldMetadata
+  value: any
+  error: string | null
+  onChange: (value: any) => void
+  required: boolean
+}
+
+// 自定义组件类型
+export type CustomFieldComponent = React.ComponentType<CustomFieldProps>
 
 // ZodForm 组件属性
 interface ZodFormProps<T extends ZodRawShape> {
@@ -31,6 +52,15 @@ interface ZodFormProps<T extends ZodRawShape> {
   className?: string
   fieldClassName?: string
   showReset?: boolean
+  // 自定义组件注册表
+  customComponents?: Record<string, CustomFieldComponent>
+  // 完全自定义字段渲染
+  renderField?: (
+    field: FieldMetadata,
+    value: any,
+    error: string | null,
+    onChange: (name: string, value: any) => void,
+  ) => React.ReactNode
 }
 
 // 从 Zod Schema 中提取字段的默认值
@@ -69,6 +99,7 @@ function parseZodSchema(schema: ZodObject<any>): FieldMetadata[] {
     }
   }
 
+  console.log('[ZodForm] 解析完成的字段列表:', fields)
   return fields
 }
 
@@ -164,11 +195,6 @@ function parseZodType(name: string, zodType: ZodType): FieldMetadata | null {
       type = 'text'
   }
 
-  // 获取描述信息
-  if (currentType.description) {
-    description = currentType.description
-  }
-
   return {
     name,
     type,
@@ -182,6 +208,7 @@ function parseZodType(name: string, zodType: ZodType): FieldMetadata | null {
     max,
     minLength,
     maxLength,
+    metadata: currentType.meta?.(),
   }
 }
 
@@ -191,7 +218,26 @@ function renderField(
   value: any,
   error: string | null,
   onChange: (name: string, value: any) => void,
+  customComponents?: Record<string, CustomFieldComponent>,
 ) {
+  // 如果字段指定了自定义组件，使用自定义组件渲染
+  if (field.metadata?.component && customComponents) {
+    const CustomComponent = customComponents[field.metadata?.component]
+    if (CustomComponent) {
+      return (
+        <CustomComponent
+          field={field}
+          value={value}
+          error={error}
+          onChange={(newValue: any) => onChange(field.name, newValue)}
+          required={field.required}
+        />
+      )
+    } else {
+    }
+  }
+
+  // 默认渲染逻辑
   const commonProps = {
     id: field.name,
     name: field.name,
@@ -310,6 +356,8 @@ export function ZodForm<T extends ZodRawShape>({
   className = '',
   fieldClassName = '',
   showReset = true,
+  customComponents,
+  renderField: customRenderField,
 }: ZodFormProps<T>) {
   // 解析 schema
   const fields = parseZodSchema(schema)
@@ -321,8 +369,11 @@ export function ZodForm<T extends ZodRawShape>({
 
     fields.forEach((field) => {
       // 优先使用 props 中的 defaultValues
-      if (defaultValues[field.name] !== undefined) {
-        initial[field.name] = defaultValues[field.name]
+      if (
+        defaultValues[field.name as keyof typeof defaultValues] !== undefined
+      ) {
+        initial[field.name] =
+          defaultValues[field.name as keyof typeof defaultValues]
       } else {
         // 从 schema 中提取默认值
         const zodType = shape[field.name] as ZodType
@@ -395,7 +446,7 @@ export function ZodForm<T extends ZodRawShape>({
       if (!result.success) {
         // 显示验证错误
         const newErrors: Record<string, string> = {}
-        result.error.errors.forEach((err) => {
+        result.error.issues.forEach((err: any) => {
           const path = err.path.join('.')
           newErrors[path] = err.message
         })
@@ -443,12 +494,20 @@ export function ZodForm<T extends ZodRawShape>({
             </label>
           )}
 
-          {renderField(
-            field,
-            formData[field.name],
-            errors[field.name] || null,
-            handleFieldChange,
-          )}
+          {customRenderField
+            ? customRenderField(
+                field,
+                formData[field.name],
+                errors[field.name] || null,
+                handleFieldChange,
+              )
+            : renderField(
+                field,
+                formData[field.name],
+                errors[field.name] || null,
+                handleFieldChange,
+                customComponents,
+              )}
 
           {field.description && (
             <p className='text-sm text-gray-500'>{field.description}</p>
