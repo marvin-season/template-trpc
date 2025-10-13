@@ -16,7 +16,6 @@ export function extractComponent(props: ExtractComponentProps) {
   // 从 meta 中获取自定义类型，优先级高于 JSON Schema 的 type
   const { type, component, placeholder } = fieldJsonSchema
   // 如果 meta 中指定了 component，优先使用自定义组件
-
   if (component && components[component]) {
     const CustomComponent = components[component]
     return { component: CustomComponent, props: { fieldJsonSchema } }
@@ -59,6 +58,8 @@ export function extractComponent(props: ExtractComponentProps) {
       }
     }
   } else if (type === 'string') {
+    debugger
+
     const StrComponent = components['string'] || components['input']
     const props = {
       type: type,

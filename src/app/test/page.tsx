@@ -10,7 +10,12 @@ import { NativeMultiSelect } from '@/app/_components/ZodV4Form/native'
 // 全局组件映射
 const customComponents = {
   // 类型级别的映射
-  string: Input,
+  string: (props: any) => (
+    <Input
+      value={props.value}
+      onChange={(e) => props.onChange(e.target.value)}
+    />
+  ),
   boolean: Switch,
   multiSelect: (props: any) => {
     console.log('multiSelect', props)
@@ -78,15 +83,7 @@ export default function Page() {
 
   return (
     <div className='container mx-auto py-8'>
-      <h1 className='mb-6 text-3xl font-bold'>Zod V4 动态表单演示</h1>
-
       <div className='mb-8'>
-        <h4 className='mb-2 text-xl font-semibold'>
-          示例 2: 使用自定义 shadcn/ui 组件
-        </h4>
-        <p className='mb-4 text-gray-600'>
-          通过 components 配置使用 @/components/ui 中的组件
-        </p>
         <ZodV4Form
           schema={demoSchema}
           onSubmit={handleDemoSubmit}
