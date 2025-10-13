@@ -4,9 +4,10 @@ import React from 'react'
 import { z } from 'zod/v4'
 import ZodV4Form from '@/app/_components/ZodV4Form'
 import { Input } from '@/components/ui/input'
+import { type TComponentMap } from '@/app/_components/ZodV4Form/extract-component'
 
 // 全局组件映射
-const customComponents = {
+const customComponents: TComponentMap = {
   // 类型级别的映射
   string: (props: any) => (
     <Input

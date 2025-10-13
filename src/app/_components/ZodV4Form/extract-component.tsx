@@ -4,11 +4,14 @@ import {
   type INativeInputProps,
   NativeRadioGroup,
   NativeSelect,
-} from '@/app/_components/ZodV4Form/native'
+  type TInputType,
+  type TFieldJSONSchema,
+} from './native'
 export type NativeComponent = React.ComponentType<INativeInputProps>
-export type TComponentMap = Partial<Record<string, NativeComponent>>
+export type TComponentMap = Record<string, NativeComponent> &
+  Partial<Record<TInputType, NativeComponent>>
 interface ExtractComponentParams<T> {
-  (params: { fieldJsonSchema: any; components: T }): {
+  (params: { fieldJsonSchema: TFieldJSONSchema; components: T }): {
     component: T[keyof T] | null
     props?: INativeInputProps
   }
@@ -38,14 +41,14 @@ export const extractComponent: ExtractComponentParams<TComponentMap> = (
     }
   } else if (type === 'boolean') {
     // 检查是否使用自定义组件
-    const BoolComponent = components['boolean'] || components['switch']
+    const BoolComponent = components['radio']
     if (BoolComponent) {
       return { component: BoolComponent }
     } else {
       return { component: NativeCheckbox }
     }
   } else if (type === 'number' || type === 'integer') {
-    const NumComponent = components['number'] || components['input']
+    const NumComponent = components['number']
 
     const props = {
       type: type,
@@ -64,7 +67,7 @@ export const extractComponent: ExtractComponentParams<TComponentMap> = (
       }
     }
   } else if (type === 'string') {
-    const StrComponent = components['string'] || components['input']
+    const StrComponent = components['string']
     const props = {
       type: type,
       minLength: fieldJsonSchema.minLength,

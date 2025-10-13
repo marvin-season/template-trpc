@@ -2,6 +2,13 @@ import type { FC, InputHTMLAttributes } from 'react'
 
 export type TInputType = 'string' | 'number' | 'checkbox' | 'radio' | 'select'
 
+export type TFieldJSONSchema = {
+  component?: TInputType
+  placeholder?: string
+
+  [key: string]: any
+}
+
 export type INativeInputProps<T = any> = Omit<
   InputHTMLAttributes<HTMLInputElement>,
   'value' | 'onChange'
