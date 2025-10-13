@@ -2,17 +2,9 @@
 
 import React, { useMemo, useState } from 'react'
 import { z } from 'zod/v4'
-import { Button } from '@/components/ui'
-import {
-  NativeMultiSelect,
-  NativeRadioGroup,
-  NativeSelect,
-  NativeCheckbox,
-  NativeNumberInput,
-  NativeInput,
-  NativeResetButton,
-  NativeSubmitButton,
-} from './native'
+import { extractDefaultValues } from './helper'
+import { NativeResetButton, NativeSubmitButton } from './native'
+import { extractComponent } from '@/app/_components/ZodV4Form/extract-component'
 
 // ============ 类型定义 ============
 
@@ -30,22 +22,6 @@ interface ZodV4FormProps<T extends ZodSchema> {
   renderFooter?: (props: {
     onReset: (resetFunc: () => void) => void
   }) => React.ReactNode
-}
-
-/**
- * 从 JSON Schema 中提取默认值
- */
-function extractDefaultValues(jsonSchema: any): Record<string, any> {
-  const defaults: Record<string, any> = {}
-
-  if (jsonSchema.properties) {
-    for (const [key, field] of Object.entries<any>(jsonSchema.properties)) {
-      if (field.default !== undefined) {
-        defaults[key] = field.default
-      }
-    }
-  }
-  return defaults
 }
 
 // ============ 主组件 ============
@@ -113,157 +89,17 @@ export default function ZodV4Form<T extends ZodSchema>({
     const value = formData[name]
     const error = errors[name]
     // 从 meta 中获取自定义类型，优先级高于 JSON Schema 的 type
-    const { type, component, label, description, placeholder } = fieldJsonSchema
-
-    // 如果 meta 中指定了 component，优先使用自定义组件
-    if (component && components[component]) {
-      const CustomComponent = components[component]
-      if (!CustomComponent) return null
-
-      return (
-        <div key={name} className='mb-4'>
-          <label className='mb-2 block font-medium text-gray-700'>
-            {label || name}
-            {jsonSchema.required?.includes(name) && (
-              <span className='ml-1 text-red-500'>*</span>
-            )}
-          </label>
-
-          {description && (
-            <p className='mb-2 text-sm text-gray-500'>{description}</p>
-          )}
-
-          <CustomComponent
-            value={value}
-            onChange={(newValue: any) => updateField(name, newValue)}
-            error={error}
-            {...fieldJsonSchema}
-          />
-
-          {error && <p className='mt-1 text-sm text-red-600'>{error}</p>}
-        </div>
-      )
-    }
-
-    // 根据类型渲染对应的组件
-    let FieldComponent: React.ReactNode
-
-    // 处理数组类型（多选）
-    if (type === 'multi-select') {
-      const enumOptions = fieldJsonSchema.items?.enum || []
-      FieldComponent = (
-        <NativeMultiSelect
-          value={value}
-          onChange={(newValue: any) => updateField(name, newValue)}
-          options={enumOptions}
-        />
-      )
-    }
-    // 处理单选枚举
-    else if (type === 'single-select') {
-      const enumOptions = fieldJsonSchema.enum || []
-      // 如果选项少于等于3个，使用 radio，否则使用 select
-      if (enumOptions.length <= 3) {
-        FieldComponent = (
-          <NativeRadioGroup
-            value={value}
-            onChange={(newValue: any) => updateField(name, newValue)}
-            options={enumOptions}
-            name={name}
-          />
-        )
-      } else {
-        FieldComponent = (
-          <NativeSelect
-            value={value}
-            onChange={(newValue: any) => updateField(name, newValue)}
-            options={enumOptions}
-          />
-        )
-      }
-    }
-    // 处理布尔类型
-    else if (type === 'boolean') {
-      // 检查是否使用自定义组件
-      const BoolComponent = components['boolean'] || components['switch']
-      if (BoolComponent) {
-        FieldComponent = (
-          <BoolComponent
-            checked={value ?? false}
-            onCheckedChange={(checked: boolean) => updateField(name, checked)}
-          />
-        )
-      } else {
-        FieldComponent = (
-          <NativeCheckbox
-            value={value}
-            onChange={(newValue: any) => updateField(name, newValue)}
-          />
-        )
-      }
-    }
-    // 处理数字类型
-    else if (type === 'number' || type === 'integer') {
-      const NumComponent = components['number'] || components['input']
-      if (NumComponent) {
-        FieldComponent = (
-          <NumComponent
-            type='number'
-            value={value ?? ''}
-            onChange={(e: any) => {
-              const newValue =
-                e.target?.value !== undefined ? e.target.value : e
-              updateField(name, Number(newValue))
-            }}
-            min={fieldJsonSchema.minimum}
-            max={fieldJsonSchema.maximum}
-          />
-        )
-      } else {
-        FieldComponent = (
-          <NativeNumberInput
-            value={value}
-            onChange={(newValue: any) => updateField(name, newValue)}
-            min={fieldJsonSchema.minimum}
-            max={fieldJsonSchema.maximum}
-          />
-        )
-      }
-    }
-    // 处理字符串类型
-    else {
-      const StrComponent = components['string'] || components['input']
-      if (StrComponent) {
-        FieldComponent = (
-          <StrComponent
-            type={fieldJsonSchema.format === 'email' ? 'email' : 'text'}
-            value={value ?? ''}
-            onChange={(e: any) => {
-              const newValue =
-                e.target?.value !== undefined ? e.target.value : e
-              updateField(name, newValue)
-            }}
-            minLength={fieldJsonSchema.minLength}
-            maxLength={fieldJsonSchema.maxLength}
-            placeholder={placeholder}
-          />
-        )
-      } else {
-        FieldComponent = (
-          <NativeInput
-            type={fieldJsonSchema.format === 'email' ? 'email' : 'text'}
-            value={value}
-            onChange={(newValue: any) => updateField(name, newValue)}
-            minLength={fieldJsonSchema.minLength}
-            maxLength={fieldJsonSchema.maxLength}
-            placeholder={placeholder}
-          />
-        )
-      }
-    }
-
+    const { label, description } = fieldJsonSchema
     // 判断字段是否必填
     const isRequired = jsonSchema.required?.includes(name)
+
+    // 根据类型渲染对应的组件
+    const { component: FieldComponent, props } = extractComponent({
+      fieldJsonSchema,
+      components,
+    })
+
+    if (!FieldComponent) return null
 
     return (
       <div key={name} className='mb-4'>
@@ -276,7 +112,13 @@ export default function ZodV4Form<T extends ZodSchema>({
           <p className='mb-2 text-sm text-gray-500'>{description}</p>
         )}
 
-        {FieldComponent}
+        <FieldComponent
+          name={name}
+          value={value}
+          error={error}
+          onChange={(newValue: any) => updateField(name, newValue)}
+          {...props}
+        />
 
         {error && <p className='mt-1 text-sm text-red-600'>{error}</p>}
       </div>

@@ -10,7 +10,6 @@ import { Switch } from '@/components/ui'
 const customComponents = {
   // 类型级别的映射
   string: Input,
-  number: Input,
   boolean: Switch,
 
   // 字段级别的自定义组件（通过 meta.component 指定）
@@ -27,14 +26,14 @@ const customComponents = {
 // 演示各种默认值的 schema
 const demoSchema = z.object({
   // 使用自定义组件的字段 - 通过 meta 指定
-  username: z.string().min(3, '用户名至少3个字符').default('guest_user').meta({
-    component: 'fancyInput',
-    description: '使用自定义 Input 组件',
-  }),
+  // username: z.string().min(3, '用户名至少3个字符').default('guest_user').meta({
+  //   component: 'fancyInput',
+  //   description: '使用自定义 Input 组件',
+  // }),
 
   // 单选枚举
   framework: z.enum(['react', 'vue', 'angular']).default('react').meta({
-    type: 'single-select',
+    type: 'select',
   }),
 
   // ✨ 多选 - 使用数组 + 枚举
