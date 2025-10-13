@@ -5,16 +5,12 @@ import {
   NativeRadioGroup,
   NativeSelect,
 } from '@/app/_components/ZodV4Form/native'
-export type NativeComponent = React.ComponentType<
-  INativeInputProps<any> & {
-    fieldJsonSchema?: any
-  }
->
+export type NativeComponent = React.ComponentType<INativeInputProps>
 export type TComponentMap = Partial<Record<string, NativeComponent>>
 interface ExtractComponentParams<T> {
   (params: { fieldJsonSchema: any; components: T }): {
     component: T[keyof T] | null
-    props?: any
+    props?: INativeInputProps
   }
 }
 

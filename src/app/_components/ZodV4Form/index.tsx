@@ -113,7 +113,7 @@ export default function ZodV4Form<T extends ZodSchema>({
           name={name}
           value={value}
           error={error}
-          onChange={(newValue: any) => updateField(name, newValue)}
+          onChange={(newValue) => updateField(name, newValue)}
           {...props}
         />
 
