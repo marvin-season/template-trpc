@@ -1,7 +1,6 @@
 import {
   NativeCheckbox,
   NativeInput,
-  NativeMultiSelect,
   NativeRadioGroup,
   NativeSelect,
 } from '@/app/_components/ZodV4Form/native'
@@ -20,14 +19,11 @@ export function extractComponent(props: ExtractComponentProps) {
 
   if (component && components[component]) {
     const CustomComponent = components[component]
-    return { component: CustomComponent, props: {} }
+    return { component: CustomComponent, props: { fieldJsonSchema } }
   }
 
-  // 处理数组类型（多选）
-  if (type === 'multi-select') {
-    const enumOptions = fieldJsonSchema.items?.enum || []
-    return { component: NativeMultiSelect, props: { options: enumOptions } }
-  } else if (type === 'single-select') {
+  // 处理数组类型
+  if (type === 'select') {
     const enumOptions = fieldJsonSchema.enum || []
 
     if (enumOptions.length <= 3) {

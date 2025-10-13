@@ -5,12 +5,25 @@ import { z } from 'zod/v4'
 import ZodV4Form from '@/app/_components/ZodV4Form'
 import { Input } from '@/components/ui/input'
 import { Switch } from '@/components/ui'
+import { NativeMultiSelect } from '@/app/_components/ZodV4Form/native'
 
 // 全局组件映射
 const customComponents = {
   // 类型级别的映射
   string: Input,
   boolean: Switch,
+  multiSelect: (props: any) => {
+    console.log('multiSelect', props)
+    const { fieldJsonSchema, value, onChange } = props
+    const enumOptions = fieldJsonSchema.items?.enum || []
+    return (
+      <NativeMultiSelect
+        options={enumOptions}
+        value={value}
+        onChange={onChange}
+      />
+    )
+  },
 
   // 字段级别的自定义组件（通过 meta.component 指定）
   fancyInput: (props: any) => (
@@ -26,10 +39,10 @@ const customComponents = {
 // 演示各种默认值的 schema
 const demoSchema = z.object({
   // 使用自定义组件的字段 - 通过 meta 指定
-  // username: z.string().min(3, '用户名至少3个字符').default('guest_user').meta({
-  //   component: 'fancyInput',
-  //   description: '使用自定义 Input 组件',
-  // }),
+  username: z.string().min(3, '用户名至少3个字符').default('guest_user').meta({
+    component: 'fancyInput',
+    description: '使用自定义 Input 组件',
+  }),
 
   // 单选枚举
   framework: z.enum(['react', 'vue', 'angular']).default('react').meta({
@@ -41,7 +54,7 @@ const demoSchema = z.object({
     .array(z.enum(['typescript', 'javascript', 'python', 'go', 'rust']))
     .min(1, '至少选择一项技能')
     .meta({
-      type: 'multi-select',
+      component: 'multiSelect',
     })
     .default(['typescript', 'javascript']),
 
@@ -66,18 +79,6 @@ export default function Page() {
   return (
     <div className='container mx-auto py-8'>
       <h1 className='mb-6 text-3xl font-bold'>Zod V4 动态表单演示</h1>
-
-      <div className='mb-8'>
-        <h4 className='mb-2 text-xl font-semibold'>
-          示例 1: 使用原生 HTML 组件
-        </h4>
-        <p className='mb-4 text-gray-600'>
-          默认使用原生 input、select、checkbox 等组件
-        </p>
-        <ZodV4Form schema={demoSchema} onSubmit={handleDemoSubmit} />
-      </div>
-
-      <hr className='my-8' />
 
       <div className='mb-8'>
         <h4 className='mb-2 text-xl font-semibold'>
