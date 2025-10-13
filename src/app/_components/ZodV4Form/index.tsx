@@ -3,7 +3,11 @@
 import React, { useMemo, useState } from 'react'
 import { z } from 'zod/v4'
 import { extractDefaultValues } from './helper'
-import { NativeResetButton, NativeSubmitButton } from './native'
+import {
+  NativeResetButton,
+  NativeSubmitButton,
+  type TFieldJSONSchema,
+} from './native'
 import { extractComponent, type TComponentMap } from './extract-component'
 
 // ============ 类型定义 ============
@@ -82,7 +86,7 @@ export default function ZodV4Form<T extends ZodSchema>({
   }
 
   // 渲染字段
-  const renderField = (name: string, fieldJsonSchema: any) => {
+  const renderField = (name: string, fieldJsonSchema: TFieldJSONSchema) => {
     const value = formData[name]
     const error = errors[name]
     // 从 meta 中获取自定义类型，优先级高于 JSON Schema 的 type
@@ -137,7 +141,8 @@ export default function ZodV4Form<T extends ZodSchema>({
     >
       <div className='space-y-4'>
         {Object.entries(jsonSchema.properties || {}).map(
-          ([name, fieldJsonSchema]) => renderField(name, fieldJsonSchema),
+          ([name, fieldJsonSchema]) =>
+            renderField(name, fieldJsonSchema as TFieldJSONSchema),
         )}
       </div>
 

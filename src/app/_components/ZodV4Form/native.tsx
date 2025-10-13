@@ -5,7 +5,15 @@ export type TInputType = 'string' | 'number' | 'checkbox' | 'radio' | 'select'
 export type TFieldJSONSchema = {
   component?: TInputType
   placeholder?: string
-
+  label?: string
+  description?: string
+  required?: boolean
+  maximum?: number
+  minimum?: number
+  minLength?: number
+  maxLength?: number
+  options?: string[]
+  enum?: string[]
   [key: string]: any
 }
 
