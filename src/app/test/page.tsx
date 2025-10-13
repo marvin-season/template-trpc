@@ -2,9 +2,8 @@
 
 import React from 'react'
 import { z } from 'zod/v4'
-import ZodV4Form from '@/app/_components/ZodV4Form'
+import ZodV4Form, { type TComponentMap } from '@/app/_components/ZodV4Form'
 import { Input } from '@/components/ui/input'
-import { Switch } from '@/components/ui'
 import { NativeMultiSelect } from '@/app/_components/ZodV4Form/native'
 
 // 全局组件映射
@@ -13,12 +12,10 @@ const customComponents = {
   string: (props: any) => (
     <Input
       value={props.value}
-      onChange={(e) => props.onChange(e.target.value)}
+      onChange={(e) => props.onChange?.(e.target.value)}
     />
   ),
-  boolean: Switch,
   multiSelect: (props: any) => {
-    console.log('multiSelect', props)
     const { fieldJsonSchema, value, onChange } = props
     const enumOptions = fieldJsonSchema.items?.enum || []
     return (

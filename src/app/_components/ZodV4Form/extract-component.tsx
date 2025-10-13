@@ -4,14 +4,23 @@ import {
   NativeRadioGroup,
   NativeSelect,
 } from '@/app/_components/ZodV4Form/native'
+export type NativeComponent = React.ComponentType<
+  React.DetailedHTMLProps<
+    React.InputHTMLAttributes<HTMLInputElement>,
+    HTMLInputElement
+  > & {
+    error?: string
+    fieldJsonSchema?: any
+  }
+>
 
-interface ExtractComponentProps {
+interface ExtractComponentParams {
   fieldJsonSchema: any
-  components: Record<string, any>
+  components: Record<string, NativeComponent>
 }
 
-export function extractComponent(props: ExtractComponentProps) {
-  const { fieldJsonSchema, components } = props
+export function extractComponent(params: ExtractComponentParams) {
+  const { fieldJsonSchema, components } = params
 
   // 从 meta 中获取自定义类型，优先级高于 JSON Schema 的 type
   const { type, component, placeholder } = fieldJsonSchema
@@ -58,8 +67,6 @@ export function extractComponent(props: ExtractComponentProps) {
       }
     }
   } else if (type === 'string') {
-    debugger
-
     const StrComponent = components['string'] || components['input']
     const props = {
       type: type,

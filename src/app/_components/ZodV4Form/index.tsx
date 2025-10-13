@@ -4,19 +4,24 @@ import React, { useMemo, useState } from 'react'
 import { z } from 'zod/v4'
 import { extractDefaultValues } from './helper'
 import { NativeResetButton, NativeSubmitButton } from './native'
-import { extractComponent } from '@/app/_components/ZodV4Form/extract-component'
+import { extractComponent, type NativeComponent } from './extract-component'
 
 // ============ 类型定义 ============
 
 type ZodSchema = z.ZodTypeAny
 
-type ComponentMap = Record<string, React.ComponentType<any>>
+export type TComponentMap = Partial<
+  Record<
+    'select' | 'number' | 'integer' | 'string' | 'boolean',
+    NativeComponent
+  >
+>
 
 interface ZodV4FormProps<T extends ZodSchema> {
   schema: T
   onSubmit: (data: z.infer<T>) => void
   defaultValues?: Partial<z.infer<T>>
-  components?: ComponentMap
+  components?: TComponentMap
   className?: string
 
   renderFooter?: (props: {
@@ -41,7 +46,6 @@ export default function ZodV4Form<T extends ZodSchema>({
 }: ZodV4FormProps<T>) {
   // 使用 Zod v4 内置的 JSON Schema 转换
   const jsonSchema = useMemo(() => z.toJSONSchema(schema), [schema])
-  console.log('jsonSchema', jsonSchema)
   // 初始化表单数据
   const initialFormData = useMemo(() => {
     const schemaDefaults = extractDefaultValues(jsonSchema)
