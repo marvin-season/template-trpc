@@ -2,7 +2,7 @@
 
 import React from 'react'
 import { z } from 'zod/v4'
-import ZodV4Form, { type TComponentMap } from '@/app/_components/ZodV4Form'
+import ZodV4Form from '@/app/_components/ZodV4Form'
 import { Input } from '@/components/ui/input'
 import { NativeMultiSelect } from '@/app/_components/ZodV4Form/native'
 

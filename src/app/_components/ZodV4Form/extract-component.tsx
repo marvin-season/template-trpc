@@ -1,22 +1,19 @@
 import {
   NativeCheckbox,
   NativeInput,
+  type INativeInputProps,
   NativeRadioGroup,
   NativeSelect,
 } from '@/app/_components/ZodV4Form/native'
 export type NativeComponent = React.ComponentType<
-  React.DetailedHTMLProps<
-    React.InputHTMLAttributes<HTMLInputElement>,
-    HTMLInputElement
-  > & {
-    error?: string
+  INativeInputProps<any> & {
     fieldJsonSchema?: any
   }
 >
-
+export type TComponentMap = Partial<Record<string, NativeComponent>>
 interface ExtractComponentParams {
   fieldJsonSchema: any
-  components: Record<string, NativeComponent>
+  components: TComponentMap
 }
 
 export function extractComponent(params: ExtractComponentParams) {

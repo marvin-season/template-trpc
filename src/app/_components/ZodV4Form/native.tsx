@@ -1,6 +1,22 @@
+import type { FC, InputHTMLAttributes } from 'react'
+
+export type TInputType = 'input' | 'number' | 'checkbox' | 'radio' | 'select'
+
+export type INativeInputProps<T> = Omit<
+  InputHTMLAttributes<HTMLInputElement>,
+  'value' | 'onChange'
+> & {
+  onChange: (value: T) => void
+  readonly value: T
+  error?: string
+}
 // ============ 默认组件 ============
 
-export const NativeInput: React.FC<any> = ({ value, onChange, ...props }) => (
+export const NativeInput: FC<INativeInputProps<string>> = ({
+  value,
+  onChange,
+  ...props
+}) => (
   <input
     {...props}
     value={value ?? ''}

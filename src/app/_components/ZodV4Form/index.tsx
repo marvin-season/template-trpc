@@ -4,18 +4,11 @@ import React, { useMemo, useState } from 'react'
 import { z } from 'zod/v4'
 import { extractDefaultValues } from './helper'
 import { NativeResetButton, NativeSubmitButton } from './native'
-import { extractComponent, type NativeComponent } from './extract-component'
+import { extractComponent, type TComponentMap } from './extract-component'
 
 // ============ 类型定义 ============
 
 type ZodSchema = z.ZodTypeAny
-
-export type TComponentMap = Partial<
-  Record<
-    'select' | 'number' | 'integer' | 'string' | 'boolean',
-    NativeComponent
-  >
->
 
 interface ZodV4FormProps<T extends ZodSchema> {
   schema: T
