@@ -5,6 +5,7 @@ import { z } from 'zod/v4'
 import ZodV4Form from '@/app/_components/ZodV4Form'
 import { Input } from '@/components/ui/input'
 import { type TComponentMap } from '@/app/_components/ZodV4Form/extract-component'
+import { NativeCheckbox } from '@/app/_components/ZodV4Form/native'
 
 // 全局组件映射
 const customComponents: TComponentMap = {
@@ -15,7 +16,8 @@ const customComponents: TComponentMap = {
       onChange={(e) => props.onChange?.(e.target.value)}
     />
   ),
-  checkbox: (props) => {
+  checkbox: NativeCheckbox,
+  multiCheckbox: (props) => {
     const { value, onChange, fieldJsonSchema } = props
     return fieldJsonSchema.items.enum?.map((option: string) => (
       <label key={option} className='flex cursor-pointer items-center gap-2'>
@@ -68,7 +70,7 @@ const demoSchema = z.object({
     .array(z.enum(['typescript', 'javascript', 'python', 'go', 'rust']))
     .min(1, '至少选择一项技能')
     .meta({
-      component: 'checkbox',
+      component: 'multiCheckbox',
     })
     .default(['typescript', 'javascript']),
 
@@ -79,7 +81,12 @@ const demoSchema = z.object({
   age: z.number().min(18, '年龄必须大于18岁').default(25),
 
   // 可选的布尔值
-  isActive: z.boolean().optional(),
+  isActive: z
+    .boolean()
+    .meta({
+      component: 'checkbox',
+    })
+    .optional(),
 
   // 布尔值 - 订阅选项，默认为 false
   newsletter: z.boolean().default(false),
