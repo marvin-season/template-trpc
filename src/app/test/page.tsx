@@ -5,7 +5,10 @@ import { z } from 'zod/v4'
 import ZodV4Form from '@/app/_components/ZodV4Form'
 import { Input } from '@/components/ui/input'
 import { type TComponentMap } from '@/app/_components/ZodV4Form/extract-component'
-import { NativeCheckbox } from '@/app/_components/ZodV4Form/native'
+import {
+  NativeCheckbox,
+  NativeSelect,
+} from '@/app/_components/ZodV4Form/native'
 
 // 全局组件映射
 const customComponents: TComponentMap = {
@@ -16,6 +19,10 @@ const customComponents: TComponentMap = {
       onChange={(e) => props.onChange?.(e.target.value)}
     />
   ),
+  select: (props) => {
+    const { fieldJsonSchema, ...restProps } = props
+    return <NativeSelect {...restProps} options={fieldJsonSchema.enum} />
+  },
   checkbox: NativeCheckbox,
   multiCheckbox: (props) => {
     const { value, onChange, fieldJsonSchema } = props
@@ -62,7 +69,7 @@ const demoSchema = z.object({
 
   // 单选枚举
   framework: z.enum(['react', 'vue', 'angular']).default('react').meta({
-    type: 'select',
+    component: 'select',
   }),
 
   // ✨ 多选 - 使用数组 + 枚举
