@@ -15,6 +15,29 @@ const customComponents: TComponentMap = {
       onChange={(e) => props.onChange?.(e.target.value)}
     />
   ),
+  checkbox: (props) => {
+    const { value, onChange, fieldJsonSchema } = props
+    return fieldJsonSchema.items.enum?.map((option: string) => (
+      <label key={option} className='flex cursor-pointer items-center gap-2'>
+        <input
+          type='checkbox'
+          checked={value.includes(option)}
+          onChange={(e) => {
+            if (e.target.checked) {
+              onChange?.([...value, option])
+            } else {
+              onChange?.(value.filter((v: string) => v !== option))
+            }
+          }}
+          className={`
+            h-4 w-4 rounded border-gray-300 text-blue-600
+            focus:ring-blue-500
+          `}
+        />
+        <span>{option}</span>
+      </label>
+    ))
+  },
 
   // 字段级别的自定义组件（通过 meta.component 指定）
   fancyInput: (props: any) => (
@@ -45,7 +68,7 @@ const demoSchema = z.object({
     .array(z.enum(['typescript', 'javascript', 'python', 'go', 'rust']))
     .min(1, '至少选择一项技能')
     .meta({
-      component: 'multiSelect',
+      component: 'checkbox',
     })
     .default(['typescript', 'javascript']),
 

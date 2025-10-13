@@ -133,6 +133,7 @@ export default function ZodV4Form<T extends ZodSchema>({
 
   return (
     <form
+      onReset={handleReset}
       onSubmit={handleSubmit}
       className={`
         mx-auto max-w-2xl p-6
