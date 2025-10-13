@@ -11,12 +11,16 @@ export type NativeComponent = React.ComponentType<
   }
 >
 export type TComponentMap = Partial<Record<string, NativeComponent>>
-interface ExtractComponentParams {
-  fieldJsonSchema: any
-  components: TComponentMap
+interface ExtractComponentParams<T> {
+  (params: { fieldJsonSchema: any; components: T }): {
+    component: T[keyof T] | null
+    props?: any
+  }
 }
 
-export function extractComponent(params: ExtractComponentParams) {
+export const extractComponent: ExtractComponentParams<TComponentMap> = (
+  params,
+) => {
   const { fieldJsonSchema, components } = params
 
   // 从 meta 中获取自定义类型，优先级高于 JSON Schema 的 type

@@ -28,24 +28,10 @@ export const NativeInput: FC<INativeInputProps<string>> = ({
   />
 )
 
-export const NativeNumberInput: React.FC<any> = ({
+export const NativeCheckbox: React.FC<INativeInputProps<boolean>> = ({
   value,
   onChange,
-  ...props
 }) => (
-  <input
-    {...props}
-    type='number'
-    value={value ?? ''}
-    onChange={(e) => onChange(Number(e.target.value))}
-    className={`
-      w-full rounded-md border border-gray-300 px-3 py-2
-      focus:ring-2 focus:ring-blue-500 focus:outline-none
-    `}
-  />
-)
-
-export const NativeCheckbox: React.FC<any> = ({ value, onChange }) => (
   <label className='flex cursor-pointer items-center gap-2'>
     <input
       type='checkbox'
