@@ -8,16 +8,22 @@ import {
   NativeSubmitButton,
   type TFieldJSONSchema,
 } from './native'
-import { type TComponentMap } from './extract-component'
+import {
+  type TComponentMap,
+  type TFieldJSONSchemaWithComponent,
+} from './extract-component'
 import { ZodV4Field } from '@/app/_components/ZodV4Form/ZodV4Field'
 
 type ZodSchema = z.ZodTypeAny
 
-interface ZodV4FormProps<T extends ZodSchema> {
+interface ZodV4FormProps<
+  T extends ZodSchema,
+  C extends TComponentMap = TComponentMap,
+> {
   schema: T
   onSubmit: (data: z.infer<T>) => void
   defaultValues?: Partial<z.infer<T>>
-  components?: TComponentMap
+  components?: C
   className?: string
 
   renderFooter?: (props: {
@@ -25,11 +31,14 @@ interface ZodV4FormProps<T extends ZodSchema> {
   }) => React.ReactNode
 }
 
-export default function ZodV4Form<T extends ZodSchema>({
+export default function ZodV4Form<
+  T extends ZodSchema,
+  C extends TComponentMap = TComponentMap,
+>({
   schema,
   onSubmit,
   defaultValues = {},
-  components = {},
+  components = {} as C,
   className = '',
   renderFooter = () => (
     <div className='flex justify-end gap-2'>
@@ -37,7 +46,7 @@ export default function ZodV4Form<T extends ZodSchema>({
       <NativeResetButton />
     </div>
   ),
-}: ZodV4FormProps<T>) {
+}: ZodV4FormProps<T, C>) {
   // 使用 Zod v4 内置的 JSON Schema 转换
   const jsonSchema = useMemo(() => z.toJSONSchema(schema), [schema])
   // 初始化表单数据
@@ -99,10 +108,12 @@ export default function ZodV4Form<T extends ZodSchema>({
       <div className='space-y-4'>
         {Object.entries(jsonSchema.properties || {}).map(
           ([name, fieldJsonSchema]) => (
-            <ZodV4Field
+            <ZodV4Field<any, C>
               key={name}
               name={name}
-              fieldJsonSchema={fieldJsonSchema as TFieldJSONSchema}
+              fieldJsonSchema={
+                fieldJsonSchema as TFieldJSONSchemaWithComponent<C>
+              }
               components={components}
               value={formData[name]}
               error={errors[name]}
