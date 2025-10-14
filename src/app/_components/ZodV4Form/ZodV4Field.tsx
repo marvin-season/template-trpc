@@ -1,23 +1,20 @@
 import {
   extractComponent,
   type TComponentMap,
-  type TFieldJSONSchemaWithComponent,
 } from '@/app/_components/ZodV4Form/extract-component'
+import type { TFieldJSONSchema } from '@/app/_components/ZodV4Form/native'
 
-interface ZodV4FieldProps<T = string, C extends TComponentMap = TComponentMap> {
+interface ZodV4FieldProps<T = string> {
   name: string
-  fieldJsonSchema: TFieldJSONSchemaWithComponent<C>
-  components: C
+  fieldJsonSchema: TFieldJSONSchema
+  components: TComponentMap
   value?: T
   error?: string
   isRequired?: boolean
   updateField: (name: string, value: T) => void
 }
 
-export function ZodV4Field<
-  T = string,
-  C extends TComponentMap = TComponentMap,
->({
+export function ZodV4Field({
   name,
   fieldJsonSchema,
   components,
@@ -25,7 +22,7 @@ export function ZodV4Field<
   value,
   error,
   updateField,
-}: ZodV4FieldProps<T, C>) {
+}: ZodV4FieldProps) {
   // 根据类型渲染对应的组件
   const { component: FieldComponent, props } = extractComponent({
     fieldJsonSchema,
@@ -35,9 +32,6 @@ export function ZodV4Field<
   if (!FieldComponent) return null
 
   const { label, description } = fieldJsonSchema
-
-  // 将 FieldComponent 转换为 React.ComponentType 以避免类型问题
-  const Component = FieldComponent as React.ComponentType<any>
 
   return (
     <div key={name} className='mb-4'>
@@ -50,11 +44,11 @@ export function ZodV4Field<
         <p className='mb-2 text-sm text-gray-500'>{description}</p>
       )}
 
-      <Component
+      <FieldComponent
         name={name}
         value={value}
         error={error}
-        onChange={(newValue: T) => updateField(name, newValue)}
+        onChange={(newValue) => updateField(name, newValue)}
         {...props}
       />
 
