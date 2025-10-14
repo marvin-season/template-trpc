@@ -10,7 +10,6 @@ import {
 } from './native'
 import { builtinComponents, type TComponentMap } from './builtin-components'
 import { ZodV4Field } from './ZodV4Field'
-import type { result } from 'lodash-es'
 
 type ZodSchema = z.ZodObject<Record<string, z.ZodTypeAny>>
 
@@ -22,9 +21,7 @@ interface ZodV4FormProps<T extends ZodSchema> {
   className?: string
   fieldClassName?: string
 
-  renderFooter?: (props: {
-    onReset: (resetFunc: () => void) => void
-  }) => React.ReactNode
+  renderFooter?: (props: { onReset: () => void }) => React.ReactNode
 }
 
 export default function ZodV4Form<T extends ZodSchema>(
@@ -120,6 +117,9 @@ export default function ZodV4Form<T extends ZodSchema>(
     setErrors({})
   }
 
+  const fields = useMemo(() => {
+    return Object.entries(jsonSchema.properties || {})
+  }, [jsonSchema])
   return (
     <form
       onReset={handleReset}
@@ -129,24 +129,22 @@ export default function ZodV4Form<T extends ZodSchema>(
         ${className}
       `}
     >
-      {Object.entries(jsonSchema.properties || {}).map(
-        ([name, fieldJsonSchema]) => (
-          <ZodV4Field
-            onValidate={onValidate}
-            key={name}
-            name={name}
-            className={fieldClassName}
-            fieldJsonSchema={fieldJsonSchema as TFieldJSONSchema}
-            components={components}
-            value={formData[name]}
-            error={errors[name]}
-            updateField={updateField}
-            isRequired={jsonSchema.required?.includes(name)}
-          />
-        ),
-      )}
+      {fields.map(([name, fieldJsonSchema]) => (
+        <ZodV4Field
+          onValidate={onValidate}
+          key={name}
+          name={name}
+          className={fieldClassName}
+          fieldJsonSchema={fieldJsonSchema as TFieldJSONSchema}
+          components={components}
+          value={formData[name]}
+          error={errors[name]}
+          updateField={updateField}
+          isRequired={jsonSchema.required?.includes(name)}
+        />
+      ))}
 
-      {renderFooter({ onReset: handleReset })}
+      {fields.length > 0 && renderFooter({ onReset: handleReset })}
     </form>
   )
 }
