@@ -92,7 +92,7 @@
     "tiptap-markdown": "^0.8.10",
     "usehooks-ts": "^3.1.1",
     "zod": "^3.25.76",
-    "zodv4-form": "^0.0.5",
+    "zodv4-form": "^1.0.1",
     "zustand": "^5.0.6"
   },
   "devDependencies": {
