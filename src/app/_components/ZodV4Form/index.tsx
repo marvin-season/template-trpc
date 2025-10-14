@@ -11,7 +11,7 @@ import {
 import { builtinComponents, type TComponentMap } from './builtin-components'
 import { ZodV4Field } from './ZodV4Field'
 
-type ZodSchema = z.ZodObject<any>
+type ZodSchema = z.ZodObject<Record<string, z.ZodTypeAny>>
 
 interface ZodV4FormProps<T extends ZodSchema> {
   schema: T
@@ -74,7 +74,8 @@ export default function ZodV4Form<T extends ZodSchema>(
 
   const onValidate = (name: string, value: any) => {
     setErrors({})
-    const fieldSchema = schema.shape[name]
+    const fieldSchema = schema.shape[name]!
+
     const { success, error } = fieldSchema.safeParse(value)
     if (!success) {
       setErrors((prev) => {
