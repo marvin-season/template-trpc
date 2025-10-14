@@ -1,5 +1,5 @@
 import { extractComponent } from './extract-component'
-import { builtinComponents, type TComponentMap } from './builtin-components'
+import { type TComponentMap } from './builtin-components'
 import type { INativeInputProps } from './native'
 import { cn } from '@/lib/utils'
 
@@ -42,9 +42,9 @@ export function ZodV4Field({
         value={value}
         error={error}
         isRequired={isRequired}
+        onValidate={onValidate}
         onChange={(newValue) => {
           updateField(name, newValue)
-          onValidate(name, newValue)
         }}
         fieldJsonSchema={fieldJsonSchema}
       />
@@ -66,9 +66,9 @@ export function ZodV4Field({
         name={name}
         value={value}
         error={error}
+        onValidate={onValidate}
         onChange={(newValue) => {
           updateField(name, newValue)
-          onValidate(name, newValue)
         }}
         fieldJsonSchema={fieldJsonSchema}
       />

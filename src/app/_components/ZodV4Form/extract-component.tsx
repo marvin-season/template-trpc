@@ -1,4 +1,4 @@
-import { NativeInput, type TFieldJSONSchema } from './native'
+import { NativeInput, NativeNumberInput, type TFieldJSONSchema } from './native'
 import type { TComponentMap } from './builtin-components'
 
 interface ExtractComponentParams<T> {
@@ -21,6 +21,12 @@ export const extractComponent: ExtractComponentParams<TComponentMap> = (
     return {
       component: CustomComponent,
       isCustom: true,
+    }
+  }
+  if (fieldJsonSchema.type === 'number') {
+    return {
+      component: NativeNumberInput,
+      isCustom: false,
     }
   }
 

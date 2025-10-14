@@ -31,12 +31,13 @@ const customComponents = defineComponents({
 
 // 演示各种默认值的 schema
 const demoSchema = z.object({
-  level: z
-    .string()
-    .refine((value) => value.length <= 2, {
-      message: 'level must be less than 2 characters',
-    })
-    .default('aa'),
+  // 单选枚举
+  framework: z.enum(['react', 'vue', 'angular']).default('react').meta({
+    component: 'radio',
+  }),
+
+  // Email
+  email: z.email().default('test@gmail.com'),
 })
 
 export default function Page() {

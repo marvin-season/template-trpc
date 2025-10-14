@@ -10,12 +10,14 @@ export type TFieldJSONSchema = {
 
 export type INativeInputProps<T> = Pick<
   InputHTMLAttributes<HTMLInputElement>,
-  'name' | 'placeholder' | 'disabled' | 'required' | 'className'
+  'placeholder' | 'disabled' | 'required' | 'className'
 > & {
   onChange?: (value: T) => void
+  onValidate?: (name: string, value: T) => void
   readonly value?: T
   error?: string
   label?: string
+  name: string
   description?: string
   options?: T[]
   isRequired?: boolean
@@ -25,15 +27,40 @@ export type INativeInputProps<T> = Pick<
 export type NativeComponent<T> = React.ComponentType<INativeInputProps<T>>
 // ============ 默认组件 ============
 
+export const NativeNumberInput: React.FC<any> = ({
+  value,
+  onChange,
+  onValidate,
+  name,
+}) => (
+  <input
+    name={name}
+    type='number'
+    value={value ?? ''}
+    onChange={(e) => {
+      onChange(Number(e.target.value))
+      onValidate?.(name, Number(e.target.value))
+    }}
+    className={`
+      w-full rounded-md border border-gray-300 px-3 py-2
+      focus:ring-2 focus:ring-blue-500 focus:outline-none
+    `}
+  />
+)
+
 export const NativeInput: FC<INativeInputProps<string>> = ({
   value,
   onChange,
-  ...props
+  name,
+  onValidate,
 }) => (
   <input
-    {...props}
+    name={name}
     value={value ?? ''}
-    onChange={(e) => onChange?.(e.target.value)}
+    onChange={(e) => {
+      onChange?.(e.target.value)
+      onValidate?.(name, e.target.value)
+    }}
     className={`
       w-full rounded-md border border-gray-300 px-3 py-2
       focus:ring-2 focus:ring-blue-500 focus:outline-none
@@ -61,11 +88,11 @@ export const NativeCheckbox: React.FC<INativeInputProps<boolean>> = ({
 export const NativeRadioGroup: React.FC<INativeInputProps<string>> = ({
   value,
   onChange,
-  options,
+  fieldJsonSchema,
   name,
 }) => (
   <div className='flex flex-col gap-2'>
-    {options?.map((option: string) => (
+    {fieldJsonSchema.enum?.map((option: string) => (
       <label key={option} className='flex cursor-pointer items-center gap-2'>
         <input
           type='radio'
@@ -84,17 +111,21 @@ export const NativeRadioGroup: React.FC<INativeInputProps<string>> = ({
   </div>
 )
 
-export const NativeSelect: React.FC<any> = ({ value, onChange, options }) => (
+export const NativeSelect: React.FC<INativeInputProps<any>> = ({
+  value,
+  onChange,
+  fieldJsonSchema,
+}) => (
   <select
     value={value ?? ''}
-    onChange={(e) => onChange(e.target.value)}
+    onChange={(e) => onChange?.(e.target.value)}
     className={`
       w-full rounded-md border border-gray-300 px-3 py-2
       focus:ring-2 focus:ring-blue-500 focus:outline-none
     `}
   >
     <option value=''>请选择...</option>
-    {options.map((option: string) => (
+    {fieldJsonSchema.enum.map((option: string) => (
       <option key={option} value={option}>
         {option}
       </option>

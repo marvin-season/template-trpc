@@ -1,6 +1,8 @@
 import { Input } from 'antd'
 import {
   NativeCheckbox,
+  NativeInput,
+  NativeRadioGroup,
   NativeSelect,
   type INativeInputProps,
   type NativeComponent,
@@ -16,15 +18,8 @@ export function defineComponents<T extends TComponentMap>(components: T) {
 
 export const builtinComponents = defineComponents({
   // 类型级别的映射
-  string: (props: INativeInputProps<string>) => (
-    <Input
-      value={props.value}
-      onChange={(e) => props.onChange?.(e.target.value)}
-    />
-  ),
-  select: (props: INativeInputProps<string>) => {
-    const { fieldJsonSchema, ...restProps } = props
-    return <NativeSelect {...restProps} options={fieldJsonSchema.enum} />
-  },
+  string: NativeInput,
+  select: NativeSelect,
+  radio: NativeRadioGroup,
   checkbox: NativeCheckbox,
 })

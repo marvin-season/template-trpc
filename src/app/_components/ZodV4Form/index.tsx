@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useMemo, useState } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 import { z } from 'zod/v4'
 import { extractDefaultValues } from './helper'
 import {
@@ -10,6 +10,7 @@ import {
 } from './native'
 import { builtinComponents, type TComponentMap } from './builtin-components'
 import { ZodV4Field } from './ZodV4Field'
+import type { result } from 'lodash-es'
 
 type ZodSchema = z.ZodObject<Record<string, z.ZodTypeAny>>
 
@@ -72,18 +73,33 @@ export default function ZodV4Form<T extends ZodSchema>(
     }
   }
 
+  const handleValidate = useCallback(
+    (args: {
+      result: z.ZodSafeParseResult<unknown>
+      name?: string
+      bypassCallback?: (data: any) => void
+    }) => {
+      const { name, result, bypassCallback } = args
+      if (result.success) {
+        setErrors({})
+        bypassCallback?.(result.data)
+      } else {
+        const newErrors: Record<string, string> = {}
+        result.error.issues.forEach((issue) => {
+          const path = name || issue.path.join('.')
+          newErrors[path] = issue.message
+        })
+        setErrors(newErrors)
+      }
+    },
+    [setErrors],
+  )
+
   const onValidate = (name: string, value: any) => {
-    setErrors({})
     const fieldSchema = schema.shape[name]!
 
-    const { success, error } = fieldSchema.safeParse(value)
-    if (!success) {
-      setErrors((prev) => {
-        const newErrors = { ...prev }
-        newErrors[name] = JSON.parse(error.message)?.[0]?.message
-        return newErrors
-      })
-    }
+    const result = fieldSchema?.safeParse(value)
+    handleValidate({ result, name })
   }
 
   // 表单提交
@@ -91,17 +107,12 @@ export default function ZodV4Form<T extends ZodSchema>(
     e.preventDefault()
 
     const result = schema.safeParse(formData)
-    if (result.success) {
-      setErrors({})
-      onSubmit(result.data)
-    } else {
-      const newErrors: Record<string, string> = {}
-      result.error.issues.forEach((issue) => {
-        const path = issue.path.join('.')
-        newErrors[path] = issue.message
-      })
-      setErrors(newErrors)
-    }
+    handleValidate({
+      result,
+      bypassCallback: (data) => {
+        onSubmit(data)
+      },
+    })
   }
 
   const handleReset = () => {
