@@ -22,14 +22,29 @@ export function ZodV4Field({
   updateField,
 }: ZodV4FieldProps) {
   // 根据类型渲染对应的组件
-  const FieldComponent = extractComponent({
+  const { component: FieldComponent, isCustom } = extractComponent({
     fieldJsonSchema,
-    components: Object.assign(builtinComponents, components),
+    components,
   })
 
   if (!FieldComponent) return null
 
   const { label, description } = fieldJsonSchema
+
+  if (isCustom) {
+    return (
+      <FieldComponent
+        name={name}
+        label={label || name}
+        description={description}
+        value={value}
+        error={error}
+        isRequired={isRequired}
+        onChange={(newValue) => updateField(name, newValue)}
+        fieldJsonSchema={fieldJsonSchema}
+      />
+    )
+  }
 
   return (
     <div key={name} className={cn('mb-4', className)}>

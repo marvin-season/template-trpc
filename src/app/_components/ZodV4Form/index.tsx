@@ -8,7 +8,7 @@ import {
   NativeSubmitButton,
   type TFieldJSONSchema,
 } from './native'
-import { type TComponentMap } from './builtin-components'
+import { builtinComponents, type TComponentMap } from './builtin-components'
 import { ZodV4Field } from './ZodV4Field'
 
 type ZodSchema = z.ZodTypeAny
@@ -26,20 +26,28 @@ interface ZodV4FormProps<T extends ZodSchema> {
   }) => React.ReactNode
 }
 
-export default function ZodV4Form<T extends ZodSchema>({
-  schema,
-  onSubmit,
-  defaultValues = {},
-  components = {},
-  className = '',
-  fieldClassName = '',
-  renderFooter = () => (
-    <div className='flex justify-end gap-2'>
-      <NativeSubmitButton />
-      <NativeResetButton />
-    </div>
-  ),
-}: ZodV4FormProps<T>) {
+export default function ZodV4Form<T extends ZodSchema>(
+  props: ZodV4FormProps<T>,
+) {
+  const {
+    schema,
+    onSubmit,
+    defaultValues = {},
+    className = '',
+    fieldClassName = '',
+    renderFooter = () => (
+      <div className='flex justify-end gap-2'>
+        <NativeSubmitButton />
+        <NativeResetButton />
+      </div>
+    ),
+  } = props
+
+  const components = useMemo(
+    () => Object.assign(builtinComponents, props.components),
+    [props.components],
+  )
+
   // 使用 Zod v4 内置的 JSON Schema 转换
   const jsonSchema = useMemo(() => z.toJSONSchema(schema), [schema])
   // 初始化表单数据

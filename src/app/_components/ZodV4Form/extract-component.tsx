@@ -1,15 +1,11 @@
-import {
-  NativeInput,
-  type INativeInputProps,
-  type TFieldJSONSchema,
-} from './native'
+import { NativeInput, type TFieldJSONSchema } from './native'
 import type { TComponentMap } from './builtin-components'
 
 interface ExtractComponentParams<T> {
-  (params: {
-    fieldJsonSchema: TFieldJSONSchema
-    components: T
-  }): T[keyof T] | null
+  (params: { fieldJsonSchema: TFieldJSONSchema; components: T }): {
+    component: T[keyof T]
+    isCustom: boolean
+  }
 }
 
 export const extractComponent: ExtractComponentParams<TComponentMap> = (
@@ -22,8 +18,14 @@ export const extractComponent: ExtractComponentParams<TComponentMap> = (
   // 如果 meta 中指定了 component，优先使用自定义组件
   if (component && components[component]) {
     const CustomComponent = components[component]
-    return CustomComponent
+    return {
+      component: CustomComponent,
+      isCustom: true,
+    }
   }
 
-  return NativeInput
+  return {
+    component: NativeInput,
+    isCustom: false,
+  }
 }

@@ -15,7 +15,10 @@ export type INativeInputProps<T> = Pick<
   onChange?: (value: T) => void
   readonly value?: T
   error?: string
+  label?: string
+  description?: string
   options?: T[]
+  isRequired?: boolean
   fieldJsonSchema?: any
 }
 

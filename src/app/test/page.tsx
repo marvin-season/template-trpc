@@ -35,14 +35,19 @@ const customComponents = defineComponents({
   // 字段级别的自定义组件（通过 meta.component 指定）
   fancyInput: (props) => (
     <div className='relative'>
+      <label className='mb-2 block font-medium text-gray-700'>
+        {props.label || props.name}
+        {props.isRequired && <span className='ml-1 text-blue-500'>*</span>}
+      </label>
       <Input
         {...props}
         onChange={(e) => props.onChange?.(e.target.value)}
-        className={`pl-10`}
+        className={``}
       />
-      <span className='absolute top-1/2 left-3 -translate-y-1/2 text-gray-400'>
-        👤
-      </span>
+
+      {props.error && (
+        <p className='mt-1 text-sm text-red-600'>{props.error}</p>
+      )}
     </div>
   ),
 })
