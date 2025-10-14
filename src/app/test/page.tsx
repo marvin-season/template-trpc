@@ -51,7 +51,11 @@ const customComponents: TComponentMap = {
   // 字段级别的自定义组件（通过 meta.component 指定）
   fancyInput: (props: any) => (
     <div className='relative'>
-      <Input {...props} className='pl-10' />
+      <Input
+        {...props}
+        onChange={(e) => props.onChange?.(e.target.value)}
+        className={`pl-10`}
+      />
       <span className='absolute top-1/2 left-3 -translate-y-1/2 text-gray-400'>
         👤
       </span>

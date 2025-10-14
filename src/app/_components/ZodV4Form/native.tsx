@@ -3,17 +3,10 @@ import type { FC, InputHTMLAttributes } from 'react'
 export type TInputType = 'string' | 'number' | 'checkbox' | 'radio' | 'select'
 
 export type TFieldJSONSchema = {
-  component?: TInputType
+  component?: string
   placeholder?: string
   label?: string
   description?: string
-  required?: boolean
-  maximum?: number
-  minimum?: number
-  minLength?: number
-  maxLength?: number
-  options?: string[]
-  enum?: string[]
   [key: string]: any
 }
 
