@@ -19,6 +19,7 @@ interface ZodV4FormProps<T extends ZodSchema> {
   defaultValues?: Partial<z.infer<T>>
   components?: TComponentMap
   className?: string
+  fieldClassName?: string
 
   renderFooter?: (props: {
     onReset: (resetFunc: () => void) => void
@@ -31,6 +32,7 @@ export default function ZodV4Form<T extends ZodSchema>({
   defaultValues = {},
   components = {},
   className = '',
+  fieldClassName = '',
   renderFooter = () => (
     <div className='flex justify-end gap-2'>
       <NativeSubmitButton />
@@ -92,26 +94,25 @@ export default function ZodV4Form<T extends ZodSchema>({
       onReset={handleReset}
       onSubmit={handleSubmit}
       className={`
-        mx-auto max-w-2xl p-6
+        mx-auto max-w-2xl space-y-4 p-6
         ${className}
       `}
     >
-      <div className='space-y-4'>
-        {Object.entries(jsonSchema.properties || {}).map(
-          ([name, fieldJsonSchema]) => (
-            <ZodV4Field
-              key={name}
-              name={name}
-              fieldJsonSchema={fieldJsonSchema as TFieldJSONSchema}
-              components={components}
-              value={formData[name]}
-              error={errors[name]}
-              updateField={updateField}
-              isRequired={jsonSchema.required?.includes(name)}
-            />
-          ),
-        )}
-      </div>
+      {Object.entries(jsonSchema.properties || {}).map(
+        ([name, fieldJsonSchema]) => (
+          <ZodV4Field
+            key={name}
+            name={name}
+            className={fieldClassName}
+            fieldJsonSchema={fieldJsonSchema as TFieldJSONSchema}
+            components={components}
+            value={formData[name]}
+            error={errors[name]}
+            updateField={updateField}
+            isRequired={jsonSchema.required?.includes(name)}
+          />
+        ),
+      )}
 
       {renderFooter({ onReset: handleReset })}
     </form>

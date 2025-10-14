@@ -1,12 +1,14 @@
 import { extractComponent } from './extract-component'
 import { builtinComponents, type TComponentMap } from './builtin-components'
 import type { INativeInputProps } from './native'
+import { cn } from '@/lib/utils'
 
 type ZodV4FieldProps<T = string> = INativeInputProps<T> & {
   components: TComponentMap
   isRequired?: boolean
   name: string
   updateField: (name: string, value: string) => void
+  className?: string
 }
 
 export function ZodV4Field({
@@ -16,6 +18,7 @@ export function ZodV4Field({
   isRequired,
   value,
   error,
+  className,
   updateField,
 }: ZodV4FieldProps) {
   // 根据类型渲染对应的组件
@@ -29,7 +32,7 @@ export function ZodV4Field({
   const { label, description } = fieldJsonSchema
 
   return (
-    <div key={name} className='mb-4'>
+    <div key={name} className={cn('mb-4', className)}>
       <label className='mb-2 block font-medium text-gray-700'>
         {label || name}
         {isRequired && <span className='ml-1 text-red-500'>*</span>}
