@@ -32,12 +32,13 @@ const customComponents = defineComponents({
 // 演示各种默认值的 schema
 const demoSchema = z.object({
   level: z
-    .enum(['low', 'medium', 'high'])
-    .meta({
-      component: 'slider',
+    .string()
+    .refine((value) => value.length <= 2, {
+      message: 'level must be less than 2 characters',
     })
-    .default('low'),
+    .default('aa'),
 })
+
 export default function Page() {
   const handleDemoSubmit = (data: z.infer<typeof demoSchema>) => {
     console.log('演示表单提交:', data)

@@ -11,7 +11,7 @@ import {
 import { builtinComponents, type TComponentMap } from './builtin-components'
 import { ZodV4Field } from './ZodV4Field'
 
-type ZodSchema = z.ZodTypeAny
+type ZodSchema = z.ZodObject<any>
 
 interface ZodV4FormProps<T extends ZodSchema> {
   schema: T
@@ -72,23 +72,34 @@ export default function ZodV4Form<T extends ZodSchema>(
     }
   }
 
+  const onValidate = (name: string, value: any) => {
+    setErrors({})
+    const fieldSchema = schema.shape[name]
+    const { success, error } = fieldSchema.safeParse(value)
+    if (!success) {
+      setErrors((prev) => {
+        const newErrors = { ...prev }
+        newErrors[name] = JSON.parse(error.message)?.[0]?.message
+        return newErrors
+      })
+    }
+  }
+
   // 表单提交
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
 
-    try {
-      const validatedData = schema.parse(formData)
+    const result = schema.safeParse(formData)
+    if (result.success) {
       setErrors({})
-      onSubmit(validatedData)
-    } catch (error) {
-      if (error instanceof z.ZodError) {
-        const newErrors: Record<string, string> = {}
-        error.issues.forEach((issue) => {
-          const path = issue.path.join('.')
-          newErrors[path] = issue.message
-        })
-        setErrors(newErrors)
-      }
+      onSubmit(result.data)
+    } else {
+      const newErrors: Record<string, string> = {}
+      result.error.issues.forEach((issue) => {
+        const path = issue.path.join('.')
+        newErrors[path] = issue.message
+      })
+      setErrors(newErrors)
     }
   }
 
@@ -109,6 +120,7 @@ export default function ZodV4Form<T extends ZodSchema>(
       {Object.entries(jsonSchema.properties || {}).map(
         ([name, fieldJsonSchema]) => (
           <ZodV4Field
+            onValidate={onValidate}
             key={name}
             name={name}
             className={fieldClassName}
