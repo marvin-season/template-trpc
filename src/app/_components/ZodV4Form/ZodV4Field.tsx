@@ -1,17 +1,12 @@
-import {
-  extractComponent,
-  type TComponentMap,
-} from '@/app/_components/ZodV4Form/extract-component'
-import type { TFieldJSONSchema } from '@/app/_components/ZodV4Form/native'
+import { extractComponent } from './extract-component'
+import { builtinComponents, type TComponentMap } from './builtin-components'
+import type { INativeInputProps } from './native'
 
-interface ZodV4FieldProps<T = string> {
-  name: string
-  fieldJsonSchema: TFieldJSONSchema
+type ZodV4FieldProps<T = string> = INativeInputProps<T> & {
   components: TComponentMap
-  value?: T
-  error?: string
   isRequired?: boolean
-  updateField: (name: string, value: T) => void
+  name: string
+  updateField: (name: string, value: string) => void
 }
 
 export function ZodV4Field({
@@ -24,9 +19,9 @@ export function ZodV4Field({
   updateField,
 }: ZodV4FieldProps) {
   // 根据类型渲染对应的组件
-  const { component: FieldComponent, props } = extractComponent({
+  const FieldComponent = extractComponent({
     fieldJsonSchema,
-    components,
+    components: Object.assign(builtinComponents, components),
   })
 
   if (!FieldComponent) return null
@@ -49,7 +44,7 @@ export function ZodV4Field({
         value={value}
         error={error}
         onChange={(newValue) => updateField(name, newValue)}
-        {...props}
+        fieldJsonSchema={fieldJsonSchema}
       />
 
       {error && <p className='mt-1 text-sm text-red-600'>{error}</p>}

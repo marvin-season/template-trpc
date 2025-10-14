@@ -8,8 +8,8 @@ import {
   NativeSubmitButton,
   type TFieldJSONSchema,
 } from './native'
-import { type TComponentMap } from './extract-component'
-import { ZodV4Field } from '@/app/_components/ZodV4Form/ZodV4Field'
+import { type TComponentMap } from './builtin-components'
+import { ZodV4Field } from './ZodV4Field'
 
 type ZodSchema = z.ZodTypeAny
 

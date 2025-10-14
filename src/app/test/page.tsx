@@ -4,26 +4,10 @@ import React from 'react'
 import { z } from 'zod/v4'
 import ZodV4Form from '@/app/_components/ZodV4Form'
 import { Input } from '@/components/ui/input'
-import { type TComponentMap } from '@/app/_components/ZodV4Form/extract-component'
-import {
-  NativeCheckbox,
-  NativeSelect,
-} from '@/app/_components/ZodV4Form/native'
+import { defineComponents } from '@/app/_components/ZodV4Form/builtin-components'
 
 // 全局组件映射
-const customComponents: TComponentMap = {
-  // 类型级别的映射
-  string: (props: any) => (
-    <Input
-      value={props.value}
-      onChange={(e) => props.onChange?.(e.target.value)}
-    />
-  ),
-  select: (props) => {
-    const { fieldJsonSchema, ...restProps } = props
-    return <NativeSelect {...restProps} options={fieldJsonSchema.enum} />
-  },
-  checkbox: NativeCheckbox,
+const customComponents = defineComponents({
   multiCheckbox: (props) => {
     const { value, onChange, fieldJsonSchema } = props
     return fieldJsonSchema.items.enum?.map((option: string) => (
@@ -49,7 +33,7 @@ const customComponents: TComponentMap = {
   },
 
   // 字段级别的自定义组件（通过 meta.component 指定）
-  fancyInput: (props: any) => (
+  fancyInput: (props) => (
     <div className='relative'>
       <Input
         {...props}
@@ -61,7 +45,7 @@ const customComponents: TComponentMap = {
       </span>
     </div>
   ),
-}
+})
 
 // 演示各种默认值的 schema
 const demoSchema = z.object({

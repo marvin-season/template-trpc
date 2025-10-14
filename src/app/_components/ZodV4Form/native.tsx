@@ -1,7 +1,5 @@
 import type { FC, InputHTMLAttributes } from 'react'
 
-export type TInputType = 'string' | 'number' | 'checkbox' | 'radio' | 'select'
-
 export type TFieldJSONSchema = {
   component?: string
   placeholder?: string
@@ -10,9 +8,9 @@ export type TFieldJSONSchema = {
   [key: string]: any
 }
 
-export type INativeInputProps<T = any> = Omit<
+export type INativeInputProps<T> = Pick<
   InputHTMLAttributes<HTMLInputElement>,
-  'value' | 'onChange'
+  'name' | 'placeholder' | 'disabled' | 'required' | 'className'
 > & {
   onChange?: (value: T) => void
   readonly value?: T
@@ -20,6 +18,8 @@ export type INativeInputProps<T = any> = Omit<
   options?: T[]
   fieldJsonSchema?: any
 }
+
+export type NativeComponent<T> = React.ComponentType<INativeInputProps<T>>
 // ============ 默认组件 ============
 
 export const NativeInput: FC<INativeInputProps<string>> = ({
