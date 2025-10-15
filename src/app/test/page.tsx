@@ -2,7 +2,7 @@
 
 import React from 'react'
 import { z } from 'zod/v4'
-import { ZodV4Form, defineComponents } from '@/app/_components/ZodV4Form'
+import { ZodV4Form, defineComponents } from 'zodv4-form'
 import { Slider } from 'antd'
 
 // 全局组件映射
