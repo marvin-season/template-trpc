@@ -3,7 +3,7 @@ import { type TComponentMap } from './builtin-components'
 import type { INativeInputProps } from './native'
 import { cn } from '@/lib/utils'
 
-type ZodV4FieldProps<T = string> = INativeInputProps<T> & {
+export type ZodV4FieldProps<T = string> = INativeInputProps<T> & {
   components: TComponentMap
   isRequired?: boolean
   name: string

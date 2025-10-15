@@ -2,7 +2,7 @@
 
 import React from 'react'
 import { z } from 'zod/v4'
-import { ZodV4Form, defineComponents } from 'zodv4-form'
+import { ZodV4Form, defineComponents } from '@/app/_components/ZodV4Form'
 import { Slider } from 'antd'
 
 // 全局组件映射
@@ -52,6 +52,9 @@ export default function Page() {
           schema={demoSchema}
           onSubmit={handleDemoSubmit}
           components={customComponents}
+          renderFields={(props) => {
+            return <div>{props.name}</div>
+          }}
         />
       </div>
     </div>
