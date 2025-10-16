@@ -13,7 +13,15 @@ export function Confetti({ active }: ConfettiProps) {
   useEffect(() => {
     if (!active || !containerRef.current) return
 
-    const colors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#FFA07A', '#98D8C8', '#F7DC6F', '#BB8FCE']
+    const colors = [
+      '#FF6B6B',
+      '#4ECDC4',
+      '#45B7D1',
+      '#FFA07A',
+      '#98D8C8',
+      '#F7DC6F',
+      '#BB8FCE',
+    ]
     const confettiCount = 50
 
     // 清空容器
@@ -23,13 +31,14 @@ export function Confetti({ active }: ConfettiProps) {
     for (let i = 0; i < confettiCount; i++) {
       const confetti = document.createElement('div')
       confetti.className = 'absolute w-2 h-2 rounded-full'
-      confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)]
+      confetti.style.backgroundColor =
+        colors[Math.floor(Math.random() * colors.length)]!
       confetti.style.left = '50%'
       confetti.style.top = '50%'
       containerRef.current.appendChild(confetti)
 
       // 随机动画参数
-      const angle = (Math.random() * 360) * (Math.PI / 180)
+      const angle = Math.random() * 360 * (Math.PI / 180)
       const distance = 200 + Math.random() * 300
       const x = Math.cos(angle) * distance
       const y = Math.sin(angle) * distance
@@ -50,9 +59,8 @@ export function Confetti({ active }: ConfettiProps) {
   return (
     <div
       ref={containerRef}
-      className="pointer-events-none absolute inset-0 overflow-hidden"
+      className='pointer-events-none absolute inset-0 overflow-hidden'
       style={{ zIndex: 100 }}
     />
   )
 }
-
