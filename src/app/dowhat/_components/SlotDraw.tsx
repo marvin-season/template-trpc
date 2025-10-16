@@ -132,7 +132,11 @@ export function SlotDraw({
 
   return (
     <div
-      className={`relative flex h-full flex-col items-center justify-center p-8`}
+      className={`
+        relative flex h-full flex-col items-center justify-center p-4
+        sm:p-6
+        md:p-8
+      `}
     >
       <Confetti active={showConfetti} />
 
@@ -141,25 +145,56 @@ export function SlotDraw({
         <div
           className={`
             absolute inset-0 z-10 flex items-center justify-center
-            bg-background/80 backdrop-blur-sm
+            bg-background/95 backdrop-blur-md
           `}
         >
           <div
             className={`
-              mx-4 max-w-md rounded-2xl bg-card p-8 text-center shadow-2xl
+              mx-4 max-w-sm rounded-2xl border-2 border-primary bg-card p-6
+              text-center shadow-2xl
+              sm:max-w-md sm:p-8
             `}
           >
             <Sparkles
-              className={`mx-auto mb-4 h-16 w-16 animate-pulse text-primary`}
+              className={`
+                mx-auto mb-3 h-12 w-12 animate-pulse text-primary
+                sm:mb-4 sm:h-16 sm:w-16
+              `}
             />
-            <h2 className='mb-2 text-2xl font-bold'>抽中了！</h2>
-            <p className='mb-6 text-4xl font-bold text-primary'>
+            <h2
+              className={`
+                mb-2 text-xl font-bold
+                sm:text-2xl
+              `}
+            >
+              🎉 太棒了！
+            </h2>
+            <p
+              className={`
+                mb-1 text-xs text-muted-foreground
+                sm:text-sm
+              `}
+            >
+              你抽到了
+            </p>
+            <p
+              className={`
+                mb-4 px-2 text-2xl font-bold break-words text-primary
+                sm:mb-6 sm:text-4xl
+              `}
+            >
               {selectedOption}
             </p>
             <div className='flex gap-2'>
-              <Button onClick={handleResetSlot} className='flex-1'>
+              <Button
+                onClick={handleResetSlot}
+                className={`
+                  h-11 flex-1
+                  sm:h-12
+                `}
+              >
                 <RotateCw className='mr-2 h-4 w-4' />
-                再来一次
+                再抽一次
               </Button>
             </div>
           </div>
@@ -167,30 +202,47 @@ export function SlotDraw({
       )}
 
       {/* Slot Machine */}
-      <div className='relative'>
-        <div className='flex gap-4'>
+      <div
+        className={`
+          relative scale-75
+          sm:scale-90
+          md:scale-100
+        `}
+      >
+        <div
+          className={`
+            flex gap-2
+            sm:gap-3
+            md:gap-4
+          `}
+        >
           {[slot1Ref, slot2Ref, slot3Ref].map((ref, slotIndex) => (
             <div key={slotIndex} className='relative'>
               {/* Frame */}
               <div
                 className={`
-                  pointer-events-none absolute inset-0 z-10 rounded-2xl border-4
+                  pointer-events-none absolute inset-0 z-10 rounded-xl border-3
                   border-foreground shadow-2xl
+                  sm:rounded-2xl sm:border-4
                 `}
               />
 
               {/* Window */}
               <div
                 className={`
-                  h-[360px] w-[200px] overflow-hidden rounded-2xl bg-card
+                  h-[280px] w-[100px] overflow-hidden rounded-xl bg-card
                   shadow-inner
+                  sm:h-[330px] sm:w-[140px] sm:rounded-2xl
+                  md:h-[360px] md:w-[180px]
                 `}
               >
                 {/* Highlight indicator */}
                 <div
                   className={`
-                    pointer-events-none absolute top-[120px] right-0 left-0 z-20
-                    h-[120px] border-y-4 border-primary bg-primary/10
+                    pointer-events-none absolute top-[93px] right-0 left-0 z-20
+                    h-[93px] border-y-3 border-primary bg-primary/10
+                    sm:top-[110px] sm:h-[110px] sm:border-y-4
+                    md:top-[120px] md:h-[120px]
                   `}
                 />
 
@@ -200,15 +252,19 @@ export function SlotDraw({
                     <div
                       key={`${option.id}-${index}`}
                       className={`
-                        flex h-[120px] w-full items-center justify-center
-                        border-b bg-gradient-to-br p-4
+                        flex h-[93px] w-full items-center justify-center
+                        border-b bg-gradient-to-br p-2
+                        sm:h-[110px] sm:p-3
+                        md:h-[120px] md:p-4
                         ${COLORS[index % COLORS.length]}
                       `}
                     >
                       <span
                         className={`
-                          text-center text-lg font-bold break-words text-white
-                          drop-shadow-lg
+                          line-clamp-2 text-center text-xs font-bold break-words
+                          text-white drop-shadow-lg
+                          sm:text-base
+                          md:text-lg
                         `}
                       >
                         {option.name}
@@ -224,12 +280,22 @@ export function SlotDraw({
 
       {/* Spin Button */}
       {!selectedOption && (
-        <div className='mt-8'>
+        <div
+          className={`
+            mt-6
+            sm:mt-8
+          `}
+        >
           <Button
             size='lg'
             onClick={handleSpin}
             disabled={isSpinning}
-            className='h-16 px-12 text-lg'
+            className={`
+              h-12 px-8 text-base transition-transform
+              active:scale-95
+              sm:h-14 sm:px-10 sm:text-lg
+              md:h-16 md:px-12
+            `}
           >
             {isSpinning ? (
               <>
@@ -239,7 +305,7 @@ export function SlotDraw({
             ) : (
               <>
                 <Sparkles className='mr-2 h-5 w-5' />
-                开始抽取
+                🎰 开始抽取
               </>
             )}
           </Button>
