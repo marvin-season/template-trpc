@@ -1,16 +1,29 @@
 'use client'
 
 import { useDecisionStore } from './_store/useDecisionStore'
-import { PlusCircle, Dices, Clock, Trash2, Sparkles } from 'lucide-react'
-import { useState } from 'react'
+import {
+  PlusCircle,
+  Dices,
+  Clock,
+  Trash2,
+  Sparkles,
+  History,
+  TrendingUp,
+} from 'lucide-react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 
 export default function Page() {
-  const { themes, addTheme, deleteTheme } = useDecisionStore()
+  const { themes, addTheme, deleteTheme, initialize, history, loadSampleData } =
+    useDecisionStore()
   const [isCreating, setIsCreating] = useState(false)
   const [newThemeName, setNewThemeName] = useState('')
+
+  useEffect(() => {
+    initialize()
+  }, [initialize])
 
   const handleCreateTheme = () => {
     if (newThemeName.trim()) {
@@ -41,27 +54,66 @@ export default function Page() {
       {/* Header */}
       <div
         className={`
-          mb-6 text-center
-          sm:mb-8 sm:text-left
+          mb-6
+          sm:mb-8
         `}
       >
-        <h1
-          className={`
-            mb-2 bg-gradient-to-r from-primary to-purple-600 bg-clip-text
-            text-3xl font-bold text-transparent
-            sm:text-4xl
-          `}
-        >
-          🎲 DoWhat
-        </h1>
-        <p
-          className={`
-            text-sm text-muted-foreground
-            sm:text-base
-          `}
-        >
-          还在纠结吗？让命运为你做决定吧！✨
-        </p>
+        <div className='flex items-center justify-between gap-4'>
+          <div
+            className={`
+              flex-1 text-center
+              sm:text-left
+            `}
+          >
+            <h1
+              className={`
+                mb-2 bg-gradient-to-r from-primary to-purple-600 bg-clip-text
+                text-3xl font-bold text-transparent
+                sm:text-4xl
+              `}
+            >
+              🎲 DoWhat
+            </h1>
+            <p
+              className={`
+                text-sm text-muted-foreground
+                sm:text-base
+              `}
+            >
+              还在纠结吗？让命运为你做决定吧！✨
+            </p>
+          </div>
+          {history.length > 0 && (
+            <Link href='/dowhat/history'>
+              <Button
+                variant='outline'
+                size='sm'
+                className={`
+                  h-9 gap-2
+                  sm:h-10
+                `}
+              >
+                <History className='h-4 w-4' />
+                <span
+                  className={`
+                    hidden
+                    sm:inline
+                  `}
+                >
+                  历史
+                </span>
+                <span
+                  className={`
+                    rounded-full bg-primary px-1.5 py-0.5 text-xs
+                    text-primary-foreground
+                  `}
+                >
+                  {history.length}
+                </span>
+              </Button>
+            </Link>
+          )}
+        </div>
       </div>
 
       {/* Create Theme Card */}
@@ -173,9 +225,13 @@ export default function Page() {
           >
             还没有主题呢~
           </p>
-          <p className='text-sm text-muted-foreground/70'>
+          <p className='mb-4 text-sm text-muted-foreground/70'>
             点击上面的按钮，开始你的第一次随机决策吧！🎉
           </p>
+          <Button onClick={loadSampleData} variant='outline' className='gap-2'>
+            <Sparkles className='h-4 w-4' />
+            加载示例数据试试
+          </Button>
         </div>
       ) : (
         <div

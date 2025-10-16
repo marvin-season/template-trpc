@@ -39,6 +39,7 @@ export default function DrawPage() {
       themeId: theme.id,
       themeName: theme.name,
       optionName,
+      drawMode,
     })
   }
 

@@ -5,6 +5,11 @@ import type { DecisionTheme, DecisionOption, DecisionHistory } from '../_types'
 interface DecisionStore {
   themes: DecisionTheme[]
   history: DecisionHistory[]
+  isInitialized: boolean
+
+  // 初始化
+  initialize: () => void
+  loadSampleData: () => void
 
   // 主题操作
   addTheme: (
@@ -25,9 +30,17 @@ interface DecisionStore {
   reorderOptions: (themeId: string, options: DecisionOption[]) => void
 
   // 历史记录
-  addHistory: (history: Omit<DecisionHistory, 'id' | 'createdAt'>) => void
+  addHistory: (
+    history: Omit<
+      DecisionHistory,
+      'id' | 'createdAt' | 'year' | 'month' | 'day'
+    >,
+  ) => void
   clearHistory: () => void
+  clearThemeHistory: (themeId: string) => void
   getThemeHistory: (themeId: string) => DecisionHistory[]
+  getYearHistory: (year: number) => DecisionHistory[]
+  getMonthHistory: (year: number, month: number) => DecisionHistory[]
 }
 
 const generateId = () => Math.random().toString(36).substring(2, 11)
@@ -37,6 +50,42 @@ export const useDecisionStore = create<DecisionStore>()(
     (set, get) => ({
       themes: [],
       history: [],
+      isInitialized: false,
+
+      initialize: () => {
+        const state = get()
+        if (state.isInitialized) return
+
+        // 如果没有主题，添加示例模板
+        if (state.themes.length === 0) {
+          get().loadSampleData()
+        } else {
+          set({ isInitialized: true })
+        }
+      },
+
+      loadSampleData: () => {
+        // 动态导入模板避免循环依赖
+        import('../_data/templates').then(({ THEME_TEMPLATES }) => {
+          const now = Date.now()
+          const templates = THEME_TEMPLATES.slice(0, 2).map(
+            (template, index) => ({
+              ...template,
+              id: generateId(),
+              createdAt: now + index,
+              updatedAt: now + index,
+              options: template.options.map((opt) => ({
+                ...opt,
+                id: generateId(),
+              })),
+            }),
+          )
+          set((state) => ({
+            themes: [...state.themes, ...templates],
+            isInitialized: true,
+          }))
+        })
+      },
 
       addTheme: (theme) => {
         const id = generateId()
@@ -134,10 +183,14 @@ export const useDecisionStore = create<DecisionStore>()(
       },
 
       addHistory: (history) => {
+        const now = new Date()
         const newHistory: DecisionHistory = {
           ...history,
           id: generateId(),
           createdAt: Date.now(),
+          year: now.getFullYear(),
+          month: now.getMonth() + 1,
+          day: now.getDate(),
         }
         set((state) => ({
           history: [newHistory, ...state.history],
@@ -148,8 +201,22 @@ export const useDecisionStore = create<DecisionStore>()(
         set({ history: [] })
       },
 
+      clearThemeHistory: (themeId) => {
+        set((state) => ({
+          history: state.history.filter((h) => h.themeId !== themeId),
+        }))
+      },
+
       getThemeHistory: (themeId) => {
         return get().history.filter((h) => h.themeId === themeId)
+      },
+
+      getYearHistory: (year) => {
+        return get().history.filter((h) => h.year === year)
+      },
+
+      getMonthHistory: (year, month) => {
+        return get().history.filter((h) => h.year === year && h.month === month)
       },
     }),
     {

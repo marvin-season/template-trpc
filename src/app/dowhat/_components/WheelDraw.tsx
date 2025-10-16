@@ -14,22 +14,23 @@ interface WheelDrawProps {
   onReset: () => void
 }
 
+// 更鲜艳的颜色方案
 const COLORS = [
-  '#FF6B6B',
-  '#4ECDC4',
-  '#45B7D1',
-  '#FFA07A',
-  '#98D8C8',
-  '#F7DC6F',
-  '#BB8FCE',
-  '#85C1E2',
-  '#F8B739',
-  '#52B788',
-  '#FF8FB1',
-  '#A8DADC',
-  '#E76F51',
-  '#F4A261',
-  '#E9C46A',
+  '#FF3B5C', // 鲜艳红
+  '#00D9FF', // 亮青色
+  '#9D4EDD', // 鲜艳紫
+  '#FFD60A', // 明黄色
+  '#06FFA5', // 荧光绿
+  '#FF006E', // 洋红
+  '#3A86FF', // 亮蓝色
+  '#FB5607', // 橙红色
+  '#8338EC', // 鲜紫色
+  '#FFBE0B', // 金黄色
+  '#FF006E', // 玫红
+  '#06D6A0', // 青绿色
+  '#EF476F', // 珊瑚红
+  '#118AB2', // 深蓝
+  '#FFD166', // 浅黄
 ]
 
 export function WheelDraw({
@@ -172,21 +173,45 @@ export function WheelDraw({
         </div>
       )}
 
-      {/* Pointer */}
+      {/* Pointer - 3D效果 */}
       <div
         className={`
-          absolute top-4 left-1/2 z-20 -translate-x-1/2
+          absolute top-4 left-1/2 z-20 -translate-x-1/2 animate-bounce
           sm:top-6
           md:top-8
         `}
+        style={{ animationDuration: '3s' }}
       >
         <div className='relative'>
+          {/* 指针阴影 */}
+          <div
+            className={`
+              absolute -bottom-1 left-1/2 h-0 w-0 -translate-x-1/2
+              border-t-[30px] border-r-[15px] border-l-[15px] border-t-black/20
+              border-r-transparent border-l-transparent blur-sm
+              sm:border-t-[40px] sm:border-r-[20px] sm:border-l-[20px]
+            `}
+          />
+          {/* 主指针 */}
           <div
             className={`
               h-0 w-0 border-t-[30px] border-r-[15px] border-l-[15px]
-              border-t-primary border-r-transparent border-l-transparent
-              drop-shadow-lg
+              border-r-transparent border-l-transparent
               sm:border-t-[40px] sm:border-r-[20px] sm:border-l-[20px]
+            `}
+            style={{
+              borderTopColor: '#EF4444',
+              filter:
+                'drop-shadow(0 4px 6px rgba(239, 68, 68, 0.4)) drop-shadow(0 0 10px rgba(239, 68, 68, 0.3))',
+            }}
+          />
+          {/* 指针高光 */}
+          <div
+            className={`
+              absolute top-1 left-1/2 h-0 w-0 -translate-x-1/2 border-t-[12px]
+              border-r-[6px] border-l-[6px] border-t-white/40
+              border-r-transparent border-l-transparent
+              sm:border-t-[16px] sm:border-r-[8px] sm:border-l-[8px]
             `}
           />
         </div>
@@ -200,10 +225,35 @@ export function WheelDraw({
           md:scale-100
         `}
       >
+        {/* 外圈装饰 */}
+        <div
+          className={`
+            absolute inset-0 h-[296px] w-[296px] -translate-x-2 -translate-y-2
+            rounded-full bg-gradient-to-br from-yellow-400 via-amber-500
+            to-yellow-600 opacity-90 shadow-[0_0_30px_rgba(251,191,36,0.5)]
+            sm:h-[420px] sm:w-[420px]
+            md:h-[520px] md:w-[520px]
+          `}
+          style={{
+            filter: 'drop-shadow(0 0 20px rgba(251, 191, 36, 0.4))',
+          }}
+        />
+
+        {/* 中圈装饰 */}
+        <div
+          className={`
+            absolute inset-0 h-[288px] w-[288px] -translate-x-1 -translate-y-1
+            rounded-full bg-gradient-to-br from-yellow-300 to-amber-400
+            sm:h-[410px] sm:w-[410px]
+            md:h-[510px] md:w-[510px]
+          `}
+        />
+
+        {/* 主轮盘 */}
         <div
           ref={wheelRef}
           className={`
-            relative h-[280px] w-[280px] rounded-full shadow-2xl
+            relative h-[280px] w-[280px] rounded-full
             sm:h-[400px] sm:w-[400px]
             md:h-[500px] md:w-[500px]
           `}
@@ -219,8 +269,28 @@ export function WheelDraw({
                 })
                 .join(', ') +
               ')',
+            boxShadow:
+              '0 10px 40px rgba(0,0,0,0.3), inset 0 2px 10px rgba(255,255,255,0.3)',
           }}
         >
+          {/* 内圈白色分隔线 */}
+          {options.map((_, index) => {
+            const angle = index * anglePerOption
+            return (
+              <div
+                key={`divider-${index}`}
+                className='absolute top-1/2 left-1/2 origin-left'
+                style={{
+                  width: '50%',
+                  height: '2px',
+                  background:
+                    'linear-gradient(to right, rgba(255,255,255,0.6), transparent)',
+                  transform: `rotate(${angle}deg)`,
+                }}
+              />
+            )
+          })}
+
           {/* Option Labels */}
           {options.map((option, index) => {
             const angle = index * anglePerOption + anglePerOption / 2
@@ -240,9 +310,13 @@ export function WheelDraw({
                 <span
                   className={`
                     line-clamp-2 block text-[10px] font-bold break-words
-                    text-white drop-shadow-lg
+                    text-white
                     sm:text-xs
                   `}
+                  style={{
+                    textShadow:
+                      '0 2px 8px rgba(0,0,0,0.5), 0 0 3px rgba(0,0,0,0.8)',
+                  }}
                 >
                   {option.name}
                 </span>
@@ -250,15 +324,31 @@ export function WheelDraw({
             )
           })}
 
-          {/* Center Circle */}
+          {/* Center Circle with gradient */}
           <div
             className={`
               absolute top-1/2 left-1/2 h-12 w-12 -translate-x-1/2
-              -translate-y-1/2 rounded-full bg-white shadow-lg
+              -translate-y-1/2 rounded-full
               sm:h-16 sm:w-16
               md:h-20 md:w-20
             `}
-          />
+            style={{
+              background:
+                'linear-gradient(145deg, #ffffff 0%, #f0f0f0 50%, #e0e0e0 100%)',
+              boxShadow:
+                '0 4px 12px rgba(0,0,0,0.3), inset 0 2px 4px rgba(255,255,255,0.8)',
+            }}
+          >
+            {/* 中心图标 */}
+            <div
+              className={`
+                absolute inset-0 flex items-center justify-center text-2xl
+                sm:text-3xl
+              `}
+            >
+              🎯
+            </div>
+          </div>
         </div>
       </div>
 
