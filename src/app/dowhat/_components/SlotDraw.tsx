@@ -320,53 +320,121 @@ export function SlotDraw({
 
               <div
                 className={`
-                  relative mx-auto mb-6 max-w-xs rounded-2xl border-2
-                  border-primary/20 bg-gradient-to-br from-primary/10
-                  via-primary/5 to-transparent p-4 backdrop-blur-sm
+                  relative mx-auto mb-6 max-w-xs rounded-2xl p-4
+                  backdrop-blur-sm
                   sm:mb-8 sm:p-6
+                  ${
+                    isJackpot
+                      ? `
+                        border-4 border-yellow-400 bg-gradient-to-br
+                        from-yellow-400/20 via-amber-500/10 to-orange-500/20
+                      `
+                      : `
+                        border-2 border-primary/20 bg-gradient-to-br
+                        from-primary/10 via-primary/5 to-transparent
+                      `
+                  }
                 `}
                 style={{
                   animation:
                     'bounceIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.3s both',
+                  boxShadow: isJackpot
+                    ? '0 0 40px rgba(255, 215, 0, 0.6), inset 0 0 20px rgba(255, 215, 0, 0.2)'
+                    : 'none',
                 }}
               >
+                {isJackpot && (
+                  <div
+                    className={`
+                      absolute -top-3 left-1/2 -translate-x-1/2 rounded-full
+                      bg-gradient-to-r from-yellow-400 to-orange-500 px-4 py-1
+                      text-xs font-bold text-white shadow-lg
+                    `}
+                  >
+                    💎 JACKPOT 💎
+                  </div>
+                )}
+
                 <p
                   className={`
-                    text-3xl font-black break-words
-                    sm:text-5xl
+                    font-black break-words
+                    ${
+                      isJackpot
+                        ? `
+                          text-4xl
+                          sm:text-6xl
+                        `
+                        : `
+                          text-3xl
+                          sm:text-5xl
+                        `
+                    }
                   `}
                   style={{
-                    background:
-                      'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+                    background: isJackpot
+                      ? 'linear-gradient(135deg, #FFD700 0%, #FFA500 50%, #FF4500 100%)'
+                      : 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
                     WebkitBackgroundClip: 'text',
                     WebkitTextFillColor: 'transparent',
-                    textShadow: '0 2px 20px rgba(245, 87, 108, 0.3)',
+                    textShadow: isJackpot
+                      ? '0 0 30px rgba(255, 215, 0, 0.5)'
+                      : '0 2px 20px rgba(245, 87, 108, 0.3)',
+                    animation: isJackpot
+                      ? 'pulse 1s ease-in-out infinite'
+                      : 'none',
                   }}
                 >
                   {selectedOption}
                 </p>
+
+                {isJackpot && (
+                  <div className='mt-3 flex justify-center gap-1 text-2xl'>
+                    🔥🔥🔥
+                  </div>
+                )}
               </div>
 
               <div className='flex gap-3'>
                 <Button
                   onClick={handleResetSlot}
                   className={`
-                    h-12 flex-1 bg-gradient-to-r from-primary via-primary
-                    to-primary/90 text-base font-semibold shadow-lg
-                    transition-all duration-300
-                    hover:scale-105 hover:from-primary/90 hover:via-primary
-                    hover:to-primary hover:shadow-xl
+                    h-12 flex-1 text-base font-semibold shadow-lg transition-all
+                    duration-300
+                    hover:scale-105 hover:shadow-xl
                     active:scale-95
                     sm:h-14 sm:text-lg
+                    ${
+                      isJackpot
+                        ? `
+                          bg-gradient-to-r from-yellow-400 via-amber-500
+                          to-orange-500 text-white
+                          hover:from-yellow-500 hover:via-amber-600
+                          hover:to-orange-600
+                        `
+                        : `
+                          bg-gradient-to-r from-primary via-primary
+                          to-primary/90
+                          hover:from-primary/90 hover:via-primary
+                          hover:to-primary
+                        `
+                    }
                   `}
                   style={{
-                    boxShadow: '0 4px 20px rgba(139, 92, 246, 0.4)',
+                    boxShadow: isJackpot
+                      ? '0 4px 20px rgba(255, 215, 0, 0.5)'
+                      : '0 4px 20px rgba(139, 92, 246, 0.4)',
                   }}
                 >
                   <RotateCw className='mr-2 h-5 w-5' />
-                  再抽一次
+                  {isJackpot ? '🎰 再来挑战超级大奖' : '🎲 再抽一次'}
                 </Button>
               </div>
+
+              {isJackpot && (
+                <p className='mt-4 text-xs text-muted-foreground/60 italic'>
+                  💫 三个一致的概率极低，你真是太幸运了！
+                </p>
+              )}
             </div>
           </div>
         </div>

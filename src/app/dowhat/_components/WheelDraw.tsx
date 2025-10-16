@@ -112,62 +112,155 @@ export function WheelDraw({
     >
       <Confetti active={showConfetti} />
 
-      {/* Result Display */}
+      {/* Result Display - 升级版 */}
       {selectedOption && (
         <div
           className={`
             absolute inset-0 z-10 flex items-center justify-center
-            bg-background/95 backdrop-blur-md
+            bg-gradient-to-br from-background/98 via-primary/5 to-background/98
+            backdrop-blur-xl
           `}
+          style={{
+            animation: 'fadeIn 0.3s ease-out',
+          }}
         >
           <div
             className={`
-              mx-4 max-w-sm rounded-2xl border-2 border-primary bg-card p-6
-              text-center shadow-2xl
-              sm:max-w-md sm:p-8
+              relative mx-4 max-w-sm overflow-hidden rounded-3xl border-4
+              border-transparent bg-gradient-to-br from-card via-card to-card/95
+              p-8 text-center
+              sm:max-w-md sm:p-10
             `}
+            style={{
+              boxShadow:
+                '0 0 0 1px rgba(139, 92, 246, 0.1), 0 20px 60px rgba(0,0,0,0.3), 0 0 100px rgba(139, 92, 246, 0.2)',
+              animation: 'scaleIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)',
+            }}
           >
-            <Sparkles
-              className={`
-                mx-auto mb-3 h-12 w-12 animate-pulse text-primary
-                sm:mb-4 sm:h-16 sm:w-16
-              `}
+            {/* 背景装饰 */}
+            <div
+              className='absolute inset-0 opacity-10'
+              style={{
+                background:
+                  'radial-gradient(circle at 50% 50%, rgba(139, 92, 246, 0.3) 0%, transparent 70%)',
+              }}
             />
-            <h2
-              className={`
-                mb-2 text-xl font-bold
-                sm:text-2xl
-              `}
-            >
-              🎉 太棒了！
-            </h2>
-            <p
-              className={`
-                mb-1 text-xs text-muted-foreground
-                sm:text-sm
-              `}
-            >
-              你抽到了
-            </p>
-            <p
-              className={`
-                mb-4 px-2 text-2xl font-bold break-words text-primary
-                sm:mb-6 sm:text-4xl
-              `}
-            >
-              {selectedOption}
-            </p>
-            <div className='flex gap-2'>
-              <Button
-                onClick={handleResetWheel}
+
+            {/* 顶部星星装饰 */}
+            <div className='absolute top-4 left-1/2 flex -translate-x-1/2 gap-2'>
+              {[...Array(5)].map((_, i) => (
+                <span
+                  key={i}
+                  className={`
+                    text-xl text-yellow-400
+                    sm:text-2xl
+                  `}
+                  style={{
+                    animation: `twinkle ${1 + i * 0.2}s ease-in-out infinite`,
+                    animationDelay: `${i * 0.1}s`,
+                  }}
+                >
+                  ⭐
+                </span>
+              ))}
+            </div>
+
+            {/* 内容 */}
+            <div className='relative z-10 mt-8'>
+              <div
                 className={`
-                  h-11 flex-1
-                  sm:h-12
+                  mb-4 text-5xl
+                  sm:text-6xl
                 `}
               >
-                <RotateCw className='mr-2 h-4 w-4' />
-                再抽一次
-              </Button>
+                🎡
+              </div>
+
+              <Sparkles
+                className={`
+                  mx-auto mb-4 h-16 w-16 text-primary
+                  sm:h-20 sm:w-20
+                `}
+                style={{
+                  animation: 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                  filter: 'drop-shadow(0 0 20px rgba(139, 92, 246, 0.5))',
+                }}
+              />
+
+              <h2
+                className={`
+                  mb-3 text-2xl font-bold
+                  sm:text-3xl
+                `}
+                style={{
+                  background:
+                    'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  animation: 'slideDown 0.6s ease-out',
+                }}
+              >
+                🎊 命运的指引！
+              </h2>
+
+              <p
+                className={`
+                  mb-2 text-sm text-muted-foreground/80
+                  sm:text-base
+                `}
+              >
+                幸运转盘为你选择了
+              </p>
+
+              <div
+                className={`
+                  relative mx-auto mb-6 max-w-xs rounded-2xl border-2
+                  border-primary/20 bg-gradient-to-br from-primary/10
+                  via-primary/5 to-transparent p-4 backdrop-blur-sm
+                  sm:mb-8 sm:p-6
+                `}
+                style={{
+                  animation:
+                    'bounceIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.3s both',
+                }}
+              >
+                <p
+                  className={`
+                    text-3xl font-black break-words
+                    sm:text-5xl
+                  `}
+                  style={{
+                    background:
+                      'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+                    WebkitBackgroundClip: 'text',
+                    WebkitTextFillColor: 'transparent',
+                    textShadow: '0 2px 20px rgba(245, 87, 108, 0.3)',
+                  }}
+                >
+                  {selectedOption}
+                </p>
+              </div>
+
+              <div className='flex gap-3'>
+                <Button
+                  onClick={handleResetWheel}
+                  className={`
+                    h-12 flex-1 bg-gradient-to-r from-primary via-primary
+                    to-primary/90 text-base font-semibold shadow-lg
+                    transition-all duration-300
+                    hover:scale-105 hover:from-primary/90 hover:via-primary
+                    hover:to-primary hover:shadow-xl
+                    active:scale-95
+                    sm:h-14 sm:text-lg
+                  `}
+                  style={{
+                    boxShadow: '0 4px 20px rgba(139, 92, 246, 0.4)',
+                  }}
+                >
+                  <RotateCw className='mr-2 h-5 w-5' />
+                  🎡 再转一次
+                </Button>
+              </div>
             </div>
           </div>
         </div>
