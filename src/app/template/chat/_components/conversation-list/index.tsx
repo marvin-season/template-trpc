@@ -13,18 +13,16 @@ export default function ConversationList() {
     <div
       key={conversation.id}
       className={`
-        rounded-lg border border-gray-200 px-4 py-2 whitespace-nowrap
-        hover:cursor-pointer hover:bg-slate-50 group
-        flex justify-between items-center
+        group flex items-center justify-between rounded-lg border
+        border-gray-200 px-4 py-2 whitespace-nowrap
+        hover:cursor-pointer hover:bg-slate-50
         ${conversationId === conversation.id ? 'bg-slate-50' : ''}
       `}
     >
-      <div className='mask-r-from-70% overflow-x-hidden flex-1'>
+      <div className='flex-1 overflow-x-hidden mask-r-from-70%'>
         <Link
           href={`/template/chat/${conversation.id}`}
-          className={`
-            text-sm text-gray-500
-          `}
+          className={`text-sm text-gray-500`}
         >
           {conversation.title}
         </Link>

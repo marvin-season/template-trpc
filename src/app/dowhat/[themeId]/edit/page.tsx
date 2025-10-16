@@ -302,31 +302,31 @@ export default function EditPage() {
         {theme.options.length === 0 ? (
           <div
             className={`
-            px-4 py-12 text-center
-            sm:py-16
-          `}
+              px-4 py-12 text-center
+              sm:py-16
+            `}
           >
             <div
               className={`
-              mb-4 text-5xl
-              sm:text-6xl
-            `}
+                mb-4 text-5xl
+                sm:text-6xl
+              `}
             >
               🎲
             </div>
             <p
               className={`
-              mb-2 text-sm text-muted-foreground
-              sm:text-base
-            `}
+                mb-2 text-sm text-muted-foreground
+                sm:text-base
+              `}
             >
               还没有选项呢~
             </p>
             <p
               className={`
-              text-xs text-muted-foreground/70
-              sm:text-sm
-            `}
+                text-xs text-muted-foreground/70
+                sm:text-sm
+              `}
             >
               快来添加一些有趣的选项吧！至少需要 2 个才能开始抽取哦 🎉
             </p>
@@ -334,9 +334,9 @@ export default function EditPage() {
         ) : (
           <div
             className={`
-            space-y-2
-            sm:space-y-2.5
-          `}
+              space-y-2
+              sm:space-y-2.5
+            `}
           >
             {theme.options.map((option, index) => (
               <div
@@ -361,9 +361,10 @@ export default function EditPage() {
 
                   <span
                     className={`
-                    w-6 flex-shrink-0 text-xs font-medium text-muted-foreground
-                    sm:text-sm
-                  `}
+                      w-6 flex-shrink-0 text-xs font-medium
+                      text-muted-foreground
+                      sm:text-sm
+                    `}
                   >
                     {index + 1}.
                   </span>
@@ -398,9 +399,9 @@ export default function EditPage() {
                     >
                       <span
                         className={`
-                        text-sm font-medium break-words
-                        sm:text-base
-                      `}
+                          text-sm font-medium break-words
+                          sm:text-base
+                        `}
                       >
                         {option.name}
                       </span>

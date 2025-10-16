@@ -5,9 +5,9 @@ export default function AppleNotFound() {
   return (
     <div
       className={`
-      flex min-h-screen items-center justify-center bg-gradient-to-br
-      from-gray-50 to-slate-100
-    `}
+        flex min-h-screen items-center justify-center bg-gradient-to-br
+        from-gray-50 to-slate-100
+      `}
     >
       <div className='text-center'>
         <div className='mb-8'>
@@ -22,9 +22,9 @@ export default function AppleNotFound() {
         <div className='space-y-6'>
           <div
             className={`
-            flex flex-col justify-center gap-4
-            sm:flex-row
-          `}
+              flex flex-col justify-center gap-4
+              sm:flex-row
+            `}
           >
             <Button
               asChild
@@ -49,9 +49,9 @@ export default function AppleNotFound() {
 
           <div
             className={`
-            mx-auto max-w-md rounded-lg border border-slate-200 bg-white p-6
-            shadow-sm
-          `}
+              mx-auto max-w-md rounded-lg border border-slate-200 bg-white p-6
+              shadow-sm
+            `}
           >
             <h3 className='mb-3 text-lg font-semibold text-slate-800'>
               推荐功能

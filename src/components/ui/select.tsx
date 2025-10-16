@@ -163,9 +163,7 @@ function SelectItem({
       {...props}
     >
       <span
-        className={`
-        absolute right-2 flex size-3.5 items-center justify-center
-      `}
+        className={`absolute right-2 flex size-3.5 items-center justify-center`}
       >
         <SelectPrimitive.ItemIndicator>
           <CheckIcon className='size-4' />

@@ -33,7 +33,11 @@ export function ConversationOperator<
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
-        <span className='i-[solar--password-minimalistic-linear] shrink-0 opacity-0 group-hover:opacity-100 transition-all'></span>
+        <span className={`
+          i-[solar--password-minimalistic-linear] shrink-0 opacity-0
+          transition-all
+          group-hover:opacity-100
+        `}></span>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
         <DropdownMenuItem>

@@ -26,4 +26,3 @@ export interface DecisionHistory {
 }
 
 export type DrawMode = 'wheel' | 'slot' | 'card'
-

@@ -76,9 +76,15 @@ export default function DrawPage() {
               setDrawMode('wheel')
               setResult(null)
             }}
-            className='h-9 sm:h-10'
+            className={`
+              h-9
+              sm:h-10
+            `}
           >
-            <span className='hidden sm:inline'>🎡 轮盘</span>
+            <span className={`
+              hidden
+              sm:inline
+            `}>🎡 轮盘</span>
             <span className='sm:hidden'>🎡</span>
           </Button>
           <Button
@@ -88,9 +94,15 @@ export default function DrawPage() {
               setDrawMode('slot')
               setResult(null)
             }}
-            className='h-9 sm:h-10'
+            className={`
+              h-9
+              sm:h-10
+            `}
           >
-            <span className='hidden sm:inline'>🎰 滚动</span>
+            <span className={`
+              hidden
+              sm:inline
+            `}>🎰 滚动</span>
             <span className='sm:hidden'>🎰</span>
           </Button>
         </div>

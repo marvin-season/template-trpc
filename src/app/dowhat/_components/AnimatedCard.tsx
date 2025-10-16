@@ -9,7 +9,11 @@ interface AnimatedCardProps {
   className?: string
 }
 
-export function AnimatedCard({ children, delay = 0, className = '' }: AnimatedCardProps) {
+export function AnimatedCard({
+  children,
+  delay = 0,
+  className = '',
+}: AnimatedCardProps) {
   const cardRef = useRef<HTMLDivElement>(null)
   const [isVisible, setIsVisible] = useState(false)
 
@@ -33,12 +37,12 @@ export function AnimatedCard({ children, delay = 0, className = '' }: AnimatedCa
                 duration: 0.6,
                 delay,
                 ease: 'power3.out',
-              }
+              },
             )
           }
         })
       },
-      { threshold: 0.1 }
+      { threshold: 0.1 },
     )
 
     if (cardRef.current) {
@@ -54,4 +58,3 @@ export function AnimatedCard({ children, delay = 0, className = '' }: AnimatedCa
     </div>
   )
 }
-
