@@ -23,4 +23,4 @@ const config = {
   },
 }
 
-export default withSerwist(config)
+export default config
