@@ -22,11 +22,8 @@ export interface DecisionHistory {
   themeId: string
   themeName: string
   optionName: string
-  drawMode: DrawMode
   createdAt: number
   year?: number
   month?: number
   day?: number
 }
-
-export type DrawMode = 'wheel' | 'slot' | 'card'

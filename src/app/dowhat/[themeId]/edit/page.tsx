@@ -211,39 +211,54 @@ export default function EditPage() {
           <button
             onClick={() => setIsAddingOption(true)}
             className={`
-              group mb-4 flex w-full items-center justify-center gap-2
+              group mb-4 flex w-full items-center justify-center gap-3
               rounded-xl border-2 border-dashed p-4 transition-all
-              hover:border-primary hover:bg-accent
+              hover:border-primary hover:bg-accent/50
               active:scale-[0.98]
-              sm:justify-start sm:p-4
+              sm:justify-start
             `}
           >
-            <Plus
+            <div
               className={`
-                h-5 w-5 text-muted-foreground transition-colors
-                group-hover:text-primary
-              `}
-            />
-            <span
-              className={`
-                text-sm font-medium text-muted-foreground transition-colors
-                group-hover:text-primary
-                sm:text-base
+                flex h-10 w-10 items-center justify-center rounded-full
+                bg-primary/10 transition-colors
+                group-hover:bg-primary/20
               `}
             >
-              ➕ 添加选项
-            </span>
+              <Plus className='h-5 w-5 text-primary' />
+            </div>
+            <div className='flex-1 text-left'>
+              <p
+                className={`
+                  text-sm font-semibold text-foreground
+                  sm:text-base
+                `}
+              >
+                ➕ 添加选项
+              </p>
+              <p className='text-xs text-muted-foreground'>
+                单个或批量添加都可以
+              </p>
+            </div>
           </button>
         ) : (
-          <div className='mb-4 rounded-xl border-2 border-primary bg-accent p-4'>
-            <p
-              className={`
-                mb-2 text-xs text-muted-foreground
-                sm:text-sm
-              `}
-            >
-              💡 每行一个选项，支持批量添加哦~
-            </p>
+          <div
+            className={`
+              mb-4 rounded-xl border-2 border-primary bg-gradient-to-br
+              from-primary/5 via-primary/3 to-transparent p-4 shadow-sm
+            `}
+          >
+            <div className='mb-3 flex items-center gap-2'>
+              <Sparkles className='h-4 w-4 text-primary' />
+              <p
+                className={`
+                  text-xs font-medium text-muted-foreground
+                  sm:text-sm
+                `}
+              >
+                💡 提示：每行一个选项，支持批量添加哦~
+              </p>
+            </div>
             <textarea
               autoFocus
               placeholder='例如：&#10;🍜 火锅&#10;🌶️ 麻辣烫&#10;🥩 烤肉&#10;🍣 寿司'
@@ -275,11 +290,13 @@ export default function EditPage() {
                   }
                 }}
                 className={`
-                  h-10 flex-1
+                  h-10 flex-1 gap-2
                   sm:flex-none
                 `}
+                disabled={!newOptionName.trim()}
               >
-                ✨ 添加
+                <Sparkles className='h-4 w-4' />
+                添加
               </Button>
               <Button
                 variant='outline'

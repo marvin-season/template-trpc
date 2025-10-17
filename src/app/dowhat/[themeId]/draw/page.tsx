@@ -3,12 +3,10 @@
 import { useDecisionStore } from '../../_store/useDecisionStore'
 import { useParams, useRouter } from 'next/navigation'
 import { useState, useEffect } from 'react'
-import { ArrowLeft } from 'lucide-react'
+import { ArrowLeft, Sparkles } from 'lucide-react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { WheelDraw } from '../../_components/WheelDraw'
-import { SlotDraw } from '../../_components/SlotDraw'
-import type { DrawMode } from '../../_types'
 
 export default function DrawPage() {
   const params = useParams()
@@ -17,7 +15,6 @@ export default function DrawPage() {
   const { getTheme, addHistory } = useDecisionStore()
 
   const [theme, setTheme] = useState(getTheme(themeId))
-  const [drawMode, setDrawMode] = useState<DrawMode>('wheel')
   const [result, setResult] = useState<string | null>(null)
 
   useEffect(() => {
@@ -39,7 +36,6 @@ export default function DrawPage() {
       themeId: theme.id,
       themeName: theme.name,
       optionName,
-      drawMode,
     })
   }
 
@@ -52,81 +48,46 @@ export default function DrawPage() {
       {/* Header */}
       <div
         className={`
-          flex items-center gap-4 border-b bg-background/95 p-4 backdrop-blur
-          supports-[backdrop-filter]:bg-background/60
+          flex items-center gap-4 border-b bg-gradient-to-r from-primary/5
+          via-transparent to-primary/5 p-4 backdrop-blur
         `}
       >
         <Link href={`/dowhat/${themeId}/edit`}>
-          <Button variant='ghost' size='icon'>
+          <Button variant='ghost' size='icon' className='h-10 w-10'>
             <ArrowLeft className='h-5 w-5' />
           </Button>
         </Link>
         <div className='flex-1'>
-          <h1 className='text-xl font-bold'>{theme.name}</h1>
-          <p className='text-sm text-muted-foreground'>
-            {theme.options.length} 个选项
+          <div className='flex items-center gap-2'>
+            <h1
+              className={`
+                text-xl font-bold
+                sm:text-2xl
+              `}
+            >
+              {theme.name}
+            </h1>
+            <Sparkles className='h-5 w-5 text-primary' />
+          </div>
+          <p
+            className={`
+              text-xs text-muted-foreground
+              sm:text-sm
+            `}
+          >
+            🎲 {theme.options.length} 个选项 · 让命运来决定吧！
           </p>
-        </div>
-
-        {/* Mode Selector */}
-        <div className='flex gap-2'>
-          <Button
-            variant={drawMode === 'wheel' ? 'default' : 'outline'}
-            size='sm'
-            onClick={() => {
-              setDrawMode('wheel')
-              setResult(null)
-            }}
-            className={`
-              h-9
-              sm:h-10
-            `}
-          >
-            <span className={`
-              hidden
-              sm:inline
-            `}>🎡 轮盘</span>
-            <span className='sm:hidden'>🎡</span>
-          </Button>
-          <Button
-            variant={drawMode === 'slot' ? 'default' : 'outline'}
-            size='sm'
-            onClick={() => {
-              setDrawMode('slot')
-              setResult(null)
-            }}
-            className={`
-              h-9
-              sm:h-10
-            `}
-          >
-            <span className={`
-              hidden
-              sm:inline
-            `}>🎰 滚动</span>
-            <span className='sm:hidden'>🎰</span>
-          </Button>
         </div>
       </div>
 
       {/* Draw Area */}
       <div className='flex-1 overflow-hidden'>
-        {drawMode === 'wheel' && (
-          <WheelDraw
-            options={theme.options}
-            onComplete={handleDrawComplete}
-            result={result}
-            onReset={handleReset}
-          />
-        )}
-        {drawMode === 'slot' && (
-          <SlotDraw
-            options={theme.options}
-            onComplete={handleDrawComplete}
-            result={result}
-            onReset={handleReset}
-          />
-        )}
+        <WheelDraw
+          options={theme.options}
+          onComplete={handleDrawComplete}
+          result={result}
+          onReset={handleReset}
+        />
       </div>
     </div>
   )

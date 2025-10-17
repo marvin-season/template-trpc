@@ -18,12 +18,10 @@ export default function HistoryPage() {
 
     const optionCounts: Record<string, number> = {}
     const themeCounts: Record<string, number> = {}
-    const modeCounts: Record<string, number> = {}
 
     history.forEach((h) => {
       optionCounts[h.optionName] = (optionCounts[h.optionName] || 0) + 1
       themeCounts[h.themeName] = (themeCounts[h.themeName] || 0) + 1
-      modeCounts[h.drawMode] = (modeCounts[h.drawMode] || 0) + 1
     })
 
     const topOptions = Object.entries(optionCounts)
@@ -36,7 +34,6 @@ export default function HistoryPage() {
       totalCount: history.length,
       topOptions,
       themeCounts,
-      modeCounts,
     }
   }, [history])
 
@@ -58,17 +55,6 @@ export default function HistoryPage() {
   const handleClearHistory = () => {
     if (confirm('🗑️ 确定要清空所有历史记录吗？此操作无法撤销！')) {
       clearHistory()
-    }
-  }
-
-  const getModeIcon = (mode: string) => {
-    switch (mode) {
-      case 'wheel':
-        return '🎡'
-      case 'slot':
-        return '🎰'
-      default:
-        return '🎲'
     }
   }
 
@@ -164,45 +150,115 @@ export default function HistoryPage() {
           {/* 统计卡片 */}
           <div
             className={`
-              mb-6 grid grid-cols-1 gap-4
-              sm:grid-cols-2
-              lg:grid-cols-4
+              mb-6 grid grid-cols-2 gap-3
+              sm:gap-4
+              lg:grid-cols-3
             `}
           >
-            <div className='rounded-xl border bg-card p-4'>
+            <div
+              className={`
+                group rounded-xl border bg-gradient-to-br from-card to-primary/5
+                p-4 transition-all
+                hover:shadow-md
+              `}
+            >
               <div className='mb-2 flex items-center gap-2'>
-                <TrendingUp className='h-4 w-4 text-primary' />
-                <span className='text-sm text-muted-foreground'>
-                  总抽取次数
-                </span>
+                <div
+                  className={`
+                    flex h-8 w-8 items-center justify-center rounded-full
+                    bg-primary/10
+                  `}
+                >
+                  <TrendingUp className='h-4 w-4 text-primary' />
+                </div>
               </div>
-              <p className='text-2xl font-bold'>{stats.totalCount}</p>
-            </div>
-
-            <div className='rounded-xl border bg-card p-4'>
-              <div className='mb-2 flex items-center gap-2'>
-                <Calendar className='h-4 w-4 text-primary' />
-                <span className='text-sm text-muted-foreground'>记录年份</span>
-              </div>
-              <p className='text-2xl font-bold'>{stats.years.length}</p>
-            </div>
-
-            <div className='rounded-xl border bg-card p-4'>
-              <div className='mb-2 flex items-center gap-2'>
-                <span className='text-lg'>🎡</span>
-                <span className='text-sm text-muted-foreground'>轮盘次数</span>
-              </div>
-              <p className='text-2xl font-bold'>
-                {stats.modeCounts.wheel || 0}
+              <p
+                className={`
+                  text-2xl font-bold
+                  sm:text-3xl
+                `}
+              >
+                {stats.totalCount}
               </p>
+              <span
+                className={`
+                  text-xs text-muted-foreground
+                  sm:text-sm
+                `}
+              >
+                总抽取次数
+              </span>
             </div>
 
-            <div className='rounded-xl border bg-card p-4'>
+            <div
+              className={`
+                group rounded-xl border bg-gradient-to-br from-card
+                to-blue-500/5 p-4 transition-all
+                hover:shadow-md
+              `}
+            >
               <div className='mb-2 flex items-center gap-2'>
-                <span className='text-lg'>🎰</span>
-                <span className='text-sm text-muted-foreground'>滚动次数</span>
+                <div
+                  className={`
+                    flex h-8 w-8 items-center justify-center rounded-full
+                    bg-blue-500/10
+                  `}
+                >
+                  <Calendar className='h-4 w-4 text-blue-600' />
+                </div>
               </div>
-              <p className='text-2xl font-bold'>{stats.modeCounts.slot || 0}</p>
+              <p
+                className={`
+                  text-2xl font-bold
+                  sm:text-3xl
+                `}
+              >
+                {stats.years.length}
+              </p>
+              <span
+                className={`
+                  text-xs text-muted-foreground
+                  sm:text-sm
+                `}
+              >
+                记录年份
+              </span>
+            </div>
+
+            <div
+              className={`
+                group col-span-2 rounded-xl border bg-gradient-to-br from-card
+                to-purple-500/5 p-4 transition-all
+                hover:shadow-md
+                sm:col-span-1
+              `}
+            >
+              <div className='mb-2 flex items-center gap-2'>
+                <div
+                  className={`
+                    flex h-8 w-8 items-center justify-center rounded-full
+                    bg-purple-500/10
+                  `}
+                >
+                  <span className='text-xl'>🎡</span>
+                </div>
+              </div>
+              <p
+                className={`
+                  text-2xl font-bold
+                  sm:text-3xl
+                `}
+              >
+                {stats.totalCount}
+              </p>
+              <span
+                className={`
+                  text-xs text-muted-foreground
+                  sm:text-sm
+                `}
+              >
+                轮盘抽取
+              </span>
             </div>
           </div>
 
@@ -210,30 +266,55 @@ export default function HistoryPage() {
           {stats.topOptions.length > 0 && (
             <div
               className={`
-                mb-6 rounded-xl border bg-card p-4
+                mb-6 rounded-xl border bg-gradient-to-br from-card
+                to-orange-500/5 p-4 shadow-sm
                 sm:p-6
               `}
             >
-              <h2 className='mb-4 text-lg font-semibold'>🔥 最常抽中的选项</h2>
-              <div className='space-y-3'>
-                {stats.topOptions.map(([option, count], index) => (
-                  <div key={option} className='flex items-center gap-3'>
+              <div className='mb-4 flex items-center gap-2'>
+                <div
+                  className={`
+                    flex h-8 w-8 items-center justify-center rounded-full
+                    bg-orange-500/10
+                  `}
+                >
+                  <span className='text-xl'>🔥</span>
+                </div>
+                <h2 className='text-lg font-semibold'>最常抽中的选项</h2>
+              </div>
+              <div className='space-y-2.5'>
+                {stats.topOptions.map(([option, count], index) => {
+                  const medals = ['🥇', '🥈', '🥉']
+                  const colors = [
+                    'from-yellow-500/20 to-amber-500/10',
+                    'from-gray-400/20 to-slate-400/10',
+                    'from-orange-600/20 to-amber-600/10',
+                  ]
+                  return (
                     <div
+                      key={option}
                       className={`
-                        flex h-8 w-8 items-center justify-center rounded-full
-                        bg-primary/10 text-sm font-bold text-primary
+                        flex items-center gap-3 rounded-lg border
+                        bg-gradient-to-r p-3 transition-all
+                        hover:shadow-sm
+                        ${index < 3 ? colors[index] : `from-card to-muted/5`}
                       `}
                     >
-                      {index + 1}
+                      <div className='text-2xl'>{medals[index] || '🏅'}</div>
+                      <div className='min-w-0 flex-1'>
+                        <p className='truncate text-sm font-medium'>{option}</p>
+                      </div>
+                      <div
+                        className={`
+                          rounded-full bg-primary/10 px-3 py-1 text-xs font-bold
+                          text-primary
+                        `}
+                      >
+                        {count} 次
+                      </div>
                     </div>
-                    <div className='min-w-0 flex-1'>
-                      <p className='truncate text-sm font-medium'>{option}</p>
-                    </div>
-                    <div className='text-sm text-muted-foreground'>
-                      {count} 次
-                    </div>
-                  </div>
-                ))}
+                  )
+                })}
               </div>
             </div>
           )}
@@ -305,28 +386,37 @@ export default function HistoryPage() {
               <div
                 key={record.id}
                 className={`
-                  flex items-center gap-3 rounded-xl border bg-card p-4
+                  group flex items-center gap-3 rounded-xl border bg-card p-4
                   transition-all
-                  hover:shadow-md
+                  hover:border-primary hover:shadow-md
                 `}
               >
-                <div className='text-2xl'>{getModeIcon(record.drawMode)}</div>
+                <div
+                  className={`
+                    flex h-10 w-10 items-center justify-center rounded-full
+                    bg-gradient-to-br from-primary/20 to-purple-500/10 text-2xl
+                    transition-transform
+                    group-hover:scale-110
+                  `}
+                >
+                  🎡
+                </div>
                 <div className='min-w-0 flex-1'>
-                  <p className='truncate text-sm font-medium'>
+                  <p className='truncate text-sm font-semibold'>
                     {record.themeName}
                   </p>
                   <p className='truncate text-xs text-muted-foreground'>
                     抽中了：
-                    <span className='font-medium text-primary'>
+                    <span className='ml-1 font-medium text-primary'>
                       {record.optionName}
                     </span>
                   </p>
                 </div>
-                <div className='text-right'>
-                  <p className='text-xs text-muted-foreground'>
+                <div className='flex-shrink-0 text-right'>
+                  <p className='text-xs font-medium text-muted-foreground'>
                     {record.year}/{record.month}/{record.day}
                   </p>
-                  <p className='text-xs text-muted-foreground'>
+                  <p className='text-xs text-muted-foreground/60'>
                     {new Date(record.createdAt).toLocaleTimeString('zh-CN', {
                       hour: '2-digit',
                       minute: '2-digit',

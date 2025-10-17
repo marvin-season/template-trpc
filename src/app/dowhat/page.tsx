@@ -8,7 +8,8 @@ import {
   Trash2,
   Sparkles,
   History,
-  TrendingUp,
+  Zap,
+  Edit,
 } from 'lucide-react'
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
@@ -116,42 +117,112 @@ export default function Page() {
         </div>
       </div>
 
-      {/* Create Theme Card */}
-      <div className='mb-6'>
-        {!isCreating ? (
+      {/* Quick Actions */}
+      {!isCreating ? (
+        <div
+          className={`
+            mb-6 grid grid-cols-1 gap-3
+            sm:grid-cols-2
+          `}
+        >
           <button
             onClick={() => setIsCreating(true)}
             className={`
-              group flex w-full items-center justify-center gap-3 rounded-xl
-              border-2 border-dashed p-5 transition-all
-              hover:border-primary hover:bg-accent
+              group flex items-center justify-center gap-3 rounded-xl border-2
+              border-dashed p-5 transition-all
+              hover:border-primary hover:bg-accent/50
               active:scale-[0.98]
-              sm:justify-start sm:p-6
+              sm:justify-start
             `}
           >
-            <PlusCircle
+            <div
               className={`
-                h-7 w-7 text-muted-foreground transition-colors
-                group-hover:text-primary
-                sm:h-8 sm:w-8
-              `}
-            />
-            <span
-              className={`
-                text-base font-medium text-muted-foreground transition-colors
-                group-hover:text-primary
-                sm:text-lg
+                flex h-10 w-10 items-center justify-center rounded-full
+                bg-primary/10 transition-colors
+                group-hover:bg-primary/20
+                sm:h-11 sm:w-11
               `}
             >
-              ✨ 创建新的选择主题
-            </span>
+              <PlusCircle
+                className={`
+                  h-5 w-5 text-primary
+                  sm:h-6 sm:w-6
+                `}
+              />
+            </div>
+            <div className='flex-1 text-left'>
+              <p
+                className={`
+                  text-sm font-semibold text-foreground
+                  sm:text-base
+                `}
+              >
+                ✨ 创建新主题
+              </p>
+              <p className='text-xs text-muted-foreground'>
+                自定义你的选择列表
+              </p>
+            </div>
           </button>
-        ) : (
+
+          <Link href='/dowhat/templates' className='block'>
+            <button
+              className={`
+                group flex w-full items-center justify-center gap-3 rounded-xl
+                border-2 border-dashed p-5 transition-all
+                hover:border-purple-500 hover:bg-purple-50/50
+                active:scale-[0.98]
+                sm:justify-start
+                dark:hover:bg-purple-950/20
+              `}
+            >
+              <div
+                className={`
+                  flex h-10 w-10 items-center justify-center rounded-full
+                  bg-purple-500/10 transition-colors
+                  group-hover:bg-purple-500/20
+                  sm:h-11 sm:w-11
+                `}
+              >
+                <Sparkles
+                  className={`
+                    h-5 w-5 text-purple-600
+                    sm:h-6 sm:w-6
+                  `}
+                />
+              </div>
+              <div className='flex-1 text-left'>
+                <p
+                  className={`
+                    text-sm font-semibold text-foreground
+                    sm:text-base
+                  `}
+                >
+                  🎨 浏览模板
+                </p>
+                <p className='text-xs text-muted-foreground'>
+                  快速开始，5个精选模板
+                </p>
+              </div>
+            </button>
+          </Link>
+        </div>
+      ) : (
+        <div
+          className={`
+            mb-6 rounded-xl border-2 border-primary bg-gradient-to-br
+            from-primary/5 via-primary/3 to-transparent p-4 shadow-sm
+            sm:p-5
+          `}
+        >
+          <div className='mb-3 flex items-center gap-2'>
+            <Zap className='h-5 w-5 text-primary' />
+            <h3 className='text-sm font-semibold'>创建新主题</h3>
+          </div>
           <div
             className={`
-              flex flex-col gap-2 rounded-xl border-2 border-primary bg-accent
-              p-4
-              sm:flex-row sm:p-4
+              flex flex-col gap-2
+              sm:flex-row
             `}
           >
             <Input
@@ -172,11 +243,13 @@ export default function Page() {
               <Button
                 onClick={handleCreateTheme}
                 className={`
-                  h-11 flex-1
+                  h-11 flex-1 gap-2
                   sm:flex-none
                 `}
+                disabled={!newThemeName.trim()}
               >
-                ✨ 创建
+                <Sparkles className='h-4 w-4' />
+                创建
               </Button>
               <Button
                 variant='outline'
@@ -193,8 +266,8 @@ export default function Page() {
               </Button>
             </div>
           </div>
-        )}
-      </div>
+        </div>
+      )}
 
       {/* Theme List */}
       {themes.length === 0 ? (
@@ -242,15 +315,12 @@ export default function Page() {
           `}
         >
           {themes.map((theme) => (
-            <Link
+            <div
               key={theme.id}
-              href={`/dowhat/${theme.id}/edit`}
               className={`
-                group relative overflow-hidden rounded-xl border bg-card p-5
+                group relative overflow-hidden rounded-xl border bg-card
                 shadow-sm transition-all
                 hover:border-primary hover:shadow-lg
-                active:scale-[0.98]
-                sm:p-6
               `}
             >
               {/* Delete Button */}
@@ -262,79 +332,106 @@ export default function Page() {
                   group-hover:opacity-100
                   hover:bg-destructive hover:text-white
                   active:scale-90
-                  sm:opacity-0
-                  md:opacity-0
                 `}
                 aria-label='删除主题'
               >
                 <Trash2 className='h-4 w-4' />
               </button>
 
-              {/* Theme Content */}
-              <div className='mb-4 pr-8'>
-                <h3
-                  className={`
-                    mb-2 line-clamp-2 text-lg font-semibold
-                    sm:text-xl
-                  `}
-                >
-                  {theme.name}
-                </h3>
-                {theme.description && (
-                  <p className='line-clamp-2 text-sm text-muted-foreground'>
-                    {theme.description}
-                  </p>
-                )}
-              </div>
-
-              {/* Stats */}
+              {/* 主题图标装饰 */}
               <div
                 className={`
-                  flex flex-wrap items-center gap-3 text-xs
-                  text-muted-foreground
-                  sm:gap-4 sm:text-sm
+                  absolute -top-8 -right-8 h-32 w-32 rounded-full
+                  bg-gradient-to-br from-primary/10 to-transparent opacity-50
+                  transition-transform
+                  group-hover:scale-110
+                `}
+              />
+
+              {/* Theme Content */}
+              <div
+                className={`
+                  relative p-5
+                  sm:p-6
                 `}
               >
-                <div className='flex items-center gap-1.5'>
-                  <Dices className='h-4 w-4 flex-shrink-0' />
-                  <span>{theme.options.length} 个选项</span>
+                <div className='mb-4'>
+                  <h3
+                    className={`
+                      mb-2 line-clamp-2 text-lg font-semibold
+                      sm:text-xl
+                    `}
+                  >
+                    {theme.name}
+                  </h3>
+                  {theme.description && (
+                    <p className='line-clamp-2 text-sm text-muted-foreground'>
+                      {theme.description}
+                    </p>
+                  )}
                 </div>
-                <div className='flex items-center gap-1.5'>
-                  <Clock className='h-4 w-4 flex-shrink-0' />
-                  <span className='truncate'>
-                    {new Date(theme.updatedAt).toLocaleDateString('zh-CN', {
-                      month: '2-digit',
-                      day: '2-digit',
-                    })}
-                  </span>
+
+                {/* Stats */}
+                <div
+                  className={`
+                    mb-4 flex flex-wrap items-center gap-3 text-xs
+                    text-muted-foreground
+                    sm:gap-4 sm:text-sm
+                  `}
+                >
+                  <div className='flex items-center gap-1.5'>
+                    <Dices className='h-4 w-4 flex-shrink-0' />
+                    <span>{theme.options.length} 个选项</span>
+                  </div>
+                  <div className='flex items-center gap-1.5'>
+                    <Clock className='h-4 w-4 flex-shrink-0' />
+                    <span className='truncate'>
+                      {new Date(theme.updatedAt).toLocaleDateString('zh-CN', {
+                        month: '2-digit',
+                        day: '2-digit',
+                      })}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Action Buttons */}
+                <div className='flex gap-2'>
+                  {theme.options.length >= 2 ? (
+                    <>
+                      <Link
+                        href={`/dowhat/${theme.id}/draw`}
+                        className='flex-1'
+                      >
+                        <Button className='h-10 w-full gap-2' size='sm'>
+                          <Zap className='h-4 w-4' />
+                          开始抽取
+                        </Button>
+                      </Link>
+                      <Link href={`/dowhat/${theme.id}/edit`}>
+                        <Button
+                          className='h-10 w-10'
+                          size='sm'
+                          variant='outline'
+                        >
+                          <Edit className='h-4 w-4' />
+                        </Button>
+                      </Link>
+                    </>
+                  ) : (
+                    <Link href={`/dowhat/${theme.id}/edit`} className='flex-1'>
+                      <Button
+                        className='h-10 w-full gap-2'
+                        size='sm'
+                        variant='outline'
+                      >
+                        <Edit className='h-4 w-4' />
+                        添加选项 (至少需要 2 个)
+                      </Button>
+                    </Link>
+                  )}
                 </div>
               </div>
-
-              {/* Start Button */}
-              {theme.options.length >= 2 ? (
-                <Link
-                  href={`/dowhat/${theme.id}/draw`}
-                  onClick={(e) => e.stopPropagation()}
-                  className='mt-4 block'
-                >
-                  <Button className='h-10 w-full' size='sm'>
-                    <Sparkles className='mr-1.5 h-4 w-4' />
-                    开始抽取
-                  </Button>
-                </Link>
-              ) : (
-                <div className='mt-4'>
-                  <Button
-                    className='h-10 w-full'
-                    size='sm'
-                    variant='outline'
-                    disabled
-                  >
-                    至少需要 2 个选项
-                  </Button>
-                </div>
-              )}
-            </Link>
+            </div>
           ))}
         </div>
       )}
