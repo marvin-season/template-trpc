@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # stop pm2 service
-pm2 stop dowhat
+pm2 stop next-app
 
 # pull latest code
 git checkout release-dowhat && git pull
@@ -10,4 +10,4 @@ git checkout release-dowhat && git pull
 npm run build
 
 # start pm2 service
-pm2 stop dowhat && pm2 start npm --name "dowhat" -- run start
+pm2 start npm --name "next-app" -- run start
