@@ -1,5 +1,9 @@
-import { SiteNavigationCard } from './_components/SiteNavigationCard'
+import { ExampleForm } from '@/components/example-form'
 
 export default async function Home() {
-  return <>Hello World</>
+  return (
+    <>
+      <ExampleForm />
+    </>
+  )
 }
