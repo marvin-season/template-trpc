@@ -1,43 +1,32 @@
 'use client'
 
 import useFCMToken from '@/hooks/useFCMToken'
-import { onMessage } from 'firebase/messaging'
-import { messaging } from '@/utils/firebase'
 import { toast } from 'sonner'
-import { useEffect } from 'react'
 import { Button } from '@/components/ui'
+import NotificationPanel from './_components/NotificationPanel'
 
 export default function FCM() {
   const token = useFCMToken()
 
-  useEffect(() => {
-    const un = onMessage(messaging(), (payload) => {
-      const { notification } = payload
-      console.log('notification', notification)
-      toast.info(
-        <>
-          <div className='font-bold'>{payload.notification?.title}</div>
-          <div className='text-sm'>{payload.notification?.body}</div>
-        </>,
-      )
-    })
-
-    return () => {
-      un()
-    }
-  }, [])
-
   return (
-    <>
-      <Button
-        onClick={() => {
-          navigator.clipboard.writeText(token)
-          toast.success('copied')
-        }}
-      >
-        copy
-      </Button>
-      <code>{token}</code>
-    </>
+    <div className='flex flex-col gap-4'>
+      {/* Token 信息 */}
+      <div className='flex items-center gap-4 rounded-lg border p-4'>
+        <Button
+          onClick={() => {
+            navigator.clipboard.writeText(token)
+            toast.success('Token 已复制')
+          }}
+          variant='outline'
+          size='sm'
+        >
+          复制 Token
+        </Button>
+        <code className='text-xs break-all text-muted-foreground'>{token}</code>
+      </div>
+
+      {/* 通知面板 */}
+      <NotificationPanel />
+    </div>
   )
 }
