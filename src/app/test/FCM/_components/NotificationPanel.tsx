@@ -14,12 +14,18 @@ import { type EnhancedNotification } from '../_types'
 import useNotificationManager from '../_hooks/useNotificationManager'
 import NotificationItem from './NotificationItem'
 import EmptyState from './EmptyState'
+import BellBadge from './BellBadge'
 
 export default function NotificationPanel() {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
 
-  const { markAsRead, markAllAsRead, deleteAllNotifications, notifications } =
-    useNotificationManager()
+  const {
+    markAsRead,
+    markAllAsRead,
+    deleteAllNotifications,
+    notifications,
+    unreadCount,
+  } = useNotificationManager()
 
   // 处理通知项点击
   const handleNotificationClick = useCallback(
@@ -56,7 +62,10 @@ export default function NotificationPanel() {
     <div className='flex max-w-md flex-col rounded-lg border bg-background'>
       {/* 头部 */}
       <div className='flex flex-col border-b p-4'>
-        <h2 className='text-lg font-semibold'>通知中心</h2>
+        <div className='flex items-center justify-between'>
+          <h2 className='text-lg font-semibold'>通知中心</h2>
+          <BellBadge count={unreadCount} />
+        </div>
 
         {/* 批量操作按钮 */}
         <div className='mt-3 flex gap-2'>

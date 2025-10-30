@@ -1,4 +1,4 @@
-import { useEffect, useCallback } from 'react'
+import { useEffect, useCallback, useMemo } from 'react'
 import { useLocalStorageState } from 'ahooks'
 import { onMessage, type MessagePayload } from 'firebase/messaging'
 import { messaging } from '@/utils/firebase'
@@ -153,8 +153,14 @@ export default function useNotificationManager() {
     setNotifications([])
   }, [setNotifications])
 
+  const unreadCount = useMemo(() => {
+    return notifications.filter((notification) => !notification.meta.readAt)
+      .length
+  }, [notifications])
+
   return {
     notifications,
+    unreadCount,
     markAsRead,
     markAllAsRead,
     deleteNotification,
