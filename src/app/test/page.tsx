@@ -13,7 +13,7 @@ export default function Page() {
       <div className='mt-8 grid gap-4'>
         <h2 className='text-lg font-semibold'>Canvas Editor Demo</h2>
         <CanvasEditor
-          ref={editorRef}
+          editorRef={editorRef}
           src={'/dog.png'}
           viewportWidth={720}
           viewportHeight={480}
