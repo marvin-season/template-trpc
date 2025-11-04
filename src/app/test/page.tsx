@@ -1,10 +1,14 @@
-import TestPanel from './test-panel'
-
-export default function Test() {
+export default async function Test() {
+  const users = (await fetch('https://localhost:12345/api/user').then((res) =>
+    res.json(),
+  )) as any[]
   return (
     <div>
-      <h3>Notifications</h3>
-      <TestPanel />
+      <ul>
+        {users.map((user) => (
+          <li key={user.id}>{user.name}</li>
+        ))}
+      </ul>
     </div>
   )
 }
