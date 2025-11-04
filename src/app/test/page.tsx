@@ -1,14 +1,32 @@
-export default async function Test() {
-  const users = (await fetch('https://localhost:12345/api/user').then((res) =>
-    res.json(),
-  )) as any[]
+'use client'
+
+import { sleep } from '@/utils/common'
+import { Badge, Drawer } from 'antd'
+import dynamic from 'next/dynamic'
+import { useState } from 'react'
+const NotificationPanel = dynamic(
+  () => import('./FCM/_components/NotificationPanel'),
+  { ssr: false, loading: () => <div>Loading...</div> },
+)
+export default function Test() {
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false)
   return (
     <div>
-      <ul>
-        {users.map((user) => (
-          <li key={user.id}>{user.name}</li>
-        ))}
-      </ul>
+      <button onClick={() => setIsDrawerOpen(true)}>
+        <Badge size='small' count={0} overflowCount={99}>
+          OPEN
+        </Badge>
+      </button>
+
+      <Drawer
+        closable={false}
+        open={isDrawerOpen}
+        onClose={() => setIsDrawerOpen(false)}
+        placement={'left'}
+        width={400}
+      >
+        <NotificationPanel />
+      </Drawer>
     </div>
   )
 }
