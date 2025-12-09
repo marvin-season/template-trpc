@@ -14,28 +14,13 @@ const tabsVariants = cva('', {
       outline: styles.outline,
       primary: styles.primary,
     },
-    size: {
-      small: `
-        [&_.ant-tabs-tab]:!px-2 [&_.ant-tabs-tab]:!py-1
-        [&_.ant-tabs-tab-btn]:!text-sm
-      `,
-      default: `
-        [&_.ant-tabs-tab]:!px-3 [&_.ant-tabs-tab]:!py-1.5
-        [&_.ant-tabs-tab-btn]:!text-base
-      `,
-      large: `
-        [&_.ant-tabs-tab]:!px-4 [&_.ant-tabs-tab]:!py-2
-        [&_.ant-tabs-tab-btn]:!text-lg
-      `,
-    },
   },
   defaultVariants: {
     variant: 'default',
-    size: 'default',
   },
 })
 
-export interface TabsProps extends Omit<AntdTabsProps, 'className' | 'size'> {
+export interface TabsProps extends AntdTabsProps {
   className?: string
 
   /**
@@ -45,25 +30,19 @@ export interface TabsProps extends Omit<AntdTabsProps, 'className' | 'size'> {
   /**
    * 自定义标签页尺寸样式（不影响 antd 的 size 属性）
    */
-  size?: VariantProps<typeof tabsVariants>['size']
-
   /**
    * 是否显示指示器
    */
-  hideIndicator?: boolean
+  showIndicator?: boolean
 }
 
 const Tabs = React.forwardRef<TabsRef, TabsProps>(
-  ({ className, variant, size, hideIndicator = true, ...props }, ref) => {
+  ({ className, variant, showIndicator = false, ...props }, ref) => {
     return (
       <AntdTabs
         ref={ref}
-        className={cn(
-          hideIndicator && '[&_.ant-tabs-ink-bar]:!hidden',
-          styles.tabs,
-          tabsVariants({ variant, size }),
-          className,
-        )}
+        indicator={showIndicator ? undefined : { size: 0 }}
+        className={cn(styles.tabs, tabsVariants({ variant }), className)}
         {...props}
       />
     )
