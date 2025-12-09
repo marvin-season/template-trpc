@@ -1,7 +1,6 @@
 import '@/styles/globals.css'
 import React from 'react'
 import { type Metadata } from 'next'
-import { Geist } from 'next/font/google'
 import { SessionProvider } from 'next-auth/react'
 import { TRPCReactProvider } from '@/trpc/react'
 import { SiteSwitcher } from '@/app/_components/SiteSwitcher'
@@ -16,22 +15,12 @@ export const metadata: Metadata = {
   icons: [{ rel: 'icon', url: '/favicon.ico' }],
 }
 
-const geist = Geist({
-  subsets: ['latin'],
-  variable: '--font-geist-sans',
-})
-
 export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   const session = await auth()
   return (
-    <html
-      lang='en'
-      className={`
-        ${geist.variable}
-      `}
-    >
+    <html lang='en' className={``}>
       <body>
         <Toaster position='top-right' />
         <SiteSwitcher />
