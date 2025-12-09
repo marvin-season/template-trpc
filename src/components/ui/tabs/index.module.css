@@ -8,6 +8,12 @@
       display: none;
     }
   }
+  :global(.ant-tabs-tab) {
+    /* 第一个标签页 - 移除左边距 */
+    &:first-of-type {
+      margin-left: 0 !important;
+    }
+  }
 }
 
 .primary {
@@ -16,43 +22,17 @@
     margin-left: 0.375rem !important;
     border-radius: 6px !important;
 
-    /* 第一个标签页 - 移除左边距 */
-    &:first-of-type {
-      margin-left: 0 !important;
-    }
     &:hover {
       background-color: var(--f-bg-layout) !important;
-    }
-    :global(.ant-tabs-tab-btn) {
-      &:hover {
-        color: var(--f-text-primary) !important;
-      }
-    }
-
-    /* Tab 按钮样式 */
-    > :global(.ant-tabs-tab-btn) {
-      color: #333 !important;
-      font-size: 0.875rem;
-      line-height: 1.25rem;
     }
   }
 
   /* 激活状态 */
   :global(.ant-tabs-tab-active) {
+    font-weight: 600 !important;
     background-color: var(--f-bg-primary) !important;
-    > :global(.ant-tabs-tab-btn) {
-      color: #fff !important;
-    }
-
-    /* 激活状态的悬停效果 */
     &:hover {
       background-color: var(--f-bg-primary) !important;
-    }
-
-    :global(.ant-tabs-tab-btn) {
-      &:hover {
-        color: #fff !important;
-      }
     }
   }
 }
@@ -65,21 +45,8 @@
     border: 1px solid var(--f-border-secondary) !important;
     border-radius: 10px !important;
 
-    /* 第一个标签页 - 移除左边距 */
-    &:first-of-type {
-      margin-left: 0 !important;
-    }
-
-    /* 悬停状态 */
     &:hover {
       background-color: var(--f-bg-layout) !important;
-    }
-
-    /* Tab 按钮样式 */
-    > :global(.ant-tabs-tab-btn) {
-      color: #333 !important;
-      font-size: 0.875rem;
-      line-height: 1.25rem;
     }
   }
 
@@ -87,35 +54,5 @@
   :global(.ant-tabs-tab-active) {
     font-weight: 600 !important;
     background-color: var(--f-bg-layout) !important;
-  }
-}
-
-/* 弹出菜单样式 */
-.tabsPopup {
-  border-radius: 0.75rem;
-  overflow: hidden;
-  background-color: var(--f-bg-base);
-  border: 1px solid var(--f-border);
-  box-shadow: var(
-    --effects-xl,
-    0px 8px 24px rgba(0, 0, 0, 0.12)
-  ); /* fallback if tailwind utility unavailable */
-
-  :global([role='listbox']) {
-    padding: 0.375rem;
-    /* Tailwind 的 space-y-1 忽略，这里需由子元素自行加 margin */
-  }
-
-  :global([role='option']) {
-    border-radius: 0.5rem;
-    padding-top: 0.25rem;
-    padding-bottom: 0.25rem;
-    font-size: 0.875rem;
-    line-height: 1.25rem;
-    color: var(--f-text);
-
-    &:hover {
-      background-color: var(--f-bg-layout);
-    }
   }
 }

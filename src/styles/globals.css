@@ -61,6 +61,8 @@
 }
 
 :root {
+  --f-primary: #3a7eff;
+  --f-text-light: #ffffff;
   --f-bg-layout: #0000000a;
   --f-bg-hover: #00000008;
   --f-bg-active: #0000000d;

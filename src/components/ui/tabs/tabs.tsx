@@ -1,11 +1,11 @@
 'use client'
 
-import * as React from 'react'
 import { Tabs as AntdTabs, type TabsProps as AntdTabsProps } from 'antd'
-import { cva, type VariantProps } from 'class-variance-authority'
-import { cn } from '@/lib/utils'
-import type { TabsRef } from 'antd/es/tabs'
+import { type VariantProps, cva } from 'class-variance-authority'
+import { ConfigProvider } from 'antd'
+
 import styles from './index.module.css'
+import { cn } from '@/lib/utils'
 
 const tabsVariants = cva('', {
   variants: {
@@ -37,7 +37,6 @@ const tabsVariants = cva('', {
 
 export interface TabsProps extends Omit<AntdTabsProps, 'className' | 'size'> {
   className?: string
-
   /**
    * 自定义样式变体
    */
@@ -46,25 +45,55 @@ export interface TabsProps extends Omit<AntdTabsProps, 'className' | 'size'> {
    * 自定义标签页尺寸样式（不影响 antd 的 size 属性）
    */
   size?: VariantProps<typeof tabsVariants>['size']
-
   /**
    * 是否显示指示器
    */
   showIndicator?: boolean
 }
 
-const Tabs = React.forwardRef<TabsRef, TabsProps>(
-  ({ className, variant, size, showIndicator = false, ...props }, ref) => {
-    return (
+const themeMap = {
+  outline: {
+    itemSelectedColor: 'var(--f-foreground)',
+    itemHoverColor: 'var(--f-foreground)',
+    itemActiveColor: 'var(--f-text-light)',
+    itemColor: 'var(--f-secondary-foreground)',
+  },
+  default: {},
+  primary: {
+    itemSelectedColor: 'var(--f-text-light)',
+    itemHoverColor: 'var(--f-primary)',
+    itemActiveColor: 'var(--f-text-light)',
+    itemColor: 'var(--f-secondary-foreground)',
+  },
+}
+
+function Tabs({
+  className,
+  variant,
+  size,
+  showIndicator = false,
+  ...props
+}: TabsProps) {
+  return (
+    <ConfigProvider
+      theme={{
+        components: {
+          Tabs: themeMap[variant || 'default'],
+        },
+      }}
+    >
       <AntdTabs
-        ref={ref}
         indicator={showIndicator ? undefined : { size: 0 }}
-        className={cn(styles.tabs, tabsVariants({ variant, size }), className)}
+        className={cn(`
+          ${styles.tabs}
+          ${tabsVariants({ variant, size })}
+          ${className}
+        `)}
         {...props}
       />
-    )
-  },
-)
+    </ConfigProvider>
+  )
+}
 
 Tabs.displayName = 'Tabs'
 
