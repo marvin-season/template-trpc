@@ -1,4 +1,4 @@
-/* Tabs 样式 */
+/* Tabs 基础样式 */
 .tabs {
   /* 导航栏样式 */
   :global(.ant-tabs-nav) {
@@ -8,20 +8,61 @@
       display: none;
     }
   }
+}
 
-  /* 隐藏墨水条（指示器） */
-  :global(.ant-tabs-ink-bar) {
-    display: none;
-  }
-
+.primary {
   /* Tab 基础样式 */
   :global(.ant-tabs-tab) {
-    padding-left: 0.75rem !important;
-    padding-right: 0.75rem !important;
-    padding-top: 0.375rem !important;
-    padding-bottom: 0.375rem !important;
     margin-left: 0.375rem !important;
-    border: 1px solid #04f !important;
+    border-radius: 6px !important;
+
+    /* 第一个标签页 - 移除左边距 */
+    &:first-of-type {
+      margin-left: 0 !important;
+    }
+    &:hover {
+      background-color: #eee !important;
+    }
+    :global(.ant-tabs-tab-btn) {
+      &:hover {
+        color: #04f !important;
+      }
+    }
+
+    /* Tab 按钮样式 */
+    > :global(.ant-tabs-tab-btn) {
+      color: #333 !important;
+      font-size: 0.875rem;
+      line-height: 1.25rem;
+    }
+  }
+
+  /* 激活状态 */
+  :global(.ant-tabs-tab-active) {
+    background-color: #04f !important;
+    > :global(.ant-tabs-tab-btn) {
+      color: #fff !important;
+    }
+
+    /* 激活状态的悬停效果 */
+    &:hover {
+      background-color: #04f !important;
+    }
+
+    :global(.ant-tabs-tab-btn) {
+      &:hover {
+        color: #fff !important;
+      }
+    }
+  }
+}
+
+/* rounded-card 变体样式 */
+.outline {
+  /* Tab 基础样式 */
+  :global(.ant-tabs-tab) {
+    margin-left: 0.375rem !important;
+    border: 1px solid #333 !important;
     border-radius: 10px !important;
 
     /* 第一个标签页 - 移除左边距 */
@@ -36,7 +77,7 @@
 
     /* Tab 按钮样式 */
     > :global(.ant-tabs-tab-btn) {
-      color: #04f !important;
+      color: #333 !important;
       font-size: 0.875rem;
       line-height: 1.25rem;
     }

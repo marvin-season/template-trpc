@@ -1,45 +1,43 @@
 'use client'
 
 import * as React from 'react'
-import {
-  Tabs as AntdTabs,
-  ConfigProvider,
-  type TabsProps as AntdTabsProps,
-} from 'antd'
+import { Tabs as AntdTabs, type TabsProps as AntdTabsProps } from 'antd'
 import { cva, type VariantProps } from 'class-variance-authority'
 import { cn } from '@/lib/utils'
-import type { ThemeConfig } from 'antd'
 import type { TabsRef } from 'antd/es/tabs'
 import styles from './index.module.css'
 
 const tabsVariants = cva('', {
   variants: {
     variant: {
-      'default': '',
-      'rounded-card': `
-        ${styles.tabs}
-      `,
+      default: '',
+      outline: styles.outline,
+      primary: styles.primary,
     },
-    tabSize: {
+    size: {
       small: `
-        [&_.ant-tabs-tab]:!py-1.5
+        [&_.ant-tabs-tab]:!px-2 [&_.ant-tabs-tab]:!py-1
         [&_.ant-tabs-tab-btn]:!text-sm
       `,
-      large: `
-        [&_.ant-tabs-tab]:!py-3
+      default: `
+        [&_.ant-tabs-tab]:!px-3 [&_.ant-tabs-tab]:!py-1.5
         [&_.ant-tabs-tab-btn]:!text-base
+      `,
+      large: `
+        [&_.ant-tabs-tab]:!px-4 [&_.ant-tabs-tab]:!py-2
+        [&_.ant-tabs-tab-btn]:!text-lg
       `,
     },
   },
   defaultVariants: {
     variant: 'default',
+    size: 'default',
   },
 })
 
-export interface CustomTabsProps
-  extends Omit<AntdTabsProps, 'className' | 'style'> {
+export interface TabsProps extends Omit<AntdTabsProps, 'className' | 'size'> {
   className?: string
-  style?: React.CSSProperties
+
   /**
    * 自定义样式变体
    */
@@ -47,79 +45,31 @@ export interface CustomTabsProps
   /**
    * 自定义标签页尺寸样式（不影响 antd 的 size 属性）
    */
-  tabSize?: VariantProps<typeof tabsVariants>['tabSize']
+  size?: VariantProps<typeof tabsVariants>['size']
 
   /**
-   * 自定义主题配置，会与默认主题合并
+   * 是否显示指示器
    */
-  theme?: ThemeConfig
-  /**
-   * 是否使用自定义样式
-   */
-  useCustomStyles?: boolean
+  hideIndicator?: boolean
 }
 
-const CustomTabs = React.forwardRef<TabsRef, CustomTabsProps>(
-  (
-    {
-      className,
-      style,
-      variant,
-      tabSize,
-      theme,
-      useCustomStyles = true,
-      ...props
-    },
-    ref,
-  ) => {
-    // 默认主题配置
-    const defaultTheme: ThemeConfig = {
-      components: {
-        Tabs: {
-          itemActiveColor: 'var(--color-primary)',
-          itemHoverColor: 'var(--color-primary)',
-          itemSelectedColor: 'var(--color-primary)',
-          inkBarColor: 'var(--color-primary)',
-          cardBg: 'var(--color-card)',
-          cardGutter: 8,
-          horizontalMargin: '0 0 16px 0',
-          ...(theme?.components?.Tabs || {}),
-        },
-      },
-    }
-
-    // 合并用户提供的主题配置
-    const mergedTheme: ThemeConfig | undefined = useCustomStyles
-      ? {
-          ...defaultTheme,
-          ...theme,
-          components: {
-            ...defaultTheme.components,
-            ...theme?.components,
-            Tabs: {
-              ...defaultTheme.components?.Tabs,
-              ...theme?.components?.Tabs,
-            },
-          },
-        }
-      : theme
-
+const Tabs = React.forwardRef<TabsRef, TabsProps>(
+  ({ className, variant, size, hideIndicator = true, ...props }, ref) => {
     return (
-      <ConfigProvider theme={mergedTheme}>
-        <AntdTabs
-          ref={ref}
-          className={cn(tabsVariants({ variant, tabSize }), className)}
-          style={style}
-          {...props}
-        />
-      </ConfigProvider>
+      <AntdTabs
+        ref={ref}
+        className={cn(
+          hideIndicator && '[&_.ant-tabs-ink-bar]:!hidden',
+          styles.tabs,
+          tabsVariants({ variant, size }),
+          className,
+        )}
+        {...props}
+      />
     )
   },
 )
 
-CustomTabs.displayName = 'CustomTabs'
+Tabs.displayName = 'Tabs'
 
-// 导出 TabPane 类型（antd 5.x 中已废弃，但为了兼容性保留）
-export const TabPane = AntdTabs.TabPane
-
-export { CustomTabs, CustomTabs as Tabs }
+export { Tabs }
