@@ -17,15 +17,15 @@ const tabsVariants = cva('', {
     size: {
       small: `
         [&_.ant-tabs-tab]:!px-2 [&_.ant-tabs-tab]:!py-1
-        [&_.ant-tabs-tab-btn]:!text-sm
+        [&_.ant-tabs-tab-btn]:!text-xs
       `,
       default: `
-        [&_.ant-tabs-tab]:!px-3 [&_.ant-tabs-tab]:!py-1.5
-        [&_.ant-tabs-tab-btn]:!text-base
+        [&_.ant-tabs-tab]:!px-3 [&_.ant-tabs-tab]:!py-1.25
+        [&_.ant-tabs-tab-btn]:!text-sm
       `,
       large: `
-        [&_.ant-tabs-tab]:!px-4 [&_.ant-tabs-tab]:!py-2
-        [&_.ant-tabs-tab-btn]:!text-lg
+        [&_.ant-tabs-tab]:!px-4 [&_.ant-tabs-tab]:!py-1.5
+        [&_.ant-tabs-tab-btn]:!text-base
       `,
     },
   },
@@ -50,20 +50,16 @@ export interface TabsProps extends Omit<AntdTabsProps, 'className' | 'size'> {
   /**
    * 是否显示指示器
    */
-  hideIndicator?: boolean
+  showIndicator?: boolean
 }
 
 const Tabs = React.forwardRef<TabsRef, TabsProps>(
-  ({ className, variant, size, hideIndicator = true, ...props }, ref) => {
+  ({ className, variant, size, showIndicator = false, ...props }, ref) => {
     return (
       <AntdTabs
         ref={ref}
-        className={cn(
-          hideIndicator && '[&_.ant-tabs-ink-bar]:!hidden',
-          styles.tabs,
-          tabsVariants({ variant, size }),
-          className,
-        )}
+        indicator={showIndicator ? undefined : { size: 0 }}
+        className={cn(styles.tabs, tabsVariants({ variant, size }), className)}
         {...props}
       />
     )

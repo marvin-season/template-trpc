@@ -2,11 +2,20 @@
 
 import { Tabs } from '@/components/ui/tabs/tabs'
 import type { TabsProps } from 'antd'
-
-const items: TabsProps['items'] = Array.from({ length: 10 }, (_, i) => {
+const labels = [
+  'For You',
+  'Models',
+  'Writing',
+  'Productivity',
+  'Business',
+  'Research',
+  'Education',
+  'Images',
+]
+const items: TabsProps['items'] = labels.map((label, i) => {
   const id = String(i)
   return {
-    label: `Tab-${id}`,
+    label,
     key: id,
     children: `Content of tab ${id}`,
   }
@@ -15,14 +24,21 @@ const items: TabsProps['items'] = Array.from({ length: 10 }, (_, i) => {
 export default function Test() {
   return (
     <div className='flex flex-col items-center space-y-8 p-8'>
-      <div className='w-[800px]'>
-        <div className='space-y-4'>
-          <h2 className='text-xl font-bold'>默认样式</h2>
-          <Tabs defaultValue='1' items={items} size='small' />
-        </div>
-
-        <Tabs items={items} variant='outline' size='small' />
-        <Tabs items={items} variant='primary' size='small' />
+      <div
+        className={`
+          w-full
+          lg:w-[800px]
+        `}
+      >
+        <Tabs defaultValue='1' items={items} showIndicator />
+        <Tabs items={items} variant='outline' />
+        <Tabs
+          items={items}
+          variant='primary'
+          more={{
+            icon: '^',
+          }}
+        />
       </div>
     </div>
   )

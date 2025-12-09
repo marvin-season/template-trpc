@@ -24,6 +24,7 @@
   },
   "dependencies": {
     "@ai-sdk/deepseek": "^0.2.14",
+    "@ant-design/nextjs-registry": "^1.3.0",
     "@auth/prisma-adapter": "^2.7.2",
     "@chatui/core": "^3.0.0",
     "@prisma/client": "^6.5.0",
