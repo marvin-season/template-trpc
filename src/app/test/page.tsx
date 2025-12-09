@@ -3,7 +3,7 @@
 import { Tabs } from '@/components/ui/tabs/tabs'
 import type { TabsProps } from 'antd'
 
-const items: TabsProps['items'] = Array.from({ length: 20 }, (_, i) => {
+const items: TabsProps['items'] = Array.from({ length: 10 }, (_, i) => {
   const id = String(i)
   return {
     label: `Tab-${id}`,

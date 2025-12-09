@@ -15,7 +15,6 @@
   :global(.ant-tabs-tab) {
     margin-left: 0.375rem !important;
     border-radius: 6px !important;
-    padding: 0.175rem 0.475rem !important;
 
     /* 第一个标签页 - 移除左边距 */
     &:first-of-type {
@@ -33,6 +32,8 @@
     /* Tab 按钮样式 */
     > :global(.ant-tabs-tab-btn) {
       color: #333 !important;
+      font-size: 0.875rem;
+      line-height: 1.25rem;
     }
   }
 
@@ -61,7 +62,6 @@
   /* Tab 基础样式 */
   :global(.ant-tabs-tab) {
     margin-left: 0.375rem !important;
-    padding: 0.175rem 0.475rem !important;
     border: 1px solid #333 !important;
     border-radius: 10px !important;
 
@@ -78,6 +78,8 @@
     /* Tab 按钮样式 */
     > :global(.ant-tabs-tab-btn) {
       color: #333 !important;
+      font-size: 0.875rem;
+      line-height: 1.25rem;
     }
   }
 
@@ -85,5 +87,35 @@
   :global(.ant-tabs-tab-active) {
     font-weight: 600 !important;
     background-color: #eee !important;
+  }
+}
+
+/* 弹出菜单样式 */
+.tabsPopup {
+  border-radius: 0.75rem;
+  overflow: hidden;
+  background-color: var(--f-bg-base);
+  border: 1px solid var(--f-border);
+  box-shadow: var(
+    --effects-xl,
+    0px 8px 24px rgba(0, 0, 0, 0.12)
+  ); /* fallback if tailwind utility unavailable */
+
+  :global([role='listbox']) {
+    padding: 0.375rem;
+    /* Tailwind 的 space-y-1 忽略，这里需由子元素自行加 margin */
+  }
+
+  :global([role='option']) {
+    border-radius: 0.5rem;
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    color: var(--f-text);
+
+    &:hover {
+      background-color: var(--f-bg-layout);
+    }
   }
 }
